@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>三上國語 第一課 〈你好，新朋友〉 互動教學簡報</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0b1021;
+      --bg-card: #151c38;
+      --bg-card-hover: #1e284f;
+      --border-color: rgba(255, 255, 255, 0.12);
+      --ink-main: #f0f4fc;
+      --ink-muted: #a0aec0;
+      --ink-dim: #64748b;
+      
+      --accent-gold: #ffb703;
+      --accent-cyan: #00d2d3;
+      --accent-pink: #ff4d6d;
+      --accent-green: #10b981;
+      --accent-purple: #9d4edd;
+      
+      --t1: clamp(30px, 3.8vw, 48px);
+      --t2: clamp(20px, 2.5vw, 30px);
+      --t3: clamp(15px, 1.7vw, 19px);
+      --t4: 14px;
+      
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--ink-main);
+      font-family: 'Noto Sans TC', sans-serif;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    /* Top Progress Bar */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-gold), var(--accent-pink));
+      width: 0%;
+      z-index: 1000;
+      transition: width 0.3s ease;
+    }
+
+    /* Top Section Tag */
+    #section-tag {
+      position: fixed;
+      top: 20px;
+      left: 30px;
+      font-family: 'JetBrains Mono', 'Noto Sans TC', monospace;
+      font-size: var(--t4);
+      font-weight: 700;
+      color: var(--accent-gold);
+      background: rgba(255, 183, 3, 0.12);
+      border: 1px solid rgba(255, 183, 3, 0.3);
+      padding: 6px 16px;
+      border-radius: 30px;
+      z-index: 900;
+      backdrop-filter: blur(8px);
+      letter-spacing: 1px;
+    }
+
+    /* Page Info & Key Hints */
+    #page-info {
+      position: fixed;
+      bottom: 20px;
+      right: 30px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-color);
+      padding: 6px 14px;
+      border-radius: 20px;
+      z-index: 900;
+      backdrop-filter: blur(8px);
+    }
+
+    #key-hint {
+      position: fixed;
+      bottom: 20px;
+      left: 30px;
+      font-size: 13px;
+      color: var(--ink-dim);
+      z-index: 900;
+      pointer-events: none;
+    }
+
+    /* Controls Overlay */
+    .nav-btn {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      background: rgba(21, 28, 56, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 50%;
+      color: var(--ink-main);
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 950;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-btn:hover {
+      background: var(--accent-cyan);
+      color: #000;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 15px rgba(0, 210, 211, 0.4);
+    }
+
+    #prev-btn { left: 20px; }
+    #next-btn { right: 20px; }
+
+    /* Slide Stage */
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 70px 90px 60px 90px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      overflow-y: auto;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .slide-inner {
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    /* Common Typography */
+    .kicker {
+      font-family: 'JetBrains Mono', 'Noto Sans TC', monospace;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .slide-title {
+      font-size: var(--t1);
+      font-weight: 900;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 30%, var(--ink-muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .highlight-gold { color: var(--accent-gold); -webkit-text-fill-color: var(--accent-gold); }
+    .highlight-cyan { color: var(--accent-cyan); -webkit-text-fill-color: var(--accent-cyan); }
+    .highlight-pink { color: var(--accent-pink); -webkit-text-fill-color: var(--accent-pink); }
+
+    /* Grids & Cards */
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .card-icon {
+      font-size: 36px;
+      line-height: 1;
+    }
+
+    .card-title {
+      font-size: var(--t2);
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .card-desc {
+      font-size: var(--t3);
+      color: var(--ink-muted);
+      line-height: 1.6;
+    }
+
+    /* Cover Slide Specifics */
+    .cover-box {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 40px 20px;
+    }
+
+    .cover-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 210, 211, 0.1);
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .cover-title {
+      font-size: clamp(38px, 5.2vw, 64px);
+      font-weight: 900;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #ffffff 0%, var(--accent-gold) 50%, var(--accent-pink) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .cover-subtitle {
+      font-size: clamp(17px, 2.1vw, 24px);
+      color: var(--ink-muted);
+      max-width: 800px;
+    }
+
+    /* Table Styling */
+    .styled-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    .styled-table th {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--accent-gold);
+      font-size: 16px;
+      font-weight: 700;
+      text-align: left;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .styled-table td {
+      padding: 14px 18px;
+      font-size: 15px;
+      color: var(--ink-main);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      line-height: 1.5;
+    }
+
+    .styled-table tr:last-child td { border-bottom: none; }
+    .styled-table tr:hover td { background: rgba(255, 255, 255, 0.03); }
+
+    /* Interactive Answer Reveal */
+    .reveal-box {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px dashed var(--accent-cyan);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .reveal-box:hover {
+      background: rgba(0, 210, 211, 0.08);
+    }
+
+    .reveal-content {
+      display: none;
+      color: var(--accent-gold);
+      font-weight: 700;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+
+    .reveal-box.active .reveal-content {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .reveal-btn-text {
+      font-size: 14px;
+      color: var(--accent-cyan);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Timeline / Step Flow */
+    .flow-steps {
+      display: flex;
+      gap: 16px;
+      position: relative;
+    }
+
+    .flow-step {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+    }
+
+    .flow-step-num {
+      width: 32px;
+      height: 32px;
+      background: var(--accent-cyan);
+      color: #000;
+      border-radius: 50%;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    /* Polyphone & Character Cards */
+    .char-badge {
+      display: inline-block;
+      width: 44px;
+      height: 44px;
+      line-height: 44px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      margin: 4px;
+    }
+
+    .cta-box {
+      background: linear-gradient(135deg, rgba(255, 183, 3, 0.15), rgba(255, 77, 109, 0.15));
+      border: 2px solid var(--accent-gold);
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="progress-bar"></div>
+  <div id="section-tag">— 引起動機 —</div>
+  <div id="page-info">01 / 11</div>
+  <div id="key-hint">💡 提示：使用 鍵盤 ← → 或 Space 切換簡報 ｜ 按 F 全螢幕</div>
+
+  <button id="prev-btn" class="nav-btn" aria-label="上一頁">❮</button>
+  <button id="next-btn" class="nav-btn" aria-label="下一頁">❯</button>
+
+  <!-- ==================== SLIDE 1: COVER ==================== -->
+  <section class="slide active" data-slide="1" data-section="引起動機">
+    <div class="slide-inner cover-box">
+      <div class="cover-badge">🎓 南一版國小國語 三年級上學期 ‧ 第壹單元</div>
+      <h1 class="cover-title">第一課 〈你好，新朋友〉</h1>
+      <p class="cover-subtitle">SOIL 互動視覺教學簡報 ＆ MAPS 三層次學習單專題備課</p>
+      
+      <div class="grid-3" style="width: 100%; max-width: 900px; margin-top: 20px;">
+        <div class="card" style="align-items: center; text-align: center;">
+          <div class="card-icon">📖</div>
+          <div class="card-title" style="font-size: 18px;">文體：童詩</div>
+          <div class="card-desc" style="font-size: 14px;">由遠及近的空間視角與韻律詩歌</div>
+        </div>
+        <div class="card" style="align-items: center; text-align: center;">
+          <div class="card-icon">🤝</div>
+          <div class="card-title" style="font-size: 18px;">核心：自我介紹</div>
+          <div class="card-desc" style="font-size: 14px;">勇於展現特質，大膽結交新朋友</div>
+        </div>
+        <div class="card" style="align-items: center; text-align: center;">
+          <div class="card-icon">📝</div>
+          <div class="card-title" style="font-size: 18px;">MAPS 學習單</div>
+          <div class="card-desc" style="font-size: 14px;">整合預習、觀點探究與寫作練功</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 2: WARM-UP ==================== -->
+  <section class="slide" data-slide="2" data-section="引起動機">
+    <div class="slide-inner">
+      <div class="kicker">— 學習單 課前預習思考 —</div>
+      <h2 class="slide-title">三年級的新開始 <span class="highlight-gold">跨出第一步</span></h2>
+      
+      <div class="grid-2">
+        <div class="card" style="border-left: 4px solid var(--accent-gold);">
+          <div class="card-icon">💡</div>
+          <div class="card-title">學習單問題 1</div>
+          <div class="card-desc" style="font-size: 18px; color: #fff; font-weight: 500;">
+            「親愛的寶貝，恭喜你升上三年級了！想一想，有沒有發現一起學習的人、事、物有什麼不一樣了呢？」
+          </div>
+          <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 10px; font-size: 15px;">
+            🗣️ <strong>引導思考：</strong> 新導師、新同學、科目變多、課本變厚、下課時間與上課節數增加……
+          </div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid var(--accent-cyan);">
+          <div class="card-icon">🤝</div>
+          <div class="card-title">學習單問題 2</div>
+          <div class="card-desc" style="font-size: 18px; color: #fff; font-weight: 500;">
+            「看看班上的同學，說一說，你最想認識哪一位？為什麼？」
+          </div>
+          <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 10px; font-size: 15px;">
+            🗣️ <strong>引導思考：</strong> 因為他笑起來很親切、他的運動神經很好、她畫畫很漂亮、我想跟他一起玩耍足球……
+          </div>
+        </div>
+      </div>
+
+      <div style="background: rgba(0, 210, 211, 0.1); border: 1px solid var(--accent-cyan); padding: 16px 24px; border-radius: 14px; text-align: center;">
+        🌟 <strong>課文的核心啟示：</strong> 主動伸出友誼之手，放膽展現優點與專長，就能輕鬆結交新朋友！
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 3: 4 ROLES ==================== -->
+  <section class="slide" data-slide="3" data-section="維持注意">
+    <div class="slide-inner">
+      <div class="kicker">— 課文靈魂角色 —</div>
+      <h2 class="slide-title">四大主角來報到 <span class="highlight-cyan">自我介紹大集合</span></h2>
+      
+      <div class="grid-4">
+        <div class="card">
+          <div style="font-size: 40px;">☀️</div>
+          <div class="card-title" style="color: var(--accent-gold);">太陽 ➔ 小草</div>
+          <div style="font-size: 14px; color: var(--accent-cyan); font-weight: 700;">【特質：熱情】</div>
+          <div class="card-desc" style="font-size: 14px;">
+            • 手：暖暖的手<br>
+            • 心：熱情的心<br>
+            • 專長：讓水滴化成彩虹、大海閃閃發亮
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="font-size: 40px;">🐦</div>
+          <div class="card-title" style="color: var(--accent-cyan);">小雲雀 ➔ 青山</div>
+          <div style="font-size: 14px; color: var(--accent-cyan); font-weight: 700;">【特質：樂於分享】</div>
+          <div class="card-desc" style="font-size: 14px;">
+            • 外表：無多彩羽衣<br>
+            • 專長：清脆的歌聲<br>
+            • 興趣：一邊唱歌，一邊停留半空中
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="font-size: 40px;">🍃</div>
+          <div class="card-title" style="color: var(--accent-pink);">風 ➔ 樹葉</div>
+          <div style="font-size: 14px; color: var(--accent-cyan); font-weight: 700;">【特質：樂於助人】</div>
+          <div class="card-desc" style="font-size: 14px;">
+            • 外表：長長的頭髮<br>
+            • 興趣：四處旅行<br>
+            • 行動：聞花香、看綿羊、送平安回家
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="font-size: 40px;">⚽</div>
+          <div class="card-title" style="color: var(--accent-green);">小豆子 ➔ 新同學</div>
+          <div style="font-size: 14px; color: var(--accent-cyan); font-weight: 700;">【特質：開朗】</div>
+          <div class="card-desc" style="font-size: 14px;">
+            • 身份：開朗的男孩<br>
+            • 專長：最會踢足球<br>
+            • 樂趣：人和球一起飛奔是最快樂的時光
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 4: WORKSHEET SUMMARY TABLE ==================== -->
+  <section class="slide" data-slide="4" data-section="維持注意">
+    <div class="slide-inner">
+      <div class="kicker">— 學習單 課文脈絡摘要 —</div>
+      <h2 class="slide-title">課文心智對照表 <span class="highlight-gold">一目了然</span></h2>
+      
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>段落</th>
+            <th>主角</th>
+            <th>對象</th>
+            <th>外貌/特徵</th>
+            <th>性格特質</th>
+            <th>專長技能</th>
+            <th>興趣與互動</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong style="color: var(--accent-gold);">第一段</strong></td>
+            <td>☀️ 太陽</td>
+            <td>小草</td>
+            <td>暖暖的手</td>
+            <td>熱情的心</td>
+            <td>讓水滴化成彩虹、大海發亮</td>
+            <td>拍拍小草說話</td>
+          </tr>
+          <tr>
+            <td><strong style="color: var(--accent-cyan);">第二段</strong></td>
+            <td>🐦 小雲雀</td>
+            <td>青山</td>
+            <td>沒有多彩羽衣</td>
+            <td>樂於分享</td>
+            <td>清脆的歌聲</td>
+            <td>一邊唱歌，一邊停留半空</td>
+          </tr>
+          <tr>
+            <td><strong style="color: var(--accent-pink);">第三段</strong></td>
+            <td>🍃 風</td>
+            <td>樹葉</td>
+            <td>長長的頭髮</td>
+            <td>樂於助人</td>
+            <td>四處旅行</td>
+            <td>帶聞花香、看綿羊、送回家</td>
+          </tr>
+          <tr>
+            <td><strong style="color: var(--accent-green);">第四段</strong></td>
+            <td>⚽ 小豆子</td>
+            <td>新同學</td>
+            <td>開朗笑容</td>
+            <td>開朗樂觀</td>
+            <td>最會踢足球</td>
+            <td>人和球一起飛奔</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 5: CAMERA PERSPECTIVE ==================== -->
+  <section class="slide" data-slide="5" data-section="維持注意">
+    <div class="slide-inner">
+      <div class="kicker">— 詩歌空間結構美學 —</div>
+      <h2 class="slide-title">大自然的視角鏡頭 <span class="highlight-cyan">由遠及近</span></h2>
+      
+      <div class="flow-steps">
+        <div class="flow-step" style="border-top: 4px solid var(--accent-gold);">
+          <div class="flow-step-num">1</div>
+          <div style="font-size: 18px; font-weight: 700; color: var(--accent-gold);">遠景（天際高空）</div>
+          <div style="font-size: 14px; color: var(--ink-muted); line-height: 1.6;">
+            <strong>太陽 ➔ 小草</strong><br>
+            從最高遠的太陽開始，俯瞰大地萬物，展現熱情光明。
+          </div>
+        </div>
+
+        <div class="flow-step" style="border-top: 4px solid var(--accent-cyan);">
+          <div class="flow-step-num">2</div>
+          <div style="font-size: 18px; font-weight: 700; color: var(--accent-cyan);">中景（山林天空）</div>
+          <div style="font-size: 14px; color: var(--ink-muted); line-height: 1.6;">
+            <strong>小雲雀 ➔ 青山</strong><br>
+            視線移至半空中飛翔的雲雀與屹立的青山，傳遞歌聲。
+          </div>
+        </div>
+
+        <div class="flow-step" style="border-top: 4px solid var(--accent-pink);">
+          <div class="flow-step-num">3</div>
+          <div style="font-size: 18px; font-weight: 700; color: var(--accent-pink);">近景（校園樹下）</div>
+          <div style="font-size: 14px; color: var(--ink-muted); line-height: 1.6;">
+            <strong>風 ➔ 樹葉</strong><br>
+            拉近到校園樹下的風吹落葉，展現體貼陪伴與照顧。
+          </div>
+        </div>
+
+        <div class="flow-step" style="border-top: 4px solid var(--accent-green);">
+          <div class="flow-step-num">4</div>
+          <div style="font-size: 18px; font-weight: 700; color: var(--accent-green);">特寫（教室內部）</div>
+          <div style="font-size: 14px; color: var(--ink-muted); line-height: 1.6;">
+            <strong>小豆子 ➔ 新同學</strong><br>
+            最後聚焦在三年級教室裡，小豆子向全班自我介紹！
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 6: MAPS DEEP THINKING ==================== -->
+  <section class="slide" data-slide="6" data-section="維持注意">
+    <div class="slide-inner">
+      <div class="kicker">— 學習單 觀點探究大挑戰 —</div>
+      <h2 class="slide-title">大腦體操：深度思考題 <span class="highlight-gold">點擊揭曉</span></h2>
+      
+      <div class="grid-2">
+        <div class="reveal-box" onclick="toggleReveal(this)">
+          <div style="font-size: 16px; font-weight: 700; color: #fff;">
+            ❓ 提問 1：課文寫太陽熱情、小豆子開朗，但沒直接寫小雲雀與風的特質，你覺得他們是什麼特質？
+          </div>
+          <div class="reveal-btn-text">👇 點擊揭曉學習單解答與推論</div>
+          <div class="reveal-content">
+            • <strong>小雲雀</strong>：樂於分享！（因為他專程唱歌給青山聽）<br>
+            • <strong>風</strong>：樂於助人/體貼！（因為他用長髮接住落葉，帶他旅行並送他平安回家）
+          </div>
+        </div>
+
+        <div class="reveal-box" onclick="toggleReveal(this)">
+          <div style="font-size: 16px; font-weight: 700; color: #fff;">
+            ❓ 提問 2：「太陽伸出暖暖的手，拍拍小草」與「太陽的陽光照著小草」，哪一句更能表現「熱情」？
+          </div>
+          <div class="reveal-btn-text">👇 點擊揭曉學習單解答與推論</div>
+          <div class="reveal-content">
+            答案是 <strong>第一句！</strong><br>
+            因為使用了擬人法（伸出手、拍拍）與觸覺摹寫（暖暖的），充滿主動關懷與身體溫度的互動感！
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="background: rgba(255,255,255,0.03); border: 1px dashed var(--accent-gold);">
+        <div style="font-size: 16px; font-weight: 700; color: var(--accent-gold);">
+          🎨 提問 3（想像延伸）：「青山坐在湖邊畫畫」是什麼樣的畫面？
+        </div>
+        <div style="font-size: 14px; color: var(--ink-muted); margin-top: 6px;">
+          引導學生閉上眼睛想像：高大的青山倒映在清澈如鏡的湖面上，就像青山正拿著畫筆在湖水畫布上描繪藍天與綠樹！
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 7: VOCABULARY & POLYPHONE ==================== -->
+  <section class="slide" data-slide="7" data-section="維持注意">
+    <div class="slide-inner">
+      <div class="kicker">— 識字與語音密碼 —</div>
+      <h2 class="slide-title">本課生字與多音字 <span class="highlight-cyan">字詞大考驗</span></h2>
+      
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title" style="font-size: 20px; color: var(--accent-gold);">本課 15 個生字展覽</div>
+          <div style="display: flex; flex-wrap: wrap;">
+            <span class="char-badge">泥</span><span class="char-badge">化</span><span class="char-badge">雀</span>
+            <span class="char-badge">輕</span><span class="char-badge">羽</span><span class="char-badge">衣</span>
+            <span class="char-badge">脆</span><span class="char-badge">髮</span><span class="char-badge">處</span>
+            <span class="char-badge">旅</span><span class="char-badge">行</span><span class="char-badge">平</span>
+            <span class="char-badge">男</span><span class="char-badge">朗</span><span class="char-badge">足</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title" style="font-size: 20px; color: var(--accent-cyan);">重點多音字辨析</div>
+          
+          <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 10px;">
+            <strong style="color: var(--accent-gold); font-size: 18px;">處</strong>
+            <ul style="margin-left: 20px; margin-top: 6px; font-size: 14px;">
+              <li><strong>ㄔㄨˋ</strong> (場所/地點)：住處、四處、教務處</li>
+              <li><strong>ㄔㄨˇ</strong> (辦理/治理)：處理、處罰、相處</li>
+            </ul>
+          </div>
+
+          <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 10px; margin-top: 10px;">
+            <strong style="color: var(--accent-cyan); font-size: 18px;">行</strong>
+            <ul style="margin-left: 20px; margin-top: 6px; font-size: 14px;">
+              <li><strong>ㄒㄧㄥˊ</strong> (走/行為)：行人、旅行、行為</li>
+              <li><strong>ㄏㄤˊ</strong> (行列/行業)：銀行、一行字、行業</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 8: RHETORIC ==================== -->
+  <section class="slide" data-slide="8" data-section="維持注意">
+    <div class="slide-inner">
+      <div class="kicker">— 文學修辭寶典 —</div>
+      <h2 class="slide-title">詩歌中的四大靈魂修辭 <span class="highlight-pink">寫作魔法</span></h2>
+      
+      <div class="grid-4">
+        <div class="card">
+          <div style="font-size: 32px;">🗣️</div>
+          <div class="card-title" style="font-size: 18px; color: var(--accent-gold);">擬人法</div>
+          <div class="card-desc" style="font-size: 14px;">
+            把大自然事物賦予人的動作與情感。<br>
+            • 太陽伸出暖暖的手<br>
+            • 風用長長的頭髮接住
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="font-size: 32px;">🔄</div>
+          <div class="card-title" style="font-size: 18px; color: var(--accent-cyan);">疊字法</div>
+          <div class="card-desc" style="font-size: 14px;">
+            重複字詞加強韻律與音樂節奏感。<br>
+            • 暖暖的手、拍拍小草<br>
+            • 閃閃發亮、慢慢落下
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="font-size: 32px;">🎨</div>
+          <div class="card-title" style="font-size: 18px; color: var(--accent-pink);">摹寫法</div>
+          <div class="card-desc" style="font-size: 14px;">
+            將感官觀察具體呈現。<br>
+            • 觸覺：暖暖的手<br>
+            • 視覺：閃閃發亮<br>
+            • 聽覺：清脆歌聲
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="font-size: 32px;">🔗</div>
+          <div class="card-title" style="font-size: 18px; color: var(--accent-green);">類疊（類句）</div>
+          <div class="card-desc" style="font-size: 14px;">
+            重複句式開頭強化感染力。<br>
+            • 帶你去聞百合的花香，<br>
+            • 帶你去看成群的綿羊
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 9: SENTENCE PRACTICE ==================== -->
+  <section class="slide" data-slide="9" data-section="喚起行動">
+    <div class="slide-inner">
+      <div class="kicker">— 句型大師實戰 —</div>
+      <h2 class="slide-title">照樣造句動動腦 <span class="highlight-gold">我是大作家</span></h2>
+      
+      <div class="card" style="background: rgba(255, 183, 3, 0.08); border-color: var(--accent-gold);">
+        <div class="card-title" style="color: var(--accent-gold);">📌 課文核心句型：</div>
+        <div style="font-size: 22px; font-weight: 700; color: #fff; margin-top: 6px;">
+          「我是 <span class="highlight-cyan">[角色/名詞]</span>，有 <span class="highlight-pink">[形容詞+名詞]</span> 的 <span class="highlight-gold">[名詞]</span>。」
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div style="color: var(--accent-gold); font-weight: 700;">【課文原句】</div>
+          <div style="font-size: 16px; color: #fff;">我是太陽，有一顆熱情的心。</div>
+        </div>
+        <div class="card">
+          <div style="color: var(--accent-cyan); font-weight: 700;">【創意延伸 1】</div>
+          <div style="font-size: 16px; color: #fff;">我是蝴蝶，有一件美麗的衣裳。</div>
+        </div>
+        <div class="card">
+          <div style="color: var(--accent-pink); font-weight: 700;">【創意延伸 2】</div>
+          <div style="font-size: 16px; color: #fff;">我是老虎，有一口銳利的牙齒。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 10: SELF-INTRO 3 STEPS ==================== -->
+  <section class="slide" data-slide="10" data-section="喚起行動">
+    <div class="slide-inner">
+      <div class="kicker">— 學習單 口語表達演練 —</div>
+      <h2 class="slide-title">自我介紹三部曲 <span class="highlight-cyan">大方登場</span></h2>
+      
+      <div class="grid-3">
+        <div class="card" style="border-top: 4px solid var(--accent-gold);">
+          <div style="font-size: 32px;">👋</div>
+          <div class="card-title" style="color: var(--accent-gold);">首部曲：問好報姓名</div>
+          <div class="card-desc" style="font-size: 15px;">
+            「老師、各位同學大家好！我叫王南南，大家可以叫我阿南。」<br><br>
+            💡 <strong>小撇步：</strong> 加上大家喜歡稱呼你的小名，親切感翻倍！
+          </div>
+        </div>
+
+        <div class="card" style="border-top: 4px solid var(--accent-cyan);">
+          <div style="font-size: 32px;">🌟</div>
+          <div class="card-title" style="color: var(--accent-cyan);">二部曲：特質與專長</div>
+          <div class="card-desc" style="font-size: 15px;">
+            「我是一個開朗的人，專長是唱歌，興趣是閱讀……」<br><br>
+            💡 <strong>小撇步：</strong> 勇敢展現外貌特色、性格或最喜歡的休閒活動。
+          </div>
+        </div>
+
+        <div class="card" style="border-top: 4px solid var(--accent-pink);">
+          <div style="font-size: 32px;">🚀</div>
+          <div class="card-title" style="color: var(--accent-pink);">三部曲：結語與期許</div>
+          <div class="card-desc" style="font-size: 15px;">
+            「升上三年級，我希望能交到更多好朋友，謝謝大家！」<br><br>
+            💡 <strong>小撇步：</strong> 說出目標並給予禮貌結語，留下完美印象。
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 11: WRITING & CTA ==================== -->
+  <section class="slide" data-slide="11" data-section="喚起行動">
+    <div class="slide-inner">
+      <div class="kicker">— 學習單 讀寫結合 —</div>
+      <h2 class="slide-title">延伸寫作《猜猜我是誰》 <span class="highlight-gold">快樂適應新生活</span></h2>
+      
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title" style="color: var(--accent-gold);">✍️ 六何法文章架構</div>
+          <div class="card-desc" style="font-size: 15px; line-height: 1.8;">
+            1. <strong>開頭段</strong>：描寫外貌特色與個性特質（先不寫出名字！）。<br>
+            2. <strong>經過段</strong>：用「六何法」寫下一件自己在班上最常發生的事。<br>
+            3. <strong>結尾段</strong>：以疑問句結尾：「看完介紹後，你知道我是誰了嗎？」
+          </div>
+        </div>
+
+        <div class="cta-box" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+          <div style="font-size: 40px;">🌈</div>
+          <h3 style="font-size: 26px; font-weight: 900; color: var(--accent-gold); margin-top: 10px;">
+            主動伸出友誼之手！
+          </h3>
+          <p style="font-size: 16px; color: var(--ink-main); margin-top: 10px; line-height: 1.6;">
+            放膽展現自己的優點與特質<br>
+            讓我們一起快樂適應三年級校園新生活！
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progress-bar');
+    const sectionTag = document.getElementById('section-tag');
+    const pageInfo = document.getElementById('page-info');
+    let currentSlide = 0;
+
+    function updateSlide(index) {
+      if (index < 0) index = 0;
+      if (index >= slides.length) index = slides.length - 1;
+      
+      slides.forEach((slide, i) => {
+        if (i === index) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      currentSlide = index;
+      const progressPercent = ((currentSlide + 1) / slides.length) * 100;
+      progressBar.style.width = progressPercent + '%';
+
+      const currentSection = slides[currentSlide].getAttribute('data-section') || '教學簡報';
+      sectionTag.textContent = '— ' + currentSection + ' —';
+      pageInfo.textContent = String(currentSlide + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+    }
+
+    document.getElementById('prev-btn').addEventListener('click', () => updateSlide(currentSlide - 1));
+    document.getElementById('next-btn').addEventListener('click', () => updateSlide(currentSlide + 1));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        updateSlide(currentSlide + 1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        updateSlide(currentSlide - 1);
+      } else if (e.key.toLowerCase() === 'f') {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(err => {});
+        } else {
+          document.exitFullscreen().catch(err => {});
+        }
+      }
+    });
+
+    // Screen side clicks
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.nav-btn') || e.target.closest('.reveal-box') || e.target.closest('.card')) return;
+      if (e.clientX > window.innerWidth * 0.75) {
+        updateSlide(currentSlide + 1);
+      } else if (e.clientX < window.innerWidth * 0.25) {
+        updateSlide(currentSlide - 1);
+      }
+    });
+
+    // Interactive Answer Reveal
+    function toggleReveal(el) {
+      el.classList.toggle('active');
+    }
+
+    // Init
+    updateSlide(0);
+  </script>
+</body>
+</html>

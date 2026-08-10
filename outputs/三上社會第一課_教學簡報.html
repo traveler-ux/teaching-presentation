@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>國小三上社會 第一課：適應中年級新生活與學習轉變 - 教學簡報</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;800;900&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-card: rgba(30, 41, 59, 0.85);
+      --border-card: rgba(255, 255, 255, 0.12);
+      --primary: #38bdf8;
+      --primary-glow: rgba(56, 189, 248, 0.35);
+      --accent-gold: #fbbf24;
+      --accent-coral: #fb7185;
+      --accent-emerald: #34d399;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-family: 'Noto Sans TC', 'Outfit', system-ui, -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(251, 191, 36, 0.1) 0%, transparent 40%);
+    }
+
+    /* Top Navigation Bar */
+    header {
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-card);
+      z-index: 10;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      padding: 0.35rem 0.9rem;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+
+    .lesson-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Slide Container */
+    main {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 140px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      max-width: 1200px;
+      height: 100%;
+      max-height: 680px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(20px) scale(0.98);
+      pointer-events: none;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    /* Hero Slide Layout */
+    .slide-hero {
+      text-align: center;
+      align-items: center;
+    }
+
+    .slide-hero h1 {
+      font-size: 3.8rem;
+      font-weight: 900;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #ffffff 30%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .slide-hero p {
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      max-width: 750px;
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-tags {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .hero-tag {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      padding: 0.6rem 1.2rem;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--accent-gold);
+    }
+
+    /* Content Slide Header */
+    .slide-header {
+      margin-bottom: 2rem;
+    }
+
+    .slide-header h2 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .slide-header p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-top: 0.4rem;
+    }
+
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      width: 100%;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 20px;
+      padding: 1.75rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      border-color: var(--primary);
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px var(--primary-glow);
+    }
+
+    .card-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin-bottom: 1.2rem;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .card h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 0.75rem;
+    }
+
+    .card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .card li {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .card li::before {
+      content: "✦";
+      color: var(--accent-gold);
+      font-size: 0.9rem;
+    }
+
+    /* Dynamic Interactive Elements */
+    .interactive-box {
+      background: rgba(15, 23, 42, 0.8);
+      border: 2px dashed var(--primary);
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .interactive-box:hover {
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    .interactive-box .reveal-text {
+      display: none;
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: var(--accent-gold);
+      font-weight: 800;
+    }
+
+    .interactive-box.revealed .reveal-text {
+      display: block;
+    }
+
+    /* Comparison Table */
+    .compare-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      width: 100%;
+    }
+
+    .compare-col {
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 2rem;
+      border: 1px solid var(--border-card);
+    }
+
+    .compare-col.highlight {
+      border-color: var(--accent-gold);
+      background: rgba(251, 191, 36, 0.05);
+    }
+
+    .compare-col h3 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Bottom Control Bar */
+    footer {
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border-card);
+      z-index: 10;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-nav {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      color: var(--text-main);
+      padding: 0.6rem 1.4rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-nav:hover:not(:disabled) {
+      background: var(--primary);
+      color: #000;
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    .btn-nav:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .progress-bar-container {
+      flex: 1;
+      max-width: 400px;
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin: 0 1.5rem;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 16.6%;
+      background: linear-gradient(90deg, var(--primary), var(--accent-gold));
+      transition: width 0.3s ease;
+    }
+
+    .slide-counter {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      min-width: 60px;
+      text-align: right;
+    }
+
+    @media (max-width: 768px) {
+      .slide-hero h1 { font-size: 2.5rem; }
+      .cards-grid, .compare-container { grid-template-columns: 1fr; }
+      .progress-bar-container { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="badge">🏫 國小三年級社會科</div>
+    <div class="lesson-title">第一課：適應中年級新生活與學習轉變</div>
+  </header>
+
+  <!-- Main Presentation Canvas -->
+  <main>
+
+    <!-- Slide 1: Cover Title -->
+    <div class="slide slide-hero active" id="slide-1">
+      <div class="badge" style="margin-bottom: 1.5rem;">🌟 SOIL 互動教學簡報</div>
+      <h1>開啟中年級的<br><span style="color: var(--accent-gold);">社會科大冒險！</span></h1>
+      <p>歡迎來到三年級！我們上課的時間變長了、認識了新同學，還多了一本神奇的「社會課本」。一起來看看中年級有哪些精彩轉變吧！</p>
+      <div class="hero-tags">
+        <span class="hero-tag">🎒 認識新班級</span>
+        <span class="hero-tag">⏰ 自主時間管理</span>
+        <span class="hero-tag">🔍 社會科探索魔法</span>
+      </div>
+    </div>
+
+    <!-- Slide 2: Low vs High Grade Comparison -->
+    <div class="slide" id="slide-2">
+      <div class="slide-header">
+        <h2>⚡ 低年級 vs 中年級大比拼</h2>
+        <p>點擊下方卡片，看看升上三年級後有哪些重要的不一樣！</p>
+      </div>
+      <div class="compare-container">
+        <div class="compare-col">
+          <h3 style="color: var(--accent-coral);">🐣 低年級的我們</h3>
+          <ul style="margin-top: 1rem; list-style: none; display: flex; flex-direction: column; gap: 1rem;">
+            <li style="font-size: 1.1rem; color: var(--text-muted);">☀️ 半天課的時間比較多</li>
+            <li style="font-size: 1.1rem; color: var(--text-muted);">🎨 科目主要整合在「生活課程」</li>
+            <li style="font-size: 1.1rem; color: var(--text-muted);">🧸 許多事情需要老師與家長提醒</li>
+          </ul>
+        </div>
+        <div class="compare-col highlight">
+          <h3 style="color: var(--accent-gold);">🦅 三年級的我們 (中年級)</h3>
+          <ul style="margin-top: 1rem; list-style: none; display: flex; flex-direction: column; gap: 1rem;">
+            <li style="font-size: 1.1rem; color: var(--text-main); font-weight: 600;">🌟 每天上課時間變長（全天課增加）</li>
+            <li style="font-size: 1.1rem; color: var(--text-main); font-weight: 600;">📚 開始學習獨立科目（社會、自然、藝文）</li>
+            <li style="font-size: 1.1rem; color: var(--text-main); font-weight: 600;">⏰ 學會整理書包與自主規劃時間</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Concept 1 - Classmates & Super Teammate -->
+    <div class="slide" id="slide-3">
+      <div class="slide-header">
+        <h2>🤝 認識新班級：尋找你的神隊友</h2>
+        <p>每個人都有獨一無二的專長，學會互相欣賞與合作！</p>
+      </div>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-icon">🙋‍♂️</div>
+          <h3>大方自我介紹</h3>
+          <ul>
+            <li>清楚說出自己的名字與興趣</li>
+            <li>分享自己最厲害的優點與專長</li>
+            <li>建立自信與開朗的第一印象</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-icon">💡</div>
+          <h3>發掘同學長處</h3>
+          <ul>
+            <li>有人算數快、有人很會畫畫</li>
+            <li>有人熱心助人、有人會講笑話</li>
+            <li>不同專長的小組組合威力最大！</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-icon">📜</div>
+          <h3>建立班級公約</h3>
+          <ul>
+            <li>認真傾聽同學發言不打斷</li>
+            <li>愛護教室公物與維護整潔</li>
+            <li>遇到爭執用溝通代替吵架</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Concept 2 - Social Studies Exploration -->
+    <div class="slide" id="slide-4">
+      <div class="slide-header">
+        <h2>🔮 什麼是「社會科」？三大學習魔法</h2>
+        <p>社會科是研究「人與自己、他人、環境」互動的有趣學問！</p>
+      </div>
+      <div class="cards-grid">
+        <div class="card" style="border-top: 4px solid var(--primary);">
+          <div class="card-icon">📖</div>
+          <h3>魔法一：看懂課本目錄</h3>
+          <p style="color: var(--text-muted); margin-top: 0.5rem;">目錄就像地圖的 GPS 導航，能幫你一眼看出這學期有哪些冒險主題！</p>
+        </div>
+        <div class="card" style="border-top: 4px solid var(--accent-gold);">
+          <div class="card-icon">🗺️</div>
+          <h3>魔法二：觀察圖片細節</h3>
+          <p style="color: var(--text-muted); margin-top: 0.5rem;">課本裡的照片與地圖藏著大量密碼，細心觀察就能發現答案！</p>
+        </div>
+        <div class="card" style="border-top: 4px solid var(--accent-emerald);">
+          <div class="card-icon">❓</div>
+          <h3>魔法三：勇敢發問與討論</h3>
+          <p style="color: var(--text-muted); margin-top: 0.5rem;">遇到不懂的地方，主動請教老師同學或查資料，你就是解密大師！</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5: Interactive Activity Guide -->
+    <div class="slide" id="slide-5">
+      <div class="slide-header">
+        <h2>🎮 課堂活動：【中年級大冒險】</h2>
+        <p>點擊下方神秘解密盒，解開今天的闖關任務！</p>
+      </div>
+      <div class="cards-grid">
+        <div class="interactive-box" onclick="this.classList.toggle('revealed')">
+          <div style="font-size: 2rem;">🛡️ 關卡一：神隊友雷達</div>
+          <div style="color: var(--text-muted); margin-top: 0.5rem;">[ 點擊解鎖任務說明 ]</div>
+          <div class="reveal-text">向同組同學介紹自己的專長，並記下至少一位同學的優點！</div>
+        </div>
+        <div class="interactive-box" onclick="this.classList.toggle('revealed')">
+          <div style="font-size: 2rem;">🔍 關卡二：魔法典大解密</div>
+          <div style="color: var(--text-muted); margin-top: 0.5rem;">[ 點擊解鎖任務說明 ]</div>
+          <div class="reveal-text">翻開社會課本，找出「這學期有幾個單元」與「地圖在第幾頁」！</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 6: Summary & Call to Action -->
+    <div class="slide slide-hero" id="slide-6">
+      <div class="badge" style="background: rgba(52, 211, 153, 0.2); border-color: var(--accent-emerald); color: var(--accent-emerald);">
+        🏆 冒險達成宣言
+      </div>
+      <h1 style="font-size: 3rem; margin-top: 1rem;">你準備好成為<br><span style="color: var(--accent-emerald);">「中年級社會神隊友」了嗎？</span></h1>
+      <p style="font-size: 1.3rem; margin-top: 1rem;">
+        從今天開始：<br>
+        ✦ 每天準時整理書包與時間規劃<br>
+        ✦ 友善對待新同學與合作學習<br>
+        ✦ 用好奇心探索生活周遭的社會小秘密！
+      </p>
+    </div>
+
+  </main>
+
+  <!-- Bottom Interactive Control Footer -->
+  <footer>
+    <div class="controls">
+      <button class="btn-nav" id="btn-prev" onclick="changeSlide(-1)" disabled>◀ 上一頁</button>
+      <button class="btn-nav" id="btn-next" onclick="changeSlide(1)">下一頁 ▶</button>
+    </div>
+    
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <div class="slide-counter" id="slide-counter">1 / 6</div>
+  </footer>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 6;
+
+    function updateSlide() {
+      // Toggle slides visibility
+      document.querySelectorAll('.slide').forEach((slide, index) => {
+        slide.classList.toggle('active', index + 1 === currentSlide);
+      });
+
+      // Update counter text
+      document.getElementById('slide-counter').textContent = `${currentSlide} / ${totalSlides}`;
+
+      // Update progress bar
+      const progressPercent = (currentSlide / totalSlides) * 100;
+      document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+      // Update nav buttons disabled state
+      document.getElementById('btn-prev').disabled = currentSlide === 1;
+      document.getElementById('btn-next').disabled = currentSlide === totalSlides;
+    }
+
+    function changeSlide(direction) {
+      currentSlide = Math.min(Math.max(1, currentSlide + direction), totalSlides);
+      updateSlide();
+    }
+
+    // Keyboard navigation support
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Space') {
+        if (currentSlide < totalSlides) changeSlide(1);
+      } else if (e.key === 'ArrowLeft') {
+        if (currentSlide > 1) changeSlide(-1);
+      }
+    });
+
+    // Initialize
+    updateSlide();
+  </script>
+</body>
+</html>

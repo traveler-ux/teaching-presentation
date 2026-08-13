@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>三上南一國語 第一課 〈你好，新朋友〉 大屏互動教學簡報與課堂測驗遊戲</title>
+  <title>三上南一國語 第一課 〈你好，新朋友〉 黃金四節課大屏互動簡報與遊戲</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -420,7 +420,7 @@
 
   <div id="top-bar">
     <div class="top-left">
-      <div id="section-tag">單元一：快樂上學去</div>
+      <div id="section-tag">第一節：引起動機與概覽</div>
       <button class="icon-btn" onclick="toggleFullscreen()">
         <span>📺</span> <span id="fs-txt">全螢幕大屏模式</span>
       </button>
@@ -437,142 +437,195 @@
   <div id="key-hint">💡 大屏觸控：點擊兩側按鈕 ❮ ❯ 或鍵盤 ⬅️ ➡️ 切換</div>
 
   <!-- SLIDE 1 -->
-  <section class="slide active" data-slide="1" data-section="課前動機">
+  <section class="slide active" data-slide="1" data-section="【第一節】引起動機與概覽">
     <div class="slide-inner" style="text-align: center; align-items: center; justify-content: center; min-height: 70vh;">
       <div class="kicker">— 南一國語三上 第一課 —</div>
       <h1 class="slide-title" style="font-size: clamp(38px, 5.5vw, 68px);">
         你好，<span class="highlight-gold">新朋友</span>！
       </h1>
       <p style="font-size: var(--t2); color: var(--ink-muted); max-width: 800px; margin-top: 10px;">
-        NotebookLM 課文解析 • MAPS 學習單 • 生字遊戲 • 我是大作家大屏互動
+        黃金四節課流程 • 角色分组朗讀 • MAPS 讀寫結合 • 大屏關卡遊戲
       </p>
       <div style="display: flex; gap: 15px; margin-top: 30px;">
         <button class="big-btn" style="background: linear-gradient(135deg, var(--accent-cyan), #0284c7);" onclick="nextSlide()">
-          🚀 開始上課與遊戲大挑戰
+          🚀 開始第一節課：電子書影片與角色朗讀
         </button>
       </div>
     </div>
   </section>
 
   <!-- SLIDE 2 -->
-  <section class="slide" data-slide="2" data-section="課前動機">
+  <section class="slide" data-slide="2" data-section="【第一節】引起動機與概覽">
     <div class="slide-inner">
-      <div class="kicker">— 學習單 暖身思考大腦體操 —</div>
-      <h2 class="slide-title">回到學校 <span class="highlight-cyan">新學期大搜查</span></h2>
+      <div class="kicker">— 第一節課 步驟一 & 二 —</div>
+      <h2 class="slide-title">影片導引與 <span class="highlight-cyan">角色分組接龍朗讀</span></h2>
       <div class="grid-2">
         <div class="card" style="border-top: 4px solid var(--accent-gold);">
-          <div style="font-size: 32px; margin-bottom: 8px;">🏫</div>
-          <div class="card-title" style="color: var(--accent-gold);">1. 新學期的新發現</div>
+          <div style="font-size: 32px; margin-bottom: 8px;">🎬</div>
+          <div class="card-title" style="color: var(--accent-gold);">1. 電子書影片賞析 (5 min)</div>
           <div class="card-desc" style="font-size: 18px;">
-            升上三年級，換了教室與新同學。身邊的人、事、物有什麼新的變化與感受？
+            播放開學電子書動畫，全班感受太陽、雲雀、風與小豆子互相招呼的情境。
           </div>
         </div>
         <div class="card" style="border-top: 4px solid var(--accent-pink);">
-          <div style="font-size: 32px; margin-bottom: 8px;">🤝</div>
-          <div class="card-title" style="color: var(--accent-pink);">2. 想認識的新朋友</div>
+          <div style="font-size: 32px; margin-bottom: 8px;">🎤</div>
+          <div class="card-title" style="color: var(--accent-pink);">2. 四組角色接龍朗讀 (15 min)</div>
           <div class="card-desc" style="font-size: 18px;">
-            班上的同學中，你最想認識哪一位？他是個怎樣的人？為什麼想和他成為好友？
+            • 第一組 (太陽組)：朗讀第一段<br>
+            • 第二組 (雲雀組)：朗讀第二段<br>
+            • 第三組 (風組)：朗讀第三段<br>
+            • 第四組 (豆子組)：朗讀第四段
           </div>
-        </div>
-      </div>
-      <div class="card" style="background: rgba(16, 185, 129, 0.1); border-color: var(--accent-green);">
-        <div style="font-size: 20px; font-weight: 700; color: var(--accent-green);">💡 大屏互動題：邀請學生上台分享</div>
-        <div style="font-size: 16px; margin-top: 6px; color: var(--ink-main);">
-          按一下右側 ❯ 按鈕，一起走入童詩中看大自然與新同學是如何互相問好的！
         </div>
       </div>
     </div>
   </section>
 
   <!-- SLIDE 3 -->
-  <section class="slide" data-slide="3" data-section="課文賞析">
+  <section class="slide" data-slide="3" data-section="【第一節】引起動機與概覽">
     <div class="slide-inner">
-      <div class="kicker">— 童詩朗讀 —</div>
-      <h2 class="slide-title">第一課 〈你好，新朋友〉 <span class="highlight-gold">課文全覽</span></h2>
-      <div class="grid-2">
-        <div class="poem-box">
-          <strong style="color: var(--accent-gold);">【第一段：太陽 ➔ 小草】</strong><br>
-          小草剛從泥土冒出，<br>
-          太陽伸出暖暖的手，拍拍小草說：<br>
-          「我是太陽，有一顆熱情的心。<br>
-          我讓水滴化成彩虹，大海也會閃閃發亮。」
+      <div class="kicker">— 第一節課 步驟三 & 關卡 1 —</div>
+      <h2 class="slide-title">童詩全文與 <span class="highlight-gold">人物描述大屏連連看</span></h2>
+      <div class="match-container">
+        <div class="match-column">
+          <div class="match-item" data-id="1" onclick="selectMatch('left', 1, this)">
+            <span>1. 太陽 / 熱情招呼</span> <span>👉</span>
+          </div>
+          <div class="match-item" data-id="2" onclick="selectMatch('left', 2, this)">
+            <span>2. 小雲雀 / 清脆歌聲</span> <span>👉</span>
+          </div>
+          <div class="match-item" data-id="3" onclick="selectMatch('left', 3, this)">
+            <span>3. 小豆子 / 踢足球</span> <span>👉</span>
+          </div>
         </div>
-        <div class="poem-box" style="border-color: var(--accent-pink);">
-          <strong style="color: var(--accent-pink);">【第二段：小雲雀 ➔ 青山】</strong><br>
-          小雲雀輕快的飛向青山，<br>
-          對著青山一邊唱歌，一邊停留半空中。<br>
-          「我是小雲雀，沒有多彩的羽衣，<br>
-          卻有清脆的歌聲。我喜歡一邊唱歌，一邊停留半空中。」
-        </div>
-        <div class="poem-box" style="border-color: var(--accent-green);">
-          <strong style="color: var(--accent-green);">【第三段：風 ➔ 樹葉】</strong><br>
-          風聽見樹葉慢慢落下，<br>
-          用長長的頭髮接住，呼呼的說：<br>
-          「我是風，最喜歡四處旅行。<br>
-          帶你去聞百合的花香，帶你去看成群的綿羊，再送你平安回地面的家。」
-        </div>
-        <div class="poem-box" style="border-color: var(--accent-purple);">
-          <strong style="color: var(--accent-purple);">【第四段：小豆子 ➔ 新同學】</strong><br>
-          教室裡有好很多新同學，<br>
-          一個男孩向大家說：<br>
-          「我是開朗的小豆子，最會踢足球。<br>
-          人和球一起飛奔，是最快樂的時光。」
+        <div class="match-column">
+          <div class="match-item" data-id="3" onclick="selectMatch('right', 3, this)">
+            <span>A. 活力十足，最喜歡在操場奔跑運動</span> <span>🎯</span>
+          </div>
+          <div class="match-item" data-id="1" onclick="selectMatch('right', 1, this)">
+            <span>B. 伸出暖暖的手，有一顆熱情的心</span> <span>🎯</span>
+          </div>
+          <div class="match-item" data-id="2" onclick="selectMatch('right', 2, this)">
+            <span>C. 沒有多彩羽衣，卻有清脆優美的歌聲</span> <span>🎯</span>
+          </div>
         </div>
       </div>
+      <div id="match-msg" style="font-size: 20px; font-weight: 700; text-align: center; color: var(--accent-gold); min-height: 30px;"></div>
     </div>
   </section>
 
   <!-- SLIDE 4 -->
-  <section class="slide" data-slide="4" data-section="結構理解">
+  <section class="slide" data-slide="4" data-section="【第二節】字詞硬筆與部首探險">
     <div class="slide-inner">
-      <div class="kicker">— 課文脈絡 —</div>
-      <h2 class="slide-title">四大主角與互動心智圖 <span class="highlight-cyan">特質分析</span></h2>
-      <div class="grid-4">
-        <div class="card">
-          <div style="font-size: 36px;">☀️</div>
-          <div class="card-title" style="color: var(--accent-gold);">太陽</div>
-          <div class="card-desc" style="font-size: 15px;">
-            • <strong>對象：</strong> 小草<br>
-            • <strong>特質：</strong> 熱情<br>
-            • <strong>專長：</strong> 水滴化彩虹、大海閃閃發亮
-          </div>
+      <div class="kicker">— 第二節課 步驟一 —</div>
+      <h2 class="slide-title">15個重點生字 <span class="highlight-cyan">硬筆筆順與部首</span></h2>
+      <div class="vocab-grid">
+        <div class="vocab-touch-card" onclick="alert('【泥】水部，共 8 畫。例：泥土、拖泥帶水'); soundEffect('card')">
+          <div class="vocab-char">泥</div><div class="vocab-pinyin">ㄋㄧˊ</div>
         </div>
-        <div class="card">
-          <div style="font-size: 36px;">🐦</div>
-          <div class="card-title" style="color: var(--accent-pink);">小雲雀</div>
-          <div class="card-desc" style="font-size: 15px;">
-            • <strong>對象：</strong> 青山<br>
-            • <strong>特質：</strong> 樂於分享<br>
-            • <strong>專長：</strong> 清脆歌聲、空中停留
-          </div>
+        <div class="vocab-touch-card" onclick="alert('【化】匕部，共 4 畫。例：化成、千變萬化'); soundEffect('card')">
+          <div class="vocab-char">化</div><div class="vocab-pinyin">ㄏㄨㄚˋ</div>
         </div>
-        <div class="card">
-          <div style="font-size: 36px;">🍃</div>
-          <div class="card-title" style="color: var(--accent-green);">風</div>
-          <div class="card-desc" style="font-size: 15px;">
-            • <strong>對象：</strong> 樹葉<br>
-            • <strong>特質：</strong> 樂於助人<br>
-            • <strong>行動：</strong> 接住樹葉送平安回家
-          </div>
+        <div class="vocab-touch-card" onclick="alert('【雀】隹部，共 11 畫。例：雲雀、孔雀'); soundEffect('card')">
+          <div class="vocab-char">雀</div><div class="vocab-pinyin">ㄑㄩㄝˋ</div>
         </div>
-        <div class="card">
-          <div style="font-size: 36px;">⚽</div>
-          <div class="card-title" style="color: var(--accent-purple);">小豆子</div>
-          <div class="card-desc" style="font-size: 15px;">
-            • <strong>對象：</strong> 新同學<br>
-            • <strong>特質：</strong> 開朗友善<br>
-            • <strong>專長：</strong> 最會踢足球
-          </div>
+        <div class="vocab-touch-card" onclick="alert('【輕】車部，共 14 畫。例：輕快、輕鬆'); soundEffect('card')">
+          <div class="vocab-char">輕</div><div class="vocab-pinyin">ㄑㄧㄥ</div>
+        </div>
+        <div class="vocab-touch-card" onclick="alert('【羽】羽部，共 6 畫。例：羽毛、羽衣'); soundEffect('card')">
+          <div class="vocab-char">羽</div><div class="vocab-pinyin">ㄩˇ</div>
+        </div>
+        <div class="vocab-touch-card" onclick="alert('【衣】衣部，共 6 畫。例：羽衣、衣服'); soundEffect('card')">
+          <div class="vocab-char">衣</div><div class="vocab-pinyin">ㄧ</div>
+        </div>
+        <div class="vocab-touch-card" onclick="alert('【脆】肉部，共 10 畫。例：清脆、乾脆'); soundEffect('card')">
+          <div class="vocab-char">脆</div><div class="vocab-pinyin">ㄘㄨㄟˋ</div>
+        </div>
+        <div class="vocab-touch-card" onclick="alert('【髮】髟部，共 15 畫。例：頭髮、千鈞一髮'); soundEffect('card')">
+          <div class="vocab-char">髮</div><div class="vocab-pinyin">ㄈㄚˇ</div>
+        </div>
+        <div class="vocab-touch-card" onclick="alert('【處】虍部，共 11 畫。例：四處、處理'); soundEffect('card')">
+          <div class="vocab-char">處</div><div class="vocab-pinyin">ㄔㄨˋ / ㄔㄨˇ</div>
+        </div>
+        <div class="vocab-touch-card" onclick="alert('【旅】方部，共 10 畫。例：旅行、旅客'); soundEffect('card')">
+          <div class="vocab-char">旅</div><div class="vocab-pinyin">ㄌㄩˇ</div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- SLIDE 5 -->
-  <section class="slide" data-slide="5" data-section="深究思考">
+  <section class="slide" data-slide="5" data-section="【第二節】字詞硬筆與部首探險">
     <div class="slide-inner">
-      <div class="kicker">— MAPS 學習單 觀點探究 —</div>
-      <h2 class="slide-title">大腦體操 <span class="highlight-gold">觸控翻牌看心法</span></h2>
+      <div class="kicker">— 第二節課 步驟二 —</div>
+      <h2 class="slide-title">多音字大擂台 <span class="highlight-gold">讀音辨析</span></h2>
+      <div class="quiz-box">
+        <div class="quiz-question">Q1. 風最喜歡「四處」旅行，這裡的「處」應該讀作什麼？</div>
+        <div class="quiz-options">
+          <button class="quiz-opt-btn" onclick="checkQuiz(this, true)">A. ㄔㄨˋ (場所/地方)</button>
+          <button class="quiz-opt-btn" onclick="checkQuiz(this, false)">B. ㄔㄨˇ (辦理/安頓)</button>
+        </div>
+        <div class="quiz-question" style="margin-top: 15px;">Q2. 爸爸去「銀行」領錢，這裡的「行」應該讀作什麼？</div>
+        <div class="quiz-options">
+          <button class="quiz-opt-btn" onclick="checkQuiz(this, false)">A. ㄒㄧㄥˊ (行走)</button>
+          <button class="quiz-opt-btn" onclick="checkQuiz(this, true)">B. ㄏㄤˊ (行業/店鋪)</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6 -->
+  <section class="slide" data-slide="6" data-section="【第二節】字詞硬筆與部首探險">
+    <div class="slide-inner">
+      <div class="kicker">— 第二節課 關卡 2 —</div>
+      <h2 class="slide-title">詞語選擇題 <span class="highlight-pink">即時通關</span></h2>
+      <div class="quiz-box">
+        <div class="quiz-question">Q3. 「小雲雀雖然沒有多彩的羽衣，卻有（ ）的歌聲。」空格應填入？</div>
+        <div class="quiz-options">
+          <button class="quiz-opt-btn" onclick="checkQuiz(this, false)">A. 暖暖</button>
+          <button class="quiz-opt-btn" onclick="checkQuiz(this, true)">B. 清脆</button>
+          <button class="quiz-opt-btn" onclick="checkQuiz(this, false)">C. 飛奔</button>
+          <button class="quiz-opt-btn" onclick="checkQuiz(this, false)">D. 四處</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 7 -->
+  <section class="slide" data-slide="7" data-section="【第三節】內容形式融合深究">
+    <div class="slide-inner">
+      <div class="kicker">— 第三節課 步驟一 —</div>
+      <h2 class="slide-title">MAPS 提問與 <span class="highlight-gold">四大修辭融合賞析</span></h2>
+      <div class="grid-4">
+        <div class="card">
+          <div style="font-size: 32px;">🗣️</div>
+          <div class="card-title" style="font-size: 18px; color: var(--accent-gold);">擬人法</div>
+          <div class="card-desc" style="font-size: 14px;">• 太陽伸出暖暖的手<br>• 風用長長頭髮接住</div>
+        </div>
+        <div class="card">
+          <div style="font-size: 32px;">🔄</div>
+          <div class="card-title" style="font-size: 18px; color: var(--accent-cyan);">疊字法</div>
+          <div class="card-desc" style="font-size: 14px;">• 暖暖的手、拍拍小草<br>• 閃閃發亮、慢慢落下</div>
+        </div>
+        <div class="card">
+          <div style="font-size: 32px;">🎨</div>
+          <div class="card-title" style="font-size: 18px; color: var(--accent-pink);">摹寫法</div>
+          <div class="card-desc" style="font-size: 14px;">• 觸覺：暖暖的手<br>• 聽覺：清脆歌聲</div>
+        </div>
+        <div class="card">
+          <div style="font-size: 32px;">🔗</div>
+          <div class="card-title" style="font-size: 18px; color: var(--accent-green);">類疊法</div>
+          <div class="card-desc" style="font-size: 14px;">• 帶你去聞百合花香<br>• 帶你去看成群綿羊</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 8 -->
+  <section class="slide" data-slide="8" data-section="【第三節】內容形式融合深究">
+    <div class="slide-inner">
+      <div class="kicker">— 第三節課 步驟二 —</div>
+      <h2 class="slide-title">MAPS 觀點探究 <span class="highlight-cyan">觸控翻牌看心法</span></h2>
       <div class="grid-3">
         <div class="flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
           <div class="flip-card-inner">
@@ -624,174 +677,10 @@
     </div>
   </section>
 
-  <!-- SLIDE 6 -->
-  <section class="slide" data-slide="6" data-section="學習單遊戲">
-    <div class="slide-inner">
-      <div class="kicker">— 學習單任務一 課文小偵探 —</div>
-      <h2 class="slide-title">大屏觸控連連看 <span class="highlight-cyan">人物與特徵配對</span></h2>
-      <p style="font-size: 18px; color: var(--ink-muted);">👉 學生請上台先點左邊人物，再點右邊對應的特徵！</p>
-      <div class="match-container">
-        <div class="match-column">
-          <div class="match-item" data-id="1" onclick="selectMatch('left', 1, this)">
-            <span>1. 太陽 / 熱情招呼</span> <span>👉</span>
-          </div>
-          <div class="match-item" data-id="2" onclick="selectMatch('left', 2, this)">
-            <span>2. 小雲雀 / 清脆歌聲</span> <span>👉</span>
-          </div>
-          <div class="match-item" data-id="3" onclick="selectMatch('left', 3, this)">
-            <span>3. 小豆子 / 踢足球</span> <span>👉</span>
-          </div>
-        </div>
-        <div class="match-column">
-          <div class="match-item" data-id="3" onclick="selectMatch('right', 3, this)">
-            <span>A. 活力十足，最喜歡在操場奔跑運動</span> <span>🎯</span>
-          </div>
-          <div class="match-item" data-id="1" onclick="selectMatch('right', 1, this)">
-            <span>B. 伸出暖暖的手，有一顆熱情的心</span> <span>🎯</span>
-          </div>
-          <div class="match-item" data-id="2" onclick="selectMatch('right', 2, this)">
-            <span>C. 沒有多彩羽衣，卻有清脆優美的歌聲</span> <span>🎯</span>
-          </div>
-        </div>
-      </div>
-      <div id="match-msg" style="font-size: 20px; font-weight: 700; text-align: center; color: var(--accent-gold); min-height: 30px;"></div>
-    </div>
-  </section>
-
-  <!-- SLIDE 7 -->
-  <section class="slide" data-slide="7" data-section="生字語詞大屏測驗">
-    <div class="slide-inner">
-      <div class="kicker">— 大屏課堂測驗遊戲 🎮 —</div>
-      <h2 class="slide-title">生字語詞大挑戰 <span class="highlight-gold">闖關搶答</span></h2>
-      <div class="game-tabs">
-        <div class="game-tab-btn active" id="tab1-btn" onclick="switchGameTab(1)">🔤 15個重點生字</div>
-        <div class="game-tab-btn" id="tab2-btn" onclick="switchGameTab(2)">🎯 多音字大擂台</div>
-        <div class="game-tab-btn" id="tab3-btn" onclick="switchGameTab(3)">🧩 詞語選擇題</div>
-      </div>
-      <div id="game-tab-1">
-        <div class="vocab-grid">
-          <div class="vocab-touch-card" onclick="alert('【泥】ㄋㄧˊ：泥土、拖泥帶水'); soundEffect('card')">
-            <div class="vocab-char">泥</div><div class="vocab-pinyin">ㄋㄧˊ</div>
-          </div>
-          <div class="vocab-touch-card" onclick="alert('【化】ㄏㄨㄚˋ：化成、千變萬化'); soundEffect('card')">
-            <div class="vocab-char">化</div><div class="vocab-pinyin">ㄏㄨㄚˋ</div>
-          </div>
-          <div class="vocab-touch-card" onclick="alert('【雀】ㄑㄩㄝˋ：雲雀、孔雀'); soundEffect('card')">
-            <div class="vocab-char">雀</div><div class="vocab-pinyin">ㄑㄩㄝˋ</div>
-          </div>
-          <div class="vocab-touch-card" onclick="alert('【輕】ㄑㄧㄥ：輕快、輕鬆'); soundEffect('card')">
-            <div class="vocab-char">輕</div><div class="vocab-pinyin">ㄑㄧㄥ</div>
-          </div>
-          <div class="vocab-touch-card" onclick="alert('【羽】ㄩˇ：羽毛、羽衣'); soundEffect('card')">
-            <div class="vocab-char">羽</div><div class="vocab-pinyin">ㄩˇ</div>
-          </div>
-          <div class="vocab-touch-card" onclick="alert('【衣】ㄧ：羽衣、衣服'); soundEffect('card')">
-            <div class="vocab-char">衣</div><div class="vocab-pinyin">ㄧ</div>
-          </div>
-          <div class="vocab-touch-card" onclick="alert('【脆】ㄘㄨㄟˋ：清脆、乾脆'); soundEffect('card')">
-            <div class="vocab-char">脆</div><div class="vocab-pinyin">ㄘㄨㄟˋ</div>
-          </div>
-          <div class="vocab-touch-card" onclick="alert('【髮】ㄈㄚˇ：頭髮、千鈞一髮'); soundEffect('card')">
-            <div class="vocab-char">髮</div><div class="vocab-pinyin">ㄈㄚˇ</div>
-          </div>
-          <div class="vocab-touch-card" onclick="alert('【處】ㄔㄨˋ/ㄔㄨˇ：四處、處理'); soundEffect('card')">
-            <div class="vocab-char">處</div><div class="vocab-pinyin">ㄔㄨˋ / ㄔㄨˇ</div>
-          </div>
-          <div class="vocab-touch-card" onclick="alert('【旅】ㄌㄩˇ：旅行、旅客'); soundEffect('card')">
-            <div class="vocab-char">旅</div><div class="vocab-pinyin">ㄌㄩˇ</div>
-          </div>
-          <div class="vocab-touch-card" onclick="alert('【行】ㄒㄧㄥˊ/ㄏㄤˊ：旅行、銀行'); soundEffect('card')">
-            <div class="vocab-char">行</div><div class="vocab-pinyin">ㄒㄧㄥˊ / ㄏㄤˊ</div>
-          </div>
-          <div class="vocab-touch-card" onclick="alert('【平】ㄆㄧㄥˊ：平安、和平'); soundEffect('card')">
-            <div class="vocab-char">平</div><div class="vocab-pinyin">ㄆㄧㄥˊ</div>
-          </div>
-          <div class="vocab-touch-card" onclick="alert('【男】ㄋㄢˊ：男孩、男生'); soundEffect('card')">
-            <div class="vocab-char">男</div><div class="vocab-pinyin">ㄋㄢˊ</div>
-          </div>
-          <div class="vocab-touch-card" onclick="alert('【朗】ㄌㄤˇ：開朗、明朗'); soundEffect('card')">
-            <div class="vocab-char">朗</div><div class="vocab-pinyin">ㄌㄤˇ</div>
-          </div>
-          <div class="vocab-touch-card" onclick="alert('【足】ㄗㄨˊ：足球、手舞足蹈'); soundEffect('card')">
-            <div class="vocab-char">足</div><div class="vocab-pinyin">ㄗㄨˊ</div>
-          </div>
-        </div>
-      </div>
-      <div id="game-tab-2" style="display: none;">
-        <div class="quiz-box">
-          <div class="quiz-question">Q1. 風喜歡「四處」旅行，這裡的「處」應該讀作什麼？</div>
-          <div class="quiz-options">
-            <button class="quiz-opt-btn" onclick="checkQuiz(this, true)">A. ㄔㄨˋ (場所/地方)</button>
-            <button class="quiz-opt-btn" onclick="checkQuiz(this, false)">B. ㄔㄨˇ (辦理/安頓)</button>
-          </div>
-          <div class="quiz-question" style="margin-top: 15px;">Q2. 爸爸去「銀行」領錢，這裡的「行」應該讀作什麼？</div>
-          <div class="quiz-options">
-            <button class="quiz-opt-btn" onclick="checkQuiz(this, false)">A. ㄒㄧㄥˊ (行走)</button>
-            <button class="quiz-opt-btn" onclick="checkQuiz(this, true)">B. ㄏㄤˊ (行業/店鋪)</button>
-          </div>
-        </div>
-      </div>
-      <div id="game-tab-3" style="display: none;">
-        <div class="quiz-box">
-          <div class="quiz-question">Q3. 「小雲雀雖然沒有多彩的羽衣，卻有（ ）的歌聲。」空格應填入？</div>
-          <div class="quiz-options">
-            <button class="quiz-opt-btn" onclick="checkQuiz(this, false)">A. 暖暖</button>
-            <button class="quiz-opt-btn" onclick="checkQuiz(this, true)">B. 清脆</button>
-            <button class="quiz-opt-btn" onclick="checkQuiz(this, false)">C. 飛奔</button>
-            <button class="quiz-opt-btn" onclick="checkQuiz(this, false)">D. 四處</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 8 -->
-  <section class="slide" data-slide="8" data-section="修辭解析">
-    <div class="slide-inner">
-      <div class="kicker">— 文學修辭寶典 —</div>
-      <h2 class="slide-title">詩歌中的四大靈魂修辭 <span class="highlight-pink">寫作魔法</span></h2>
-      <div class="grid-4">
-        <div class="card">
-          <div style="font-size: 32px;">🗣️</div>
-          <div class="card-title" style="font-size: 18px; color: var(--accent-gold);">擬人法</div>
-          <div class="card-desc" style="font-size: 14px;">
-            • 太陽伸出暖暖的手<br>
-            • 風用長長的頭髮接住
-          </div>
-        </div>
-        <div class="card">
-          <div style="font-size: 32px;">🔄</div>
-          <div class="card-title" style="font-size: 18px; color: var(--accent-cyan);">疊字法</div>
-          <div class="card-desc" style="font-size: 14px;">
-            • 暖暖的手、拍拍小草<br>
-            • 閃閃發亮、慢慢落下
-          </div>
-        </div>
-        <div class="card">
-          <div style="font-size: 32px;">🎨</div>
-          <div class="card-title" style="font-size: 18px; color: var(--accent-pink);">摹寫法</div>
-          <div class="card-desc" style="font-size: 14px;">
-            • 觸覺：暖暖的手<br>
-            • 視覺：閃閃發亮<br>
-            • 聽覺：清脆歌聲
-          </div>
-        </div>
-        <div class="card">
-          <div style="font-size: 32px;">🔗</div>
-          <div class="card-title" style="font-size: 18px; color: var(--accent-green);">類疊（類句）</div>
-          <div class="card-desc" style="font-size: 14px;">
-            • 帶你去聞百合的花香，<br>
-            • 帶你去看成群的綿羊
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- SLIDE 9 -->
-  <section class="slide" data-slide="9" data-section="我是大作家">
+  <section class="slide" data-slide="9" data-section="【第三節】內容形式融合深究">
     <div class="slide-inner">
-      <div class="kicker">— 我是大作家 大屏互動遊戲 ✍️ —</div>
+      <div class="kicker">— 第三節課 關卡 3 —</div>
       <h2 class="slide-title">照樣造句拼圖大挑戰 <span class="highlight-gold">句型大師</span></h2>
       <div class="sentence-builder">
         <div style="font-size: 18px; color: var(--accent-gold); font-weight: 700;">
@@ -822,10 +711,10 @@
   </section>
 
   <!-- SLIDE 10 -->
-  <section class="slide" data-slide="10" data-section="口語表達">
+  <section class="slide" data-slide="10" data-section="【第四節】讀寫結合發表實作">
     <div class="slide-inner">
-      <div class="kicker">— 學習單 口語表達演練 —</div>
-      <h2 class="slide-title">自我介紹三部曲 <span class="highlight-cyan">大方登場</span></h2>
+      <div class="kicker">— 第四節課 步驟一 —</div>
+      <h2 class="slide-title">自我介紹三部曲 <span class="highlight-cyan">口語演練</span></h2>
       <div class="grid-3">
         <div class="card" style="border-top: 4px solid var(--accent-gold);">
           <div style="font-size: 32px;">👋</div>
@@ -853,10 +742,10 @@
   </section>
 
   <!-- SLIDE 11 -->
-  <section class="slide" data-slide="11" data-section="我是大作家">
+  <section class="slide" data-slide="11" data-section="【第四節】讀寫結合發表實作">
     <div class="slide-inner">
-      <div class="kicker">— 我是大作家 學習單實作 🎭 —</div>
-      <h2 class="slide-title">《猜猜我是誰》 <span class="highlight-pink">大屏創作與猜猜遊戲</span></h2>
+      <div class="kicker">— 第四節課 步驟二 & 三 —</div>
+      <h2 class="slide-title">《猜猜我是誰》 <span class="highlight-pink">大屏創作與全班競猜</span></h2>
       <div class="writer-board">
         <div style="font-size: 18px; color: var(--accent-pink); font-weight: 700;">
           ✍️ 學生上台寫下《自我介紹短詩》，最後讓全班猜猜看是誰！
@@ -877,9 +766,9 @@
   </section>
 
   <!-- SLIDE 12 -->
-  <section class="slide" data-slide="12" data-section="喚起行動">
+  <section class="slide" data-slide="12" data-section="【第四節】讀寫結合發表實作">
     <div class="slide-inner">
-      <div class="kicker">— 學習單任務三 —</div>
+      <div class="kicker">— 第四節課 總結 —</div>
       <h2 class="slide-title">班級交友 Bingo 大搜查 <span class="highlight-gold">回到學校！</span></h2>
       <div class="grid-3" style="gap: 10px;">
         <div class="card" onclick="this.classList.toggle('matched'); soundEffect('correct')" style="cursor: pointer; text-align: center;">

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>三上南一國語 第一課 〈你好，新朋友〉 可愛插畫大屏互動簡報與生字翻牌遊戲</title>
+  <title>三上南一國語 第一課 〈你好，新朋友〉 可愛插畫大屏簡報與生字硬筆字大師課</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -50,159 +50,73 @@
         radial-gradient(circle at 50% 50%, rgba(244, 63, 94, 0.1) 0%, transparent 35%);
     }
 
-    /* Cute Background Illustration SVG Overlay */
     .bg-illustration {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 1;
-      opacity: 0.25;
+      position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.25;
     }
 
     #confetti-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      pointer-events: none;
-      z-index: 9999;
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;
     }
 
     #progress-bar {
-      position: fixed;
-      top: 0; left: 0;
-      height: 6px;
+      position: fixed; top: 0; left: 0; height: 6px;
       background: linear-gradient(90deg, var(--accent-cyan), var(--accent-gold), var(--accent-pink), var(--accent-green));
-      width: 0%;
-      z-index: 1000;
-      transition: width 0.3s ease;
+      width: 0%; z-index: 1000; transition: width 0.3s ease;
     }
 
     #top-bar {
-      position: fixed;
-      top: 15px; left: 20px; right: 20px;
-      display: flex; justify-content: space-between; align-items: center;
-      z-index: 900;
-      pointer-events: none;
+      position: fixed; top: 15px; left: 20px; right: 20px;
+      display: flex; justify-content: space-between; align-items: center; z-index: 900; pointer-events: none;
     }
 
-    .top-left {
-      display: flex; align-items: center; gap: 12px;
-      pointer-events: auto;
-    }
+    .top-left { display: flex; align-items: center; gap: 12px; pointer-events: auto; }
 
     #section-tag {
-      font-family: 'Noto Sans TC', sans-serif;
-      font-size: var(--t4);
-      font-weight: 700;
-      color: var(--accent-gold);
-      background: rgba(251, 191, 36, 0.18);
-      border: 2px solid rgba(251, 191, 36, 0.5);
-      padding: 8px 18px;
-      border-radius: 30px;
-      backdrop-filter: blur(12px);
-      letter-spacing: 1px;
+      font-family: 'Noto Sans TC', sans-serif; font-size: var(--t4); font-weight: 700;
+      color: var(--accent-gold); background: rgba(251, 191, 36, 0.18);
+      border: 2px solid rgba(251, 191, 36, 0.5); padding: 8px 18px; border-radius: 30px; backdrop-filter: blur(12px);
     }
 
     .icon-btn {
-      background: rgba(30, 41, 59, 0.85);
-      border: 2px solid var(--border-color);
-      color: var(--ink-main);
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex; align-items: center; gap: 6px;
-      backdrop-filter: blur(12px);
-      transition: all 0.2s;
-      pointer-events: auto;
+      background: rgba(30, 41, 59, 0.85); border: 2px solid var(--border-color); color: var(--ink-main);
+      padding: 8px 16px; border-radius: 20px; font-size: 15px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; gap: 6px; backdrop-filter: blur(12px); transition: all 0.2s; pointer-events: auto;
     }
     .icon-btn:hover, .icon-btn:active {
-      background: var(--accent-cyan);
-      color: #000;
-      border-color: var(--accent-cyan);
-      transform: scale(1.05);
+      background: var(--accent-cyan); color: #000; border-color: var(--accent-cyan); transform: scale(1.05);
     }
 
     #page-info {
-      position: fixed;
-      bottom: 15px; right: 25px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 16px; font-weight: 700;
-      color: var(--ink-muted);
-      background: rgba(15, 23, 42, 0.85);
-      border: 2px solid var(--border-color);
-      padding: 8px 18px;
-      border-radius: 20px;
-      z-index: 900;
-      backdrop-filter: blur(12px);
+      position: fixed; bottom: 15px; right: 25px;
+      font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: var(--ink-muted);
+      background: rgba(15, 23, 42, 0.85); border: 2px solid var(--border-color); padding: 8px 18px; border-radius: 20px; z-index: 900; backdrop-filter: blur(12px);
     }
 
-    #key-hint {
-      position: fixed;
-      bottom: 18px; left: 25px;
-      font-size: 14px; color: var(--ink-dim);
-      z-index: 900; pointer-events: none;
-    }
+    #key-hint { position: fixed; bottom: 18px; left: 25px; font-size: 14px; color: var(--ink-dim); z-index: 900; pointer-events: none; }
 
     .nav-btn {
-      position: fixed;
-      top: 50%; transform: translateY(-50%);
-      width: 64px; height: 64px;
-      background: rgba(30, 41, 59, 0.85);
-      border: 3px solid var(--border-color);
-      border-radius: 50%;
-      color: var(--ink-main);
-      font-size: 26px;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      z-index: 950;
-      transition: all 0.2s ease;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      position: fixed; top: 50%; transform: translateY(-50%); width: 64px; height: 64px;
+      background: rgba(30, 41, 59, 0.85); border: 3px solid var(--border-color); border-radius: 50%;
+      color: var(--ink-main); font-size: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      z-index: 950; transition: all 0.2s ease; backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.4);
     }
     .nav-btn:hover, .nav-btn:active {
-      background: var(--accent-cyan);
-      color: #000;
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 25px rgba(56, 189, 248, 0.6);
-      transform: translateY(-50%) scale(1.1);
+      background: var(--accent-cyan); color: #000; border-color: var(--accent-cyan);
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.6); transform: translateY(-50%) scale(1.1);
     }
 
-    #prev-btn { left: 15px; }
-    #next-btn { right: 15px; }
+    #prev-btn { left: 15px; } #next-btn { right: 15px; }
 
     .slide {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      padding: 75px 85px 65px 85px;
-      opacity: 0; pointer-events: none;
-      transform: translateY(20px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
-      overflow-y: auto;
-      z-index: 10;
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      padding: 75px 85px 65px 85px; opacity: 0; pointer-events: none; transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease; overflow-y: auto; z-index: 10;
     }
-    .slide.active {
-      opacity: 1; pointer-events: auto;
-      transform: translateY(0);
-    }
+    .slide.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .slide-inner { width: 100%; max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
 
-    .slide-inner {
-      width: 100%; max-width: 1200px;
-      margin: 0 auto;
-      display: flex; flex-direction: column; gap: 18px;
-    }
-
-    .kicker {
-      font-size: var(--t4); font-weight: 700;
-      color: var(--accent-cyan); letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    .slide-title {
-      font-size: var(--t1); font-weight: 900;
-      line-height: 1.25; color: #fff;
-    }
+    .kicker { font-size: var(--t4); font-weight: 700; color: var(--accent-cyan); letter-spacing: 2px; text-transform: uppercase; }
+    .slide-title { font-size: var(--t1); font-weight: 900; line-height: 1.25; color: #fff; }
 
     .highlight-gold { color: var(--accent-gold); }
     .highlight-cyan { color: var(--accent-cyan); }
@@ -221,223 +135,120 @@
     }
 
     .card {
-      background: rgba(30, 41, 59, 0.85);
-      border: 2px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 22px;
-      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
-      position: relative;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-      backdrop-filter: blur(10px);
+      background: rgba(30, 41, 59, 0.85); border: 2px solid var(--border-color); border-radius: var(--radius-lg);
+      padding: 22px; transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); position: relative;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3); backdrop-filter: blur(10px);
     }
-    .card:hover {
-      background: var(--bg-card-hover);
-      border-color: rgba(255, 255, 255, 0.3);
-    }
+    .card:hover { background: var(--bg-card-hover); border-color: rgba(255, 255, 255, 0.3); }
 
-    .card-title {
-      font-size: var(--t2); font-weight: 700;
-      margin-bottom: 10px;
-    }
+    .card-title { font-size: var(--t2); font-weight: 700; margin-bottom: 10px; }
+    .card-desc { font-size: var(--t3); color: var(--ink-muted); line-height: 1.6; }
 
-    .card-desc {
-      font-size: var(--t3); color: var(--ink-muted);
-      line-height: 1.6;
-    }
-
-    /* 3D Touch Flip Cards for Vocab (大屏生字翻牌卡) */
-    .vocab-flip-card {
-      perspective: 1000px;
-      min-height: 160px;
-      cursor: pointer;
-    }
+    /* 3D Vocab Flip Cards */
+    .vocab-flip-card { perspective: 1000px; min-height: 170px; cursor: pointer; }
     .vocab-flip-inner {
-      position: relative; width: 100%; height: 100%;
-      text-align: center;
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-      transform-style: preserve-3d;
+      position: relative; width: 100%; height: 100%; text-align: center;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d;
     }
-    .vocab-flip-card.flipped .vocab-flip-inner {
-      transform: rotateY(180deg);
-    }
+    .vocab-flip-card.flipped .vocab-flip-inner { transform: rotateY(180deg); }
     .vocab-flip-front, .vocab-flip-back {
-      position: absolute; inset: 0;
-      backface-visibility: hidden;
-      border-radius: var(--radius-md);
-      padding: 16px;
-      display: flex; flex-direction: column;
-      justify-content: center; align-items: center;
-      border: 3px solid var(--border-color);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      position: absolute; inset: 0; backface-visibility: hidden; border-radius: var(--radius-md);
+      padding: 16px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+      border: 3px solid var(--border-color); box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
-    .vocab-flip-front {
-      background: linear-gradient(145deg, #1e293b, #0f172a);
-      color: #fff;
+    .vocab-flip-front { background: linear-gradient(145deg, #1e293b, #0f172a); color: #fff; }
+    .vocab-flip-back { background: linear-gradient(145deg, #311042, #1e1b4b); color: #fff; transform: rotateY(180deg); border-color: var(--accent-gold); }
+
+    /* Hard-pen Rice Grid Box (米字格) */
+    .rice-grid-box {
+      width: 100px; height: 100px;
+      border: 2px dashed var(--accent-gold);
+      position: relative; display: flex; align-items: center; justify-content: center;
+      font-size: 54px; font-weight: 900; color: var(--accent-gold);
+      background: rgba(251, 191, 36, 0.08); border-radius: 12px; margin: 0 auto;
     }
-    .vocab-flip-front:hover {
+    .rice-grid-box::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to right, transparent 49%, rgba(251,191,36,0.3) 50%, transparent 51%),
+                  linear-gradient(to bottom, transparent 49%, rgba(251,191,36,0.3) 50%, transparent 51%);
+      pointer-events: none;
+    }
+
+    .calli-card {
+      background: rgba(15, 23, 42, 0.9);
+      border: 2px solid var(--accent-cyan);
+      border-radius: var(--radius-md); padding: 16px;
+      display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: all 0.2s;
+    }
+    .calli-card:hover, .calli-card.active {
       border-color: var(--accent-gold);
-    }
-    .vocab-flip-back {
-      background: linear-gradient(145deg, #311042, #1e1b4b);
-      color: #fff; transform: rotateY(180deg);
-      border-color: var(--accent-gold);
+      box-shadow: 0 0 20px rgba(251, 191, 36, 0.4); transform: scale(1.03);
     }
 
     /* General MAPS Flip Cards */
-    .flip-card {
-      perspective: 1000px;
-      min-height: 200px;
-      cursor: pointer;
-    }
+    .flip-card { perspective: 1000px; min-height: 200px; cursor: pointer; }
     .flip-card-inner {
-      position: relative; width: 100%; height: 100%;
-      text-align: center;
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-      transform-style: preserve-3d;
+      position: relative; width: 100%; height: 100%; text-align: center;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d;
     }
-    .flip-card.flipped .flip-card-inner {
-      transform: rotateY(180deg);
-    }
+    .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
     .flip-front, .flip-back {
-      position: absolute; inset: 0;
-      backface-visibility: hidden;
-      border-radius: var(--radius-lg);
-      padding: 20px;
-      display: flex; flex-direction: column;
-      justify-content: center; align-items: center;
-      border: 2px solid var(--border-color);
+      position: absolute; inset: 0; backface-visibility: hidden; border-radius: var(--radius-lg);
+      padding: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 2px solid var(--border-color);
     }
-    .flip-front {
-      background: linear-gradient(135deg, #1e293b, #0f172a);
-      color: #fff;
-    }
-    .flip-back {
-      background: linear-gradient(135deg, #1e1b4b, #311042);
-      color: #fff; transform: rotateY(180deg);
-      border-color: var(--accent-gold);
-    }
-
-    .game-tabs { display: flex; gap: 10px; margin-bottom: 10px; }
-    .game-tab-btn {
-      flex: 1; padding: 14px 20px;
-      font-size: 18px; font-weight: 700;
-      background: rgba(255,255,255,0.08);
-      border: 2px solid var(--border-color);
-      color: var(--ink-muted);
-      border-radius: 14px; cursor: pointer; text-align: center;
-      transition: all 0.2s;
-    }
-    .game-tab-btn.active {
-      background: var(--accent-gold);
-      color: #000; border-color: var(--accent-gold);
-      box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
-    }
+    .flip-front { background: linear-gradient(135deg, #1e293b, #0f172a); color: #fff; }
+    .flip-back { background: linear-gradient(135deg, #1e1b4b, #311042); color: #fff; transform: rotateY(180deg); border-color: var(--accent-gold); }
 
     .quiz-box {
-      background: rgba(15, 23, 42, 0.9);
-      border: 2px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 24px; display: flex; flex-direction: column; gap: 16px;
+      background: rgba(15, 23, 42, 0.9); border: 2px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; gap: 16px;
     }
     .quiz-question { font-size: 22px; font-weight: 700; color: #fff; }
     .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .quiz-opt-btn {
-      padding: 16px 20px; font-size: 20px; font-weight: 700;
-      background: rgba(255,255,255,0.06);
-      border: 2px solid var(--border-color); color: #fff;
-      border-radius: var(--radius-md); cursor: pointer;
-      transition: all 0.2s ease; text-align: center;
+      padding: 16px 20px; font-size: 20px; font-weight: 700; background: rgba(255,255,255,0.06);
+      border: 2px solid var(--border-color); color: #fff; border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s ease; text-align: center;
     }
-    .quiz-opt-btn:hover, .quiz-opt-btn:active {
-      background: rgba(56, 189, 248, 0.2); border-color: var(--accent-cyan);
-      transform: scale(1.02);
-    }
-    .quiz-opt-btn.correct {
-      background: rgba(52, 211, 153, 0.3) !important;
-      border-color: var(--accent-green) !important; color: #6ee7b7 !important;
-    }
-    .quiz-opt-btn.wrong {
-      background: rgba(244, 63, 94, 0.3) !important;
-      border-color: var(--accent-pink) !important; color: #fca5a5 !important;
-    }
+    .quiz-opt-btn:hover, .quiz-opt-btn:active { background: rgba(56, 189, 248, 0.2); border-color: var(--accent-cyan); transform: scale(1.02); }
+    .quiz-opt-btn.correct { background: rgba(52, 211, 153, 0.3) !important; border-color: var(--accent-green) !important; color: #6ee7b7 !important; }
+    .quiz-opt-btn.wrong { background: rgba(244, 63, 94, 0.3) !important; border-color: var(--accent-pink) !important; color: #fca5a5 !important; }
 
     .match-container { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
     .match-column { display: flex; flex-direction: column; gap: 12px; }
     .match-item {
-      padding: 16px 20px; font-size: 18px; font-weight: 700;
-      background: var(--bg-card); border: 2px solid var(--border-color);
-      border-radius: var(--radius-md); cursor: pointer;
-      transition: all 0.2s ease; display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; font-size: 18px; font-weight: 700; background: var(--bg-card);
+      border: 2px solid var(--border-color); border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: space-between;
     }
-    .match-item.selected {
-      border-color: var(--accent-gold); background: rgba(251, 191, 36, 0.2);
-      box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
-    }
-    .match-item.matched {
-      border-color: var(--accent-green); background: rgba(52, 211, 153, 0.2);
-      color: #6ee7b7; pointer-events: none;
-    }
+    .match-item.selected { border-color: var(--accent-gold); background: rgba(251, 191, 36, 0.2); box-shadow: 0 0 15px rgba(251, 191, 36, 0.4); }
+    .match-item.matched { border-color: var(--accent-green); background: rgba(52, 211, 153, 0.2); color: #6ee7b7; pointer-events: none; }
 
     .sentence-builder {
-      background: rgba(15, 23, 42, 0.9);
-      border: 2px solid var(--accent-gold);
-      border-radius: var(--radius-lg);
-      padding: 24px; display: flex; flex-direction: column; gap: 18px;
+      background: rgba(15, 23, 42, 0.9); border: 2px solid var(--accent-gold); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; gap: 18px;
     }
     .slot-display {
-      font-size: 26px; font-weight: 700; padding: 20px;
-      background: rgba(251, 191, 36, 0.1);
-      border: 2px dashed var(--accent-gold);
-      border-radius: var(--radius-md);
-      text-align: center; color: #fff; line-height: 1.5;
+      font-size: 26px; font-weight: 700; padding: 20px; background: rgba(251, 191, 36, 0.1); border: 2px dashed var(--accent-gold); border-radius: var(--radius-md); text-align: center; color: #fff; line-height: 1.5;
     }
     .slot-btn-group { display: flex; flex-wrap: wrap; gap: 10px; }
     .slot-chip {
-      padding: 12px 20px; font-size: 18px; font-weight: 700;
-      background: rgba(56, 189, 248, 0.15);
-      border: 2px solid var(--accent-cyan); color: #fff;
-      border-radius: 30px; cursor: pointer; transition: all 0.2s;
+      padding: 12px 20px; font-size: 18px; font-weight: 700; background: rgba(56, 189, 248, 0.15); border: 2px solid var(--accent-cyan); color: #fff; border-radius: 30px; cursor: pointer; transition: all 0.2s;
     }
-    .slot-chip:hover, .slot-chip:active {
-      background: var(--accent-cyan); color: #000; transform: scale(1.05);
-    }
+    .slot-chip:hover, .slot-chip:active { background: var(--accent-cyan); color: #000; transform: scale(1.05); }
 
     .writer-board {
-      background: rgba(15, 23, 42, 0.9);
-      border: 2px solid var(--accent-pink);
-      border-radius: var(--radius-lg);
-      padding: 24px; display: flex; flex-direction: column; gap: 16px;
+      background: rgba(15, 23, 42, 0.9); border: 2px solid var(--accent-pink); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; gap: 16px;
     }
     .writer-input {
-      width: 100%; background: rgba(0,0,0,0.4);
-      border: 2px solid var(--border-color);
-      border-radius: var(--radius-md); color: #fff;
-      font-size: 20px; font-family: inherit;
-      padding: 16px; min-height: 120px; resize: none;
+      width: 100%; background: rgba(0,0,0,0.4); border: 2px solid var(--border-color); border-radius: var(--radius-md); color: #fff; font-size: 20px; font-family: inherit; padding: 16px; min-height: 120px; resize: none;
     }
     .writer-input:focus { outline: none; border-color: var(--accent-pink); }
     .big-btn {
-      padding: 16px 28px; font-size: 20px; font-weight: 900;
-      background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
-      color: #fff; border: none; border-radius: 30px; cursor: pointer;
-      transition: all 0.2s; box-shadow: 0 4px 20px rgba(244, 63, 94, 0.4);
-      display: flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 16px 28px; font-size: 20px; font-weight: 900; background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple)); color: #fff; border: none; border-radius: 30px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(244, 63, 94, 0.4); display: flex; align-items: center; justify-content: center; gap: 10px;
     }
-    .big-btn:hover, .big-btn:active {
-      transform: scale(1.05); box-shadow: 0 0 25px rgba(244, 63, 94, 0.7);
-    }
-
-    .poem-box {
-      background: rgba(255, 255, 255, 0.04);
-      border-left: 5px solid var(--accent-cyan);
-      padding: 18px 24px; border-radius: 0 var(--radius-md) var(--radius-md) 0;
-      font-size: 20px; line-height: 1.8; color: #e2e8f0;
-    }
+    .big-btn:hover, .big-btn:active { transform: scale(1.05); box-shadow: 0 0 25px rgba(244, 63, 94, 0.7); }
   </style>
 </head>
 <body>
 
-  <!-- Cute SVG Illustration Overlay -->
+  <!-- Cute SVG Background Illustration -->
   <svg class="bg-illustration" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="150" cy="120" r="70" fill="#FBBF24" opacity="0.4" />
     <path d="M100 220 Q150 180 200 220 T300 220" stroke="#38BDF8" stroke-width="6" fill="none" />
@@ -475,11 +286,11 @@
         你好，<span class="highlight-gold">新朋友</span>！
       </h1>
       <p style="font-size: var(--t2); color: var(--ink-muted); max-width: 800px; margin-top: 10px;">
-        黃金四節課流程 • 3D 生字翻牌卡 • 角色朗讀 • 大屏關卡遊戲
+        黃金四節課流程 • 生字硬筆字大師課 • 3D 翻牌遊戲 • 全螢幕大屏觸控
       </p>
       <div style="display: flex; gap: 15px; margin-top: 30px;">
         <button class="big-btn" style="background: linear-gradient(135deg, var(--accent-cyan), #0284c7);" onclick="nextSlide()">
-          🚀 開啟黃金第一節課：動畫影片與角色朗讀
+          🚀 開啟第一節課：動畫導引與角色朗讀
         </button>
       </div>
     </div>
@@ -543,7 +354,7 @@
     </div>
   </section>
 
-  <!-- SLIDE 4: 生字 3D 翻牌大卡片 (第二節課重點升級) -->
+  <!-- SLIDE 4: 第二節課生字 3D 翻牌大卡片 -->
   <section class="slide" data-slide="4" data-section="【第二節】字詞硬筆與部首探險">
     <div class="slide-inner">
       <div class="kicker">— 第二節課 3D 大屏生字翻牌遊戲 🎴 —</div>
@@ -551,7 +362,6 @@
       <p style="font-size: 18px; color: var(--ink-muted);">👉 學生請上台點選卡片翻牌，看看背後的重點生字、筆畫與成語！</p>
       
       <div class="grid-5">
-        <!-- 1. 泥 -->
         <div class="vocab-flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
           <div class="vocab-flip-inner">
             <div class="vocab-flip-front">
@@ -566,37 +376,6 @@
           </div>
         </div>
 
-        <!-- 2. 化 -->
-        <div class="vocab-flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
-          <div class="vocab-flip-inner">
-            <div class="vocab-flip-front">
-              <div style="font-size: 20px; color: var(--accent-cyan); font-weight: 700;">ㄏㄨㄚˋ</div>
-              <div style="font-size: 14px; margin-top: 5px;">匕部 • 4畫</div>
-              <div style="font-size: 13px; color: var(--accent-gold); margin-top: 10px;">👉 點擊翻牌</div>
-            </div>
-            <div class="vocab-flip-back">
-              <div style="font-size: 36px; font-weight: 900; color: var(--accent-gold);">化</div>
-              <div style="font-size: 13px; margin-top: 4px;">成語：千變萬化</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3. 雀 -->
-        <div class="vocab-flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
-          <div class="vocab-flip-inner">
-            <div class="vocab-flip-front">
-              <div style="font-size: 20px; color: var(--accent-cyan); font-weight: 700;">ㄑㄩㄝˋ</div>
-              <div style="font-size: 14px; margin-top: 5px;">隹部 • 11畫</div>
-              <div style="font-size: 13px; color: var(--accent-gold); margin-top: 10px;">👉 點擊翻牌</div>
-            </div>
-            <div class="vocab-flip-back">
-              <div style="font-size: 36px; font-weight: 900; color: var(--accent-gold);">雀</div>
-              <div style="font-size: 13px; margin-top: 4px;">詞語：雲雀、孔雀</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 4. 輕 -->
         <div class="vocab-flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
           <div class="vocab-flip-inner">
             <div class="vocab-flip-front">
@@ -611,17 +390,44 @@
           </div>
         </div>
 
-        <!-- 5. 脆 -->
         <div class="vocab-flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
           <div class="vocab-flip-inner">
             <div class="vocab-flip-front">
-              <div style="font-size: 20px; color: var(--accent-cyan); font-weight: 700;">ㄘㄨㄟˋ</div>
-              <div style="font-size: 14px; margin-top: 5px;">肉部 • 10畫</div>
+              <div style="font-size: 20px; color: var(--accent-cyan); font-weight: 700;">ㄈㄚˇ</div>
+              <div style="font-size: 14px; margin-top: 5px;">髟部 • 15畫</div>
               <div style="font-size: 13px; color: var(--accent-gold); margin-top: 10px;">👉 點擊翻牌</div>
             </div>
             <div class="vocab-flip-back">
-              <div style="font-size: 36px; font-weight: 900; color: var(--accent-gold);">脆</div>
-              <div style="font-size: 13px; margin-top: 4px;">詞語：清脆歌聲</div>
+              <div style="font-size: 36px; font-weight: 900; color: var(--accent-gold);">髮</div>
+              <div style="font-size: 13px; margin-top: 4px;">成語：千鈞一髮</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vocab-flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
+          <div class="vocab-flip-inner">
+            <div class="vocab-flip-front">
+              <div style="font-size: 20px; color: var(--accent-cyan); font-weight: 700;">ㄔㄨˋ</div>
+              <div style="font-size: 14px; margin-top: 5px;">虍部 • 11畫</div>
+              <div style="font-size: 13px; color: var(--accent-gold); margin-top: 10px;">👉 點擊翻牌</div>
+            </div>
+            <div class="vocab-flip-back">
+              <div style="font-size: 36px; font-weight: 900; color: var(--accent-gold);">處</div>
+              <div style="font-size: 13px; margin-top: 4px;">詞語：四處旅行</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vocab-flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
+          <div class="vocab-flip-inner">
+            <div class="vocab-flip-front">
+              <div style="font-size: 20px; color: var(--accent-cyan); font-weight: 700;">ㄑㄩㄝˋ</div>
+              <div style="font-size: 14px; margin-top: 5px;">隹部 • 11畫</div>
+              <div style="font-size: 13px; color: var(--accent-gold); margin-top: 10px;">👉 點擊翻牌</div>
+            </div>
+            <div class="vocab-flip-back">
+              <div style="font-size: 36px; font-weight: 900; color: var(--accent-gold);">雀</div>
+              <div style="font-size: 13px; margin-top: 4px;">詞語：小雲雀</div>
             </div>
           </div>
         </div>
@@ -629,21 +435,45 @@
     </div>
   </section>
 
-  <!-- SLIDE 5 -->
+  <!-- SLIDE 5: 硬筆字間架結構大師課 (新增亮點) -->
   <section class="slide" data-slide="5" data-section="【第二節】字詞硬筆與部首探險">
     <div class="slide-inner">
-      <div class="kicker">— 第二節課 步驟二 —</div>
-      <h2 class="slide-title">多音字大擂台 <span class="highlight-gold">讀音辨析</span></h2>
-      <div class="quiz-box">
-        <div class="quiz-question">Q1. 風最喜歡「四處」旅行，這裡的「處」應該讀作什麼？</div>
-        <div class="quiz-options">
-          <button class="quiz-opt-btn" onclick="checkQuiz(this, true)">A. ㄔㄨˋ (場所/地方)</button>
-          <button class="quiz-opt-btn" onclick="checkQuiz(this, false)">B. ㄔㄨˇ (辦理/安頓)</button>
+      <div class="kicker">— 第二節課 重點生字硬筆字教學 ✒️ —</div>
+      <h2 class="slide-title">生字硬筆書法 <span class="highlight-gold">間架結構與運筆秘訣</span></h2>
+      <p style="font-size: 18px; color: var(--ink-muted);">👉 點選下方生字，觀看大屏米字格間架與硬筆書寫要訣：</p>
+      
+      <div class="grid-5" style="margin-bottom: 10px;">
+        <div class="calli-card active" onclick="showCalligraphy('泥', '水部 (8畫)', '左右結構 (1:2)', '三點水呈弧形，第三筆提指向右。右側尼字橫折左緊右舒。', this)">
+          <div style="font-size: 28px; font-weight: 900; text-align: center; color: var(--accent-gold);">泥</div>
+          <div style="font-size: 13px; text-align: center; color: var(--accent-cyan);">左右 1:2</div>
         </div>
-        <div class="quiz-question" style="margin-top: 15px;">Q2. 爸爸去「銀行」領錢，這裡的「行」應該讀作什麼？</div>
-        <div class="quiz-options">
-          <button class="quiz-opt-btn" onclick="checkQuiz(this, false)">A. ㄒㄧㄥˊ (行走)</button>
-          <button class="quiz-opt-btn" onclick="checkQuiz(this, true)">B. ㄏㄤˊ (行業/店鋪)</button>
+        <div class="calli-card" onclick="showCalligraphy('輕', '車部 (14畫)', '偏旁變形 (1:2)', '左側車部作偏旁時，末筆橫改為「提」(左低右高)。右側橫畫平行勻稱。', this)">
+          <div style="font-size: 28px; font-weight: 900; text-align: center; color: var(--accent-gold);">輕</div>
+          <div style="font-size: 13px; text-align: center; color: var(--accent-cyan);">橫畫改提</div>
+        </div>
+        <div class="calli-card" onclick="showCalligraphy('髮', '髟部 (15畫)', '上下結構 (2:1)', '上半部髟長撇舒展蓋頂；下半部友/犬交叉筆畫居中，筆鋒內聚。', this)">
+          <div style="font-size: 28px; font-weight: 900; text-align: center; color: var(--accent-gold);">髮</div>
+          <div style="font-size: 13px; text-align: center; color: var(--accent-cyan);">長撇蓋頂</div>
+        </div>
+        <div class="calli-card" onclick="showCalligraphy('處', '虍部 (11畫)', '半包圍 (主筆捺)', '虍字頭安定蓋頂，左下「夊」部平捺為全字主筆，要舒展出腳！', this)">
+          <div style="font-size: 28px; font-weight: 900; text-align: center; color: var(--accent-gold);">處</div>
+          <div style="font-size: 13px; text-align: center; color: var(--accent-cyan);">主筆平捺</div>
+        </div>
+        <div class="calli-card" onclick="showCalligraphy('雀', '隹部 (11畫)', '上下結構 (1:2)', '上半部「小」字居中；下半部「隹」字多橫平行，間距均等豎畫直立。', this)">
+          <div style="font-size: 28px; font-weight: 900; text-align: center; color: var(--accent-gold);">雀</div>
+          <div style="font-size: 13px; text-align: center; color: var(--accent-cyan);">多橫均勻</div>
+        </div>
+      </div>
+
+      <!-- 米字格與細節動態展示區 -->
+      <div class="card" style="background: rgba(15, 23, 42, 0.9); border-color: var(--accent-gold); display: flex; flex-direction: row; gap: 30px; align-items: center;">
+        <div class="rice-grid-box" id="calli-grid">泥</div>
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+          <div style="font-size: 24px; font-weight: 900; color: var(--accent-gold);" id="calli-title">生字【泥】硬筆書寫秘訣</div>
+          <div style="font-size: 16px; color: var(--accent-cyan); font-weight: 700;" id="calli-struct">結構法則：左右結構 (1:2) | 部首：水部 (8畫)</div>
+          <div style="font-size: 18px; color: #fff; line-height: 1.6;" id="calli-desc">
+            三點水呈弧形，第三筆由左下向右上「提」出，指向右側。右側「尼」字橫折要左緊右舒，整體顯得親切有神采。
+          </div>
         </div>
       </div>
     </div>
@@ -652,15 +482,18 @@
   <!-- SLIDE 6 -->
   <section class="slide" data-slide="6" data-section="【第二節】字詞硬筆與部首探險">
     <div class="slide-inner">
-      <div class="kicker">— 第二節課 關卡 2 —</div>
-      <h2 class="slide-title">詞語選擇題 <span class="highlight-pink">即時通關</span></h2>
+      <div class="kicker">— 第二節課 多音字與選擇題 —</div>
+      <h2 class="slide-title">多音字擂台與 <span class="highlight-pink">詞語通關</span></h2>
       <div class="quiz-box">
-        <div class="quiz-question">Q3. 「小雲雀雖然沒有多彩的羽衣，卻有（ ）的歌聲。」空格應填入？</div>
+        <div class="quiz-question">Q1. 風最喜歡「四處」旅行，這裡的「處」應該讀作什麼？</div>
+        <div class="quiz-options">
+          <button class="quiz-opt-btn" onclick="checkQuiz(this, true)">A. ㄔㄨˋ (場所/地方)</button>
+          <button class="quiz-opt-btn" onclick="checkQuiz(this, false)">B. ㄔㄨˇ (辦理/安頓)</button>
+        </div>
+        <div class="quiz-question" style="margin-top: 10px;">Q2. 「小雲雀雖然沒有多彩的羽衣，卻有（ ）的歌聲。」</div>
         <div class="quiz-options">
           <button class="quiz-opt-btn" onclick="checkQuiz(this, false)">A. 暖暖</button>
           <button class="quiz-opt-btn" onclick="checkQuiz(this, true)">B. 清脆</button>
-          <button class="quiz-opt-btn" onclick="checkQuiz(this, false)">C. 飛奔</button>
-          <button class="quiz-opt-btn" onclick="checkQuiz(this, false)">D. 四處</button>
         </div>
       </div>
     </div>
@@ -996,6 +829,17 @@
       render();
     }
 
+    function showCalligraphy(char, rad, struct, desc, cardEl) {
+      soundEffect('card');
+      document.querySelectorAll('.calli-card').forEach(c => c.classList.remove('active'));
+      if (cardEl) cardEl.classList.add('active');
+
+      document.getElementById('calli-grid').innerText = char;
+      document.getElementById('calli-title').innerText = `生字【${char}】硬筆書寫秘訣`;
+      document.getElementById('calli-struct').innerText = `結構法則：${struct} | 部首：${rad}`;
+      document.getElementById('calli-desc').innerText = desc;
+    }
+
     let selectedLeft = null;
     function selectMatch(side, id, el) {
       soundEffect('card');
@@ -1017,15 +861,6 @@
         selectedLeft = null;
         document.querySelectorAll('.match-column:first-child .match-item').forEach(i => i.classList.remove('selected'));
       }
-    }
-
-    function switchGameTab(num) {
-      soundEffect('card');
-      document.querySelectorAll('.game-tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(`tab${num}-btn`).classList.active;
-      document.getElementById('game-tab-1').style.display = num === 1 ? 'block' : 'none';
-      document.getElementById('game-tab-2').style.display = num === 2 ? 'block' : 'none';
-      document.getElementById('game-tab-3').style.display = num === 3 ? 'block' : 'none';
     }
 
     function checkQuiz(btn, isCorrect) {

@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎓 三上數學 第一單元《10000以內的數》大屏隨機題庫遊戲 (獎勵與修復版)</title>
+<style>
+  :root {
+    --primary: #1a5f7a;
+    --primary-light: #008891;
+    --accent: #ff9f43;
+    --success: #10ac84;
+    --danger: #ee5253;
+    --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    --card-bg: rgba(255, 255, 255, 0.95);
+  }
+
+  * { box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    background: var(--bg-gradient);
+    height: 100vh;
+    overflow: hidden;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header Bar */
+  header {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    padding: 12px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+  }
+
+  .app-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  }
+
+  .score-badge {
+    background: linear-gradient(45deg, #ff9f43, #ff6b6b);
+    color: white;
+    padding: 8px 22px;
+    border-radius: 30px;
+    font-size: 22px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+
+  /* Navigation Tabs */
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .tab-btn {
+    background: rgba(255, 255, 255, 0.15);
+    color: #e0e0e0;
+    border: 2px solid rgba(255,255,255,0.2);
+    padding: 10px 20px;
+    font-size: 17px;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .tab-btn:hover, .tab-btn.active {
+    background: #ffffff;
+    color: #1a5f7a;
+    border-color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255,255,255,0.3);
+  }
+
+  /* Main Stage */
+  main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    position: relative;
+  }
+
+  .game-container {
+    width: 98%;
+    max-width: 1280px;
+    height: 98%;
+    background: var(--card-bg);
+    border-radius: 24px;
+    padding: 25px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    display: none;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .game-container.active {
+    display: flex;
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .level-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 3px dashed #008891;
+    padding-bottom: 12px;
+  }
+
+  .level-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1a5f7a;
+  }
+
+  .q-badge {
+    background: #0284c7;
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .instruction-box {
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 19px;
+    font-weight: 600;
+  }
+
+  /* GAME 1: Tap Blocks */
+  .g1-intuitive-stage {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 20px;
+    flex: 1;
+  }
+
+  .g1-top-banner {
+    background: #f1f5f9;
+    border: 3px solid #cbd5e1;
+    border-radius: 18px;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .target-number-lg {
+    font-size: 56px;
+    font-weight: 900;
+    color: #0284c7;
+    letter-spacing: 4px;
+  }
+
+  .g1-tap-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    height: 100%;
+  }
+
+  .tap-block-card {
+    background: #ffffff;
+    border: 3px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.06);
+    position: relative;
+  }
+
+  .tap-block-card:hover { transform: translateY(-5px); border-color: #3b82f6; }
+  .tap-block-card:active { transform: scale(0.95); }
+
+  .block-visual-box {
+    width: 100%;
+    flex: 1;
+    background: #f8fafc;
+    border-radius: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 6px;
+    padding: 10px;
+    overflow-y: auto;
+  }
+
+  .mini-block {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: bold; color: white;
+    animation: popIn 0.2s ease;
+  }
+
+  .mb-thousand { background: #3b82f6; width: 42px; height: 42px; font-size: 14px; }
+  .mb-hundred { background: #10b981; width: 38px; height: 38px; }
+  .mb-ten { background: #f59e0b; width: 34px; height: 34px; }
+  .mb-one { background: #ef4444; width: 30px; height: 30px; }
+
+  .tap-btn-label {
+    font-size: 22px; font-weight: 800; margin-top: 10px;
+    padding: 8px 16px; border-radius: 12px; color: white;
+    width: 100%; text-align: center;
+  }
+
+  /* GAME 2: Monster Elimination */
+  .g2-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    flex: 1;
+    align-content: center;
+  }
+
+  .monster-card {
+    background: linear-gradient(145deg, #ffffff, #f1f5f9);
+    border: 3px solid #94a3b8;
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    position: relative;
+  }
+
+  .monster-card:hover { transform: scale(1.05); border-color: #3b82f6; }
+  .monster-avatar { font-size: 60px; margin-bottom: 5px; }
+  .monster-num { font-size: 34px; font-weight: 900; color: #0f172a; }
+
+  /* GAME 3: Cash Register */
+  .g3-stage {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    flex: 1;
+  }
+
+  .register-display {
+    background: #0f172a;
+    color: #38bdf8;
+    border-radius: 20px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+  }
+
+  .reg-target { font-size: 24px; color: #94a3b8; }
+  .reg-current { font-size: 50px; font-weight: bold; color: #4ade80; margin: 10px 0; }
+
+  .cash-btn-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .cash-btn {
+    border: none;
+    border-radius: 16px;
+    padding: 20px;
+    font-size: 26px;
+    font-weight: 900;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .cash-btn:active { transform: translateY(3px); }
+  .c-1000 { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+  .c-100 { background: linear-gradient(135deg, #065f46, #10b981); }
+  .c-10 { background: linear-gradient(135deg, #b45309, #f59e0b); }
+  .c-1 { background: linear-gradient(135deg, #991b1b, #ef4444); }
+
+  /* GAME 4: PK Comparison */
+  .g4-stage {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    flex: 1;
+  }
+
+  .cmp-stage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-top: 10px;
+  }
+
+  .num-card-lg {
+    font-size: 48px;
+    font-weight: 900;
+    background: #f1f5f9;
+    padding: 20px 40px;
+    border-radius: 20px;
+    border: 3px solid #cbd5e1;
+    min-width: 260px;
+    text-align: center;
+  }
+
+  .op-btn {
+    font-size: 44px;
+    padding: 15px 35px;
+    background: #38bdf8;
+    color: white;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    min-width: 110px;
+    text-align: center;
+  }
+
+  /* Action Footers */
+  .action-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+  }
+
+  .nav-btn-group { display: flex; gap: 12px; }
+
+  .action-btn {
+    padding: 12px 28px;
+    font-size: 20px;
+    font-weight: 800;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform 0.2s;
+  }
+
+  .btn-submit { background: #10b981; color: white; }
+  .btn-reset { background: #64748b; color: white; }
+  .btn-next { background: #3b82f6; color: white; }
+
+  /* Modal Overlay */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.75);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal-overlay.active { display: flex; }
+
+  .modal-content {
+    background: white;
+    padding: 35px;
+    border-radius: 26px;
+    text-align: center;
+    max-width: 540px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .modal-icon { font-size: 75px; margin-bottom: 15px; }
+  .modal-title { font-size: 32px; font-weight: 900; color: #1e293b; }
+  .modal-desc { font-size: 20px; color: #64748b; margin: 15px 0 25px; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="app-title">🎓 三上數學 第一單元《10000以內的數》大屏隨機題庫遊戲</div>
+  <div class="score-badge">🏆 全班累計得分：<span id="global-score">0</span> 分</div>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="switchLevel(1)">一、直覺積木抓抓樂 (10+題)</button>
+  <button class="tab-btn" onclick="switchLevel(2)">二、怪獸大消除 (加獎勵)</button>
+  <button class="tab-btn" onclick="switchLevel(3)">三、快手收銀員 (10+題)</button>
+  <button class="tab-btn" onclick="switchLevel(4)">四、數線PK撕榜 (循環符號修復)</button>
+</nav>
+
+<main>
+  <!-- GAME 1 -->
+  <div id="level-1" class="game-container active">
+    <div class="level-header">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="level-title">🧩 小節一：直覺位值積木抓抓樂</div>
+        <div class="q-badge" id="g1-q-badge">隨機題目 #1</div>
+      </div>
+      <div class="instruction-box">💡 直接點擊大屏上的【積木區】即可加入積木！擺出目標數字！</div>
+    </div>
+    <div class="g1-intuitive-stage">
+      <div class="g1-top-banner">
+        <div>
+          <span style="font-size: 20px; color: #64748b; font-weight: bold;">目標四位數：</span>
+          <span class="target-number-lg" id="g1-target">8406</span>
+        </div>
+        <div style="font-size: 22px; font-weight: bold; color: #0284c7;" id="g1-current-sum">目前擺出：0</div>
+      </div>
+      <div class="g1-tap-grid">
+        <div class="tap-block-card" onclick="addG1Block('thousand')">
+          <div class="tap-btn-label" style="background: #3b82f6;">🔵 點擊 +1個千塊 (1000)</div>
+          <div class="block-visual-box" id="visual-thousand"></div>
+          <div style="font-size: 20px; font-weight: bold; color: #3b82f6;" id="count-thousand">0 個</div>
+        </div>
+        <div class="tap-block-card" onclick="addG1Block('hundred')">
+          <div class="tap-btn-label" style="background: #10b981;">🟢 點擊 +1個百板 (100)</div>
+          <div class="block-visual-box" id="visual-hundred"></div>
+          <div style="font-size: 20px; font-weight: bold; color: #10b981;" id="count-hundred">0 個</div>
+        </div>
+        <div class="tap-block-card" onclick="addG1Block('ten')">
+          <div class="tap-btn-label" style="background: #f59e0b;">🟡 點擊 +1個十條 (10)</div>
+          <div class="block-visual-box" id="visual-ten"></div>
+          <div style="font-size: 20px; font-weight: bold; color: #f59e0b;" id="count-ten">0 個</div>
+        </div>
+        <div class="tap-block-card" onclick="addG1Block('one')">
+          <div class="tap-btn-label" style="background: #ef4444;">🔴 點擊 +1個單塊 (1)</div>
+          <div class="block-visual-box" id="visual-one"></div>
+          <div style="font-size: 20px; font-weight: bold; color: #ef4444;" id="count-one">0 個</div>
+        </div>
+      </div>
+    </div>
+    <div class="action-footer">
+      <button class="action-btn btn-reset" onclick="resetG1()">清空重擺</button>
+      <div class="nav-btn-group">
+        <button class="action-btn btn-submit" onclick="checkG1()">送出核對</button>
+        <button class="action-btn btn-next" onclick="nextRandomG1()">隨機下一題 (換同學) ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME 2 -->
+  <div id="level-2" class="game-container">
+    <div class="level-header">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="level-title">✍️ 小節二：零的怪獸大消除 (獎勵機制版)</div>
+        <div class="q-badge" id="g2-q-badge">隨機關卡 #1</div>
+      </div>
+      <div class="instruction-box" id="g2-prompt">👾 任務：請點擊消除符合條件的怪獸！</div>
+    </div>
+    <div class="g2-grid" id="monster-container"></div>
+    <div class="action-footer">
+      <div style="font-size: 20px; font-weight: bold; color: #d84315;" id="g2-rem-text">剩餘合規怪獸：0 隻</div>
+      <button class="action-btn btn-next" onclick="nextRandomG2()">隨機下一關怪獸 ➔</button>
+    </div>
+  </div>
+
+  <!-- GAME 3 -->
+  <div id="level-3" class="game-container">
+    <div class="level-header">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="level-title">💰 小節三：快手智慧收銀員</div>
+        <div class="q-badge" id="g3-q-badge">隨機商品 #1</div>
+      </div>
+      <div class="instruction-box" id="g3-prompt">🛒 商品：請快手投幣結帳！</div>
+    </div>
+    <div class="g3-stage">
+      <div class="register-display">
+        <div>
+          <div class="reg-target" id="g3-target-text">應付總額：$ 0 元</div>
+          <div class="reg-current" id="g3-current">$ 0 元</div>
+        </div>
+        <div style="font-size: 19px; color: #94a3b8;" id="g3-detail">已投幣：0張千元、0張百元、0枚十元、0枚一元</div>
+      </div>
+      <div class="cash-btn-grid">
+        <button class="cash-btn c-1000" onclick="addCash(1000)">💵 +1000 元</button>
+        <button class="cash-btn c-100" onclick="addCash(100)">💴 +100 元</button>
+        <button class="cash-btn c-10" onclick="addCash(10)">🪙 +10 元</button>
+        <button class="cash-btn c-1" onclick="addCash(1)">🪙 +1 元</button>
+      </div>
+    </div>
+    <div class="action-footer">
+      <button class="action-btn btn-reset" onclick="resetG3()">歸零重新投幣</button>
+      <div class="nav-btn-group">
+        <button class="action-btn btn-submit" onclick="checkG3()">嗶嗶！結帳</button>
+        <button class="action-btn btn-next" onclick="nextRandomG3()">隨機下一件商品 ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME 4 -->
+  <div id="level-4" class="game-container">
+    <div class="level-header">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="level-title">⚖️ 小節四：數線大冒險與比大小 PK</div>
+        <div class="q-badge" id="g4-q-badge">隨機 PK #1</div>
+      </div>
+      <div class="instruction-box" id="g4-prompt">🚩 請選擇 > 、 < 或 = 符號！（可重複循環切換）</div>
+    </div>
+    <div class="g4-stage">
+      <div class="cmp-stage">
+        <div class="num-card-lg" id="g4-left">8530</div>
+        <button class="op-btn" id="g4-op" onclick="toggleG4Op()">?</button>
+        <div class="num-card-lg" id="g4-right">8350</div>
+      </div>
+    </div>
+    <div class="action-footer">
+      <div></div>
+      <div class="nav-btn-group">
+        <button class="action-btn btn-submit" onclick="checkG4()">確認 PK 結果</button>
+        <button class="action-btn btn-next" onclick="nextRandomG4()">隨機下一題 PK ➔</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Modal -->
+<div class="modal-overlay" id="win-modal">
+  <div class="modal-content">
+    <div class="modal-icon" id="m-icon">🎉</div>
+    <div class="modal-title" id="m-title">太棒了！答對囉！</div>
+    <div class="modal-desc" id="m-desc">恭喜答對！獲得 100 分！</div>
+    <button class="action-btn btn-submit" style="width: 100%;" onclick="closeModalAndNext()">換下一位同學 (隨機下一題) ➔</button>
+  </div>
+</div>
+
+<script>
+  let globalScore = 0;
+  let currentActiveLvl = 1;
+
+  // Web Audio Synthesizer
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  function playSound(type) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    if (type === 'correct') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+      osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
+      osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2);
+      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.5);
+    } else if (type === 'fanfare') {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+      osc.frequency.setValueAtTime(554.37, audioCtx.currentTime + 0.15);
+      osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.3);
+      osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.45);
+      gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.8);
+    } else if (type === 'wrong') {
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.3);
+    } else if (type === 'click') {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.05);
+    }
+  }
+
+  function addScore(pts) {
+    globalScore += pts;
+    document.getElementById('global-score').innerText = globalScore;
+  }
+
+  function switchLevel(lvl) {
+    playSound('click');
+    currentActiveLvl = lvl;
+    document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
+      btn.classList.toggle('active', idx === lvl - 1);
+    });
+    document.querySelectorAll('.game-container').forEach((ct, idx) => {
+      ct.classList.toggle('active', idx === lvl - 1);
+    });
+  }
+
+  // --- GAME 1 LOGIC ---
+  const g1Pool = [
+    8406, 3059, 6075, 4325, 9090, 1500, 2450, 7005, 3280, 5040, 8090, 4981, 6002, 1005
+  ];
+  let g1Count = { thousand: 0, hundred: 0, ten: 0, one: 0 };
+  let g1CurrentNum = 8406;
+  let g1QNum = 1;
+
+  function nextRandomG1() {
+    g1QNum++;
+    g1CurrentNum = g1Pool[Math.floor(Math.random() * g1Pool.length)];
+    document.getElementById('g1-q-badge').innerText = `隨機題目 #${g1QNum}`;
+    document.getElementById('g1-target').innerText = g1CurrentNum;
+    resetG1();
+  }
+
+  function addG1Block(type) {
+    playSound('click');
+    g1Count[type]++;
+    renderG1Visuals();
+  }
+
+  function resetG1() {
+    g1Count = { thousand: 0, hundred: 0, ten: 0, one: 0 };
+    renderG1Visuals();
+  }
+
+  function renderG1Visuals() {
+    const types = ['thousand', 'hundred', 'ten', 'one'];
+    let totalVal = g1Count.thousand * 1000 + g1Count.hundred * 100 + g1Count.ten * 10 + g1Count.one * 1;
+    document.getElementById('g1-current-sum').innerText = `目前擺出：${totalVal}`;
+
+    types.forEach(t => {
+      const box = document.getElementById(`visual-${t}`);
+      const countEl = document.getElementById(`count-${t}`);
+      box.innerHTML = '';
+      countEl.innerText = `${g1Count[t]} 個`;
+      for (let i = 0; i < g1Count[t]; i++) {
+        const mb = document.createElement('div');
+        mb.className = `mini-block mb-${t}`;
+        mb.innerText = t === 'thousand' ? '1000' : t === 'hundred' ? '100' : t === 'ten' ? '10' : '1';
+        mb.onclick = (e) => {
+          e.stopPropagation();
+          playSound('click');
+          g1Count[t] = Math.max(0, g1Count[t] - 1);
+          renderG1Visuals();
+        };
+        box.appendChild(mb);
+      }
+    });
+  }
+
+  function checkG1() {
+    let totalVal = g1Count.thousand * 1000 + g1Count.hundred * 100 + g1Count.ten * 10 + g1Count.one * 1;
+    if (totalVal === g1CurrentNum) {
+      playSound('correct');
+      addScore(100);
+      showModal("🎉 太棒了！完美擺出！", `成功直覺擺出 ${g1CurrentNum} 對應的位值積木！`, "🏆");
+    } else {
+      playSound('wrong');
+      alert(`目前擺出 ${totalVal}，與目標 ${g1CurrentNum} 不符喔！再試一次！`);
+    }
+  }
+
+  // --- GAME 2 LOGIC (Reward Mechanism Added) ---
+  const g2Pool = [
+    { prompt: "👾 任務：請點擊消除讀法中「只需要讀出一個『零』」的怪獸！", validCheck: num => (num.includes('0') && !num.endsWith('00') && !num.endsWith('000') && num !== '5000' && num !== '9999') },
+    { prompt: "👾 任務：請點擊消除讀法中「完全不需要讀出『零』」的怪獸！", validCheck: num => (!num.includes('0') || num.endsWith('50') || num.endsWith('00')) },
+    { prompt: "👾 任務：請點擊消除末尾有 0，但讀法「不需要讀『零』」的怪獸！", validCheck: num => (num.endsWith('0')) }
+  ];
+  let g2QNum = 1;
+  let g2RemainingValid = 0;
+
+  function nextRandomG2() {
+    g2QNum++;
+    document.getElementById('g2-q-badge').innerText = `隨機關卡 #${g2QNum}`;
+    const roundType = g2Pool[Math.floor(Math.random() * g2Pool.length)];
+    document.getElementById('g2-prompt').innerText = roundType.prompt;
+
+    const monsterNums = ["6075", "8090", "7005", "6750", "5000", "9999", "3059", "4080", "1500", "2450"];
+    const picked = monsterNums.sort(() => 0.5 - Math.random()).slice(0, 6);
+    const container = document.getElementById('monster-container');
+    container.innerHTML = '';
+
+    g2RemainingValid = 0;
+    picked.forEach(num => {
+      if (roundType.validCheck(num)) g2RemainingValid++;
+    });
+
+    document.getElementById('g2-rem-text').innerText = `本關剩餘合規怪獸：${g2RemainingValid} 隻`;
+
+    picked.forEach(num => {
+      const card = document.createElement('div');
+      card.className = 'monster-card';
+      const isValid = roundType.validCheck(num);
+      card.innerHTML = `
+        <div class="monster-avatar">👾</div>
+        <div class="monster-num">${num}</div>
+      `;
+      card.onclick = () => {
+        if (isValid) {
+          playSound('correct');
+          addScore(50);
+          g2RemainingValid--;
+          document.getElementById('g2-rem-text').innerText = `本關剩餘合規怪獸：${g2RemainingValid} 隻`;
+          
+          card.style.transform = 'scale(0) rotate(360deg)';
+          card.style.opacity = '0';
+          setTimeout(() => {
+            card.remove();
+            // REWARD MECHANISM FOR LEVEL 2
+            if (g2RemainingValid === 0) {
+              playSound('fanfare');
+              addScore(100); // Bonus reward
+              showModal("👑 怪獸大滿貫大獎勵！", "恭喜全班精準將本關合規怪獸全部消滅！額外獲得 100 分大獎勵！", "🎁");
+            }
+          }, 400);
+        } else {
+          playSound('wrong');
+          alert(`「${num}」不符合這個任務條件喔！再仔細看題目！`);
+        }
+      };
+      container.appendChild(card);
+    });
+  }
+
+  // --- GAME 3 LOGIC ---
+  const g3Pool = [
+    { name: "氣炸鍋", price: 4325 },
+    { name: "滾筒洗衣機", price: 8090 },
+    { name: "微波爐", price: 3280 },
+    { name: "吸塵器", price: 2950 },
+    { name: "變速腳踏車", price: 3580 },
+    { name: "智慧電視", price: 9090 },
+    { name: "烘碗機", price: 1500 },
+    { name: "除濕機", price: 6075 },
+    { name: "掃地機器人", price: 7005 },
+    { name: "靜音電風扇", price: 1005 }
+  ];
+  let g3QNum = 1;
+  let g3CurrentItem = g3Pool[0];
+  let g3Total = 0;
+  let g3Counts = { 1000: 0, 100: 0, 10: 0, 1: 0 };
+
+  function nextRandomG3() {
+    g3QNum++;
+    g3CurrentItem = g3Pool[Math.floor(Math.random() * g3Pool.length)];
+    document.getElementById('g3-q-badge').innerText = `隨機商品 #${g3QNum}`;
+    document.getElementById('g3-prompt').innerText = `🛒 商品：${g3CurrentItem.name} $${g3CurrentItem.price} 元！請快手點擊代幣結帳！`;
+    document.getElementById('g3-target-text').innerText = `應付總額：$ ${g3CurrentItem.price} 元`;
+    resetG3();
+  }
+
+  function addCash(val) {
+    playSound('click');
+    g3Total += val;
+    g3Counts[val]++;
+    document.getElementById('g3-current').innerText = `$ ${g3Total} 元`;
+    document.getElementById('g3-detail').innerText = 
+      `已投幣：${g3Counts[1000]}張千元、${g3Counts[100]}張百元、${g3Counts[10]}枚十元、${g3Counts[1]}枚一元`;
+  }
+
+  function resetG3() {
+    g3Total = 0;
+    g3Counts = { 1000: 0, 100: 0, 10: 0, 1: 0 };
+    document.getElementById('g3-current').innerText = `$ 0 元`;
+    document.getElementById('g3-detail').innerText = `已投幣：0張千元、0張百元、0枚十元、0枚一元`;
+  }
+
+  function checkG3() {
+    if (g3Total === g3CurrentItem.price) {
+      playSound('correct');
+      addScore(100);
+      showModal("🛍️ 嗶嗶！結帳成功！", `成功精準投幣 $${g3CurrentItem.price} 元購買 ${g3CurrentItem.name}！`, "🛒");
+    } else {
+      playSound('wrong');
+      alert(`目前金額是 $${g3Total} 元，與金額 $${g3CurrentItem.price} 元不符喔！`);
+    }
+  }
+
+  // --- GAME 4 LOGIC (OPERATOR TOGGLE FIXED & REPEATABLE) ---
+  const g4Pool = [
+    { left: "8530", right: "8350", correctOp: ">", prompt: "比較 8530 與 8350（千位相同比百位）" },
+    { left: "6075", right: "6750", correctOp: "<", prompt: "比較 6075 與 6750" },
+    { left: "50個百", right: "4999", correctOp: ">", prompt: "比較 50個百 (5000) 與 4999" },
+    { left: "999 + 1", right: "1001", correctOp: "<", prompt: "比較 999加1 (1000) 與 1001" },
+    { left: "499 × 4", right: "2000", correctOp: "<", prompt: "比較 499×4 估算值與 2000" },
+    { left: "3059", right: "3509", correctOp: "<", prompt: "比較 3059 與 3509" },
+    { left: "9090", right: "9009", correctOp: ">", prompt: "比較 9090 與 9009" },
+    { left: "10000", right: "9999", correctOp: ">", prompt: "比較 10000 與 9999" },
+    { left: "7005", right: "7050", correctOp: "<", prompt: "比較 7005 與 7050" },
+    { left: "4325", right: "4235", correctOp: ">", prompt: "比較 4325 與 4235" },
+    { left: "5000", right: "50個百", correctOp: "=", prompt: "比較 5000 與 50個百" }
+  ];
+  let g4QNum = 1;
+  let g4CurrentPK = g4Pool[0];
+  let g4OpState = '?';
+
+  function nextRandomG4() {
+    g4QNum++;
+    g4CurrentPK = g4Pool[Math.floor(Math.random() * g4Pool.length)];
+    document.getElementById('g4-q-badge').innerText = `隨機 PK #${g4QNum}`;
+    document.getElementById('g4-prompt').innerText = `🚩 ${g4CurrentPK.prompt}`;
+    document.getElementById('g4-left').innerText = g4CurrentPK.left;
+    document.getElementById('g4-right').innerText = g4CurrentPK.right;
+    g4OpState = '?';
+    document.getElementById('g4-op').innerText = '?';
+  }
+
+  // FIX FOR LEVEL 4 OPERATOR TOGGLE SEAMLESS CYCLING (? -> > -> < -> = -> > ...)
+  function toggleG4Op() {
+    playSound('click');
+    if (g4OpState === '?') g4OpState = '>';
+    else if (g4OpState === '>') g4OpState = '<';
+    else if (g4OpState === '<') g4OpState = '=';
+    else g4OpState = '>'; // Seamless loop!
+    document.getElementById('g4-op').innerText = g4OpState;
+  }
+
+  function checkG4() {
+    if (g4OpState === g4CurrentPK.correctOp) {
+      playSound('correct');
+      addScore(100);
+      showModal("🚩 答對囉！PK 成功！", `大小比較完全正確！讚！`, "🎯");
+    } else {
+      playSound('wrong');
+      alert("答案不對喔！請重新比較看看！");
+    }
+  }
+
+  // Modal
+  function showModal(title, desc, icon = "🎉") {
+    document.getElementById('m-icon').innerText = icon;
+    document.getElementById('m-title').innerText = title;
+    document.getElementById('m-desc').innerText = desc;
+    document.getElementById('win-modal').classList.add('active');
+  }
+
+  function closeModalAndNext() {
+    playSound('click');
+    document.getElementById('win-modal').classList.remove('active');
+    if (currentActiveLvl === 1) nextRandomG1();
+    else if (currentActiveLvl === 2) nextRandomG2();
+    else if (currentActiveLvl === 3) nextRandomG3();
+    else if (currentActiveLvl === 4) nextRandomG4();
+  }
+
+  // Init
+  renderG1Visuals();
+  nextRandomG2();
+  nextRandomG3();
+  nextRandomG4();
+</script>
+</body>
+</html>

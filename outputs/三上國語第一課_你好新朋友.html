@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>三上國語 第一課 〈你好，新朋友〉 大屏互動教學簡報與課堂測驗遊戲</title>
+  <title>三上南一國語 第一課 〈你好，新朋友〉 大屏互動教學簡報與課堂測驗遊戲</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -46,22 +46,17 @@
       user-select: none;
     }
 
-    /* Confetti Canvas Overlay */
     #confetti-canvas {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
       pointer-events: none;
       z-index: 9999;
     }
 
-    /* Top Progress Bar */
     #progress-bar {
       position: fixed;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       height: 6px;
       background: linear-gradient(90deg, var(--accent-cyan), var(--accent-gold), var(--accent-pink), var(--accent-green));
       width: 0%;
@@ -69,23 +64,16 @@
       transition: width 0.3s ease;
     }
 
-    /* Top Section Tag & Controls */
     #top-bar {
       position: fixed;
-      top: 15px;
-      left: 20px;
-      right: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      top: 15px; left: 20px; right: 20px;
+      display: flex; justify-content: space-between; align-items: center;
       z-index: 900;
       pointer-events: none;
     }
 
     .top-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      display: flex; align-items: center; gap: 12px;
       pointer-events: auto;
     }
 
@@ -103,7 +91,7 @@
     }
 
     .icon-btn {
-      background: rgba(21, 28, 56, 0.8);
+      background: rgba(21, 28, 56, 0.85);
       border: 1px solid var(--border-color);
       color: var(--ink-main);
       padding: 8px 14px;
@@ -111,9 +99,7 @@
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      display: flex; align-items: center; gap: 6px;
       backdrop-filter: blur(10px);
       transition: all 0.2s;
       pointer-events: auto;
@@ -125,16 +111,13 @@
       transform: scale(1.05);
     }
 
-    /* Page Info */
     #page-info {
       position: fixed;
-      bottom: 15px;
-      right: 25px;
+      bottom: 15px; right: 25px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 16px;
-      font-weight: 700;
+      font-size: 16px; font-weight: 700;
       color: var(--ink-muted);
-      background: rgba(15, 23, 42, 0.8);
+      background: rgba(15, 23, 42, 0.85);
       border: 1px solid var(--border-color);
       padding: 8px 18px;
       border-radius: 20px;
@@ -144,36 +127,27 @@
 
     #key-hint {
       position: fixed;
-      bottom: 18px;
-      left: 25px;
-      font-size: 14px;
-      color: var(--ink-dim);
-      z-index: 900;
-      pointer-events: none;
+      bottom: 18px; left: 25px;
+      font-size: 14px; color: var(--ink-dim);
+      z-index: 900; pointer-events: none;
     }
 
-    /* Large Screen Navigation Touch Buttons */
     .nav-btn {
       position: fixed;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 64px;
-      height: 64px;
+      top: 50%; transform: translateY(-50%);
+      width: 64px; height: 64px;
       background: rgba(21, 28, 56, 0.85);
       border: 2px solid var(--border-color);
       border-radius: 50%;
       color: var(--ink-main);
       font-size: 26px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       z-index: 950;
       transition: all 0.2s ease;
       backdrop-filter: blur(10px);
       box-shadow: 0 4px 20px rgba(0,0,0,0.4);
     }
-
     .nav-btn:hover, .nav-btn:active {
       background: var(--accent-cyan);
       color: #000;
@@ -185,50 +159,35 @@
     #prev-btn { left: 15px; }
     #next-btn { right: 15px; }
 
-    /* Slide Stage */
     .slide {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
       padding: 75px 85px 65px 85px;
-      opacity: 0;
-      pointer-events: none;
+      opacity: 0; pointer-events: none;
       transform: translateY(20px);
       transition: opacity 0.4s ease, transform 0.4s ease;
       overflow-y: auto;
     }
-
     .slide.active {
-      opacity: 1;
-      pointer-events: auto;
+      opacity: 1; pointer-events: auto;
       transform: translateY(0);
     }
 
     .slide-inner {
-      width: 100%;
-      max-width: 1200px;
+      width: 100%; max-width: 1200px;
       margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
+      display: flex; flex-direction: column; gap: 18px;
     }
 
-    /* Headings & Typography */
     .kicker {
-      font-size: var(--t4);
-      font-weight: 700;
-      color: var(--accent-cyan);
-      letter-spacing: 2px;
+      font-size: var(--t4); font-weight: 700;
+      color: var(--accent-cyan); letter-spacing: 2px;
       text-transform: uppercase;
     }
 
     .slide-title {
-      font-size: var(--t1);
-      font-weight: 900;
-      line-height: 1.25;
-      color: #fff;
+      font-size: var(--t1); font-weight: 900;
+      line-height: 1.25; color: #fff;
     }
 
     .highlight-gold { color: var(--accent-gold); }
@@ -236,7 +195,6 @@
     .highlight-pink { color: var(--accent-pink); }
     .highlight-green { color: var(--accent-green); }
 
-    /* General Layout Grids */
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
     .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
@@ -247,7 +205,6 @@
       .nav-btn { width: 48px; height: 48px; font-size: 20px; }
     }
 
-    /* Large Touch Friendly Cards */
     .card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
@@ -263,27 +220,22 @@
     }
 
     .card-title {
-      font-size: var(--t2);
-      font-weight: 700;
+      font-size: var(--t2); font-weight: 700;
       margin-bottom: 10px;
     }
 
     .card-desc {
-      font-size: var(--t3);
-      color: var(--ink-muted);
+      font-size: var(--t3); color: var(--ink-muted);
       line-height: 1.6;
     }
 
-    /* Flip Card (Interactive MAPS QA) */
     .flip-card {
       perspective: 1000px;
       min-height: 200px;
       cursor: pointer;
     }
     .flip-card-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
+      position: relative; width: 100%; height: 100%;
       text-align: center;
       transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
       transform-style: preserve-3d;
@@ -292,15 +244,12 @@
       transform: rotateY(180deg);
     }
     .flip-front, .flip-back {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       backface-visibility: hidden;
       border-radius: var(--radius-lg);
       padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
       border: 2px solid var(--border-color);
     }
     .flip-front {
@@ -309,12 +258,10 @@
     }
     .flip-back {
       background: linear-gradient(135deg, #1e1b4b, #311042);
-      color: #fff;
-      transform: rotateY(180deg);
+      color: #fff; transform: rotateY(180deg);
       border-color: var(--accent-gold);
     }
 
-    /* ==================== GAME 1: VOCAB & PHONETICS (大屏生字語詞遊戲) ==================== */
     .vocab-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -337,242 +284,140 @@
     .vocab-touch-card:hover, .vocab-touch-card:active {
       transform: scale(1.06);
       border-color: var(--accent-gold);
-      background: linear-gradient(145deg, #2a386c, #1e284f);
       box-shadow: 0 0 20px rgba(255, 183, 3, 0.4);
     }
     .vocab-char {
-      font-size: 34px;
-      font-weight: 900;
+      font-size: 34px; font-weight: 900;
       color: var(--accent-gold);
     }
     .vocab-pinyin {
-      font-size: 14px;
-      color: var(--accent-cyan);
-      margin-top: 4px;
-      font-weight: 700;
+      font-size: 14px; color: var(--accent-cyan);
+      margin-top: 4px; font-weight: 700;
     }
 
-    /* Game Tab Controls */
-    .game-tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
+    .game-tabs { display: flex; gap: 10px; margin-bottom: 10px; }
     .game-tab-btn {
-      flex: 1;
-      padding: 14px 20px;
-      font-size: 18px;
-      font-weight: 700;
+      flex: 1; padding: 14px 20px;
+      font-size: 18px; font-weight: 700;
       background: rgba(255,255,255,0.08);
       border: 2px solid var(--border-color);
       color: var(--ink-muted);
-      border-radius: 14px;
-      cursor: pointer;
-      text-align: center;
+      border-radius: 14px; cursor: pointer; text-align: center;
       transition: all 0.2s;
     }
     .game-tab-btn.active {
       background: var(--accent-gold);
-      color: #000;
-      border-color: var(--accent-gold);
+      color: #000; border-color: var(--accent-gold);
       box-shadow: 0 0 15px rgba(255, 183, 3, 0.5);
     }
 
-    /* Interactive Quiz Box */
     .quiz-box {
       background: rgba(15, 23, 42, 0.9);
       border: 2px solid var(--border-color);
       border-radius: var(--radius-lg);
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+      padding: 24px; display: flex; flex-direction: column; gap: 16px;
     }
-    .quiz-question {
-      font-size: 22px;
-      font-weight: 700;
-      color: #fff;
-    }
-    .quiz-options {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
+    .quiz-question { font-size: 22px; font-weight: 700; color: #fff; }
+    .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .quiz-opt-btn {
-      padding: 16px 20px;
-      font-size: 20px;
-      font-weight: 700;
+      padding: 16px 20px; font-size: 20px; font-weight: 700;
       background: rgba(255,255,255,0.06);
-      border: 2px solid var(--border-color);
-      color: #fff;
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: center;
+      border: 2px solid var(--border-color); color: #fff;
+      border-radius: var(--radius-md); cursor: pointer;
+      transition: all 0.2s ease; text-align: center;
     }
     .quiz-opt-btn:hover, .quiz-opt-btn:active {
-      background: rgba(0, 210, 211, 0.2);
-      border-color: var(--accent-cyan);
+      background: rgba(0, 210, 211, 0.2); border-color: var(--accent-cyan);
       transform: scale(1.02);
     }
     .quiz-opt-btn.correct {
       background: rgba(16, 185, 129, 0.3) !important;
-      border-color: var(--accent-green) !important;
-      color: #5eead4 !important;
+      border-color: var(--accent-green) !important; color: #5eead4 !important;
     }
     .quiz-opt-btn.wrong {
       background: rgba(255, 77, 109, 0.3) !important;
-      border-color: var(--accent-pink) !important;
-      color: #fca5a5 !important;
+      border-color: var(--accent-pink) !important; color: #fca5a5 !important;
     }
 
-    /* Match Line Game (連連看) */
-    .match-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 25px;
-    }
-    .match-column {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    .match-container { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+    .match-column { display: flex; flex-direction: column; gap: 12px; }
     .match-item {
-      padding: 16px 20px;
-      font-size: 18px;
-      font-weight: 700;
-      background: var(--bg-card);
-      border: 2px solid var(--border-color);
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      padding: 16px 20px; font-size: 18px; font-weight: 700;
+      background: var(--bg-card); border: 2px solid var(--border-color);
+      border-radius: var(--radius-md); cursor: pointer;
+      transition: all 0.2s ease; display: flex; align-items: center; justify-content: space-between;
     }
     .match-item.selected {
-      border-color: var(--accent-gold);
-      background: rgba(255, 183, 3, 0.2);
+      border-color: var(--accent-gold); background: rgba(255, 183, 3, 0.2);
       box-shadow: 0 0 15px rgba(255, 183, 3, 0.4);
     }
     .match-item.matched {
-      border-color: var(--accent-green);
-      background: rgba(16, 185, 129, 0.2);
-      color: #6ee7b7;
-      pointer-events: none;
+      border-color: var(--accent-green); background: rgba(16, 185, 129, 0.2);
+      color: #6ee7b7; pointer-events: none;
     }
 
-    /* ==================== GAME 2: I AM A GREAT WRITER (我是大作家大屏拼圖遊戲) ==================== */
     .sentence-builder {
       background: rgba(15, 23, 42, 0.9);
       border: 2px solid var(--accent-gold);
       border-radius: var(--radius-lg);
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
+      padding: 24px; display: flex; flex-direction: column; gap: 18px;
     }
     .slot-display {
-      font-size: 26px;
-      font-weight: 700;
-      padding: 20px;
+      font-size: 26px; font-weight: 700; padding: 20px;
       background: rgba(255, 183, 3, 0.1);
       border: 2px dashed var(--accent-gold);
       border-radius: var(--radius-md);
-      text-align: center;
-      color: #fff;
-      line-height: 1.5;
+      text-align: center; color: #fff; line-height: 1.5;
     }
-    .slot-btn-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+    .slot-btn-group { display: flex; flex-wrap: wrap; gap: 10px; }
     .slot-chip {
-      padding: 12px 20px;
-      font-size: 18px;
-      font-weight: 700;
+      padding: 12px 20px; font-size: 18px; font-weight: 700;
       background: rgba(0, 210, 211, 0.15);
-      border: 2px solid var(--accent-cyan);
-      color: #fff;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: all 0.2s;
+      border: 2px solid var(--accent-cyan); color: #fff;
+      border-radius: 30px; cursor: pointer; transition: all 0.2s;
     }
     .slot-chip:hover, .slot-chip:active {
-      background: var(--accent-cyan);
-      color: #000;
-      transform: scale(1.05);
+      background: var(--accent-cyan); color: #000; transform: scale(1.05);
     }
 
-    /* Writing Mask Game (猜猜我是誰) */
     .writer-board {
       background: rgba(15, 23, 42, 0.9);
       border: 2px solid var(--accent-pink);
       border-radius: var(--radius-lg);
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+      padding: 24px; display: flex; flex-direction: column; gap: 16px;
     }
     .writer-input {
-      width: 100%;
-      background: rgba(0,0,0,0.4);
+      width: 100%; background: rgba(0,0,0,0.4);
       border: 2px solid var(--border-color);
-      border-radius: var(--radius-md);
-      color: #fff;
-      font-size: 20px;
-      font-family: inherit;
-      padding: 16px;
-      min-height: 120px;
-      resize: none;
+      border-radius: var(--radius-md); color: #fff;
+      font-size: 20px; font-family: inherit;
+      padding: 16px; min-height: 120px; resize: none;
     }
-    .writer-input:focus {
-      outline: none;
-      border-color: var(--accent-pink);
-    }
+    .writer-input:focus { outline: none; border-color: var(--accent-pink); }
     .big-btn {
-      padding: 16px 28px;
-      font-size: 20px;
-      font-weight: 900;
+      padding: 16px 28px; font-size: 20px; font-weight: 900;
       background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
-      color: #fff;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 4px 20px rgba(255, 77, 109, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
+      color: #fff; border: none; border-radius: 30px; cursor: pointer;
+      transition: all 0.2s; box-shadow: 0 4px 20px rgba(255, 77, 109, 0.4);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
     }
     .big-btn:hover, .big-btn:active {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px rgba(255, 77, 109, 0.7);
+      transform: scale(1.05); box-shadow: 0 0 25px rgba(255, 77, 109, 0.7);
     }
 
-    /* Poem Presentation Cards */
     .poem-box {
       background: rgba(255, 255, 255, 0.04);
       border-left: 5px solid var(--accent-cyan);
-      padding: 18px 24px;
-      border-radius: 0 var(--radius-md) var(--radius-md) 0;
-      font-size: 20px;
-      line-height: 1.8;
-      color: #e2e8f0;
+      padding: 18px 24px; border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      font-size: 20px; line-height: 1.8; color: #e2e8f0;
     }
   </style>
 </head>
 <body>
 
-  <!-- Confetti Particle Canvas -->
   <canvas id="confetti-canvas"></canvas>
-
-  <!-- Top Progress Bar -->
   <div id="progress-bar"></div>
 
-  <!-- Top Controls -->
   <div id="top-bar">
     <div class="top-left">
       <div id="section-tag">單元一：快樂上學去</div>
@@ -585,17 +430,13 @@
     </div>
   </div>
 
-  <!-- Navigation Buttons for Touch Screen -->
   <button class="nav-btn" id="prev-btn" onclick="prevSlide()">❮</button>
   <button class="nav-btn" id="next-btn" onclick="nextSlide()">❯</button>
 
-  <!-- Page Info & Hints -->
   <div id="page-info"><span id="curr-slide">1</span> / <span id="total-slides">12</span></div>
   <div id="key-hint">💡 大屏觸控：點擊兩側按鈕 ❮ ❯ 或鍵盤 ⬅️ ➡️ 切換</div>
 
-  <!-- =================================================================== -->
-  <!-- SLIDE 1: COVER -->
-  <!-- =================================================================== -->
+  <!-- SLIDE 1 -->
   <section class="slide active" data-slide="1" data-section="課前動機">
     <div class="slide-inner" style="text-align: center; align-items: center; justify-content: center; min-height: 70vh;">
       <div class="kicker">— 南一國語三上 第一課 —</div>
@@ -603,9 +444,8 @@
         你好，<span class="highlight-gold">新朋友</span>！
       </h1>
       <p style="font-size: var(--t2); color: var(--ink-muted); max-width: 800px; margin-top: 10px;">
-        融入 NotebookLM 課文解析 • MAPS 學習單 • 生字遊戲 • 我是大作家大屏互動
+        NotebookLM 課文解析 • MAPS 學習單 • 生字遊戲 • 我是大作家大屏互動
       </p>
-
       <div style="display: flex; gap: 15px; margin-top: 30px;">
         <button class="big-btn" style="background: linear-gradient(135deg, var(--accent-cyan), #0284c7);" onclick="nextSlide()">
           🚀 開始上課與遊戲大挑戰
@@ -614,14 +454,11 @@
     </div>
   </section>
 
-  <!-- =================================================================== -->
-  <!-- SLIDE 2: PRE-WARMUP (學習單預習) -->
-  <!-- =================================================================== -->
+  <!-- SLIDE 2 -->
   <section class="slide" data-slide="2" data-section="課前動機">
     <div class="slide-inner">
       <div class="kicker">— 學習單 暖身思考大腦體操 —</div>
       <h2 class="slide-title">回到學校 <span class="highlight-cyan">新學期大搜查</span></h2>
-
       <div class="grid-2">
         <div class="card" style="border-top: 4px solid var(--accent-gold);">
           <div style="font-size: 32px; margin-bottom: 8px;">🏫</div>
@@ -630,7 +467,6 @@
             升上三年級，換了教室與新同學。身邊的人、事、物有什麼新的變化與感受？
           </div>
         </div>
-
         <div class="card" style="border-top: 4px solid var(--accent-pink);">
           <div style="font-size: 32px; margin-bottom: 8px;">🤝</div>
           <div class="card-title" style="color: var(--accent-pink);">2. 想認識的新朋友</div>
@@ -639,7 +475,6 @@
           </div>
         </div>
       </div>
-
       <div class="card" style="background: rgba(16, 185, 129, 0.1); border-color: var(--accent-green);">
         <div style="font-size: 20px; font-weight: 700; color: var(--accent-green);">💡 大屏互動題：邀請學生上台分享</div>
         <div style="font-size: 16px; margin-top: 6px; color: var(--ink-main);">
@@ -649,14 +484,11 @@
     </div>
   </section>
 
-  <!-- =================================================================== -->
-  <!-- SLIDE 3: POEM READING (課文朗讀) -->
-  <!-- =================================================================== -->
+  <!-- SLIDE 3 -->
   <section class="slide" data-slide="3" data-section="課文賞析">
     <div class="slide-inner">
       <div class="kicker">— 童詩朗讀 —</div>
       <h2 class="slide-title">第一課 〈你好，新朋友〉 <span class="highlight-gold">課文全覽</span></h2>
-
       <div class="grid-2">
         <div class="poem-box">
           <strong style="color: var(--accent-gold);">【第一段：太陽 ➔ 小草】</strong><br>
@@ -665,7 +497,6 @@
           「我是太陽，有一顆熱情的心。<br>
           我讓水滴化成彩虹，大海也會閃閃發亮。」
         </div>
-
         <div class="poem-box" style="border-color: var(--accent-pink);">
           <strong style="color: var(--accent-pink);">【第二段：小雲雀 ➔ 青山】</strong><br>
           小雲雀輕快的飛向青山，<br>
@@ -673,7 +504,6 @@
           「我是小雲雀，沒有多彩的羽衣，<br>
           卻有清脆的歌聲。我喜歡一邊唱歌，一邊停留半空中。」
         </div>
-
         <div class="poem-box" style="border-color: var(--accent-green);">
           <strong style="color: var(--accent-green);">【第三段：風 ➔ 樹葉】</strong><br>
           風聽見樹葉慢慢落下，<br>
@@ -681,7 +511,6 @@
           「我是風，最喜歡四處旅行。<br>
           帶你去聞百合的花香，帶你去看成群的綿羊，再送你平安回地面的家。」
         </div>
-
         <div class="poem-box" style="border-color: var(--accent-purple);">
           <strong style="color: var(--accent-purple);">【第四段：小豆子 ➔ 新同學】</strong><br>
           教室裡有好很多新同學，<br>
@@ -693,14 +522,11 @@
     </div>
   </section>
 
-  <!-- =================================================================== -->
-  <!-- SLIDE 4: MIND MAP & CHARACTERS (角色心智圖) -->
-  <!-- =================================================================== -->
+  <!-- SLIDE 4 -->
   <section class="slide" data-slide="4" data-section="結構理解">
     <div class="slide-inner">
       <div class="kicker">— 課文脈絡 —</div>
       <h2 class="slide-title">四大主角與互動心智圖 <span class="highlight-cyan">特質分析</span></h2>
-
       <div class="grid-4">
         <div class="card">
           <div style="font-size: 36px;">☀️</div>
@@ -711,7 +537,6 @@
             • <strong>專長：</strong> 水滴化彩虹、大海閃閃發亮
           </div>
         </div>
-
         <div class="card">
           <div style="font-size: 36px;">🐦</div>
           <div class="card-title" style="color: var(--accent-pink);">小雲雀</div>
@@ -721,7 +546,6 @@
             • <strong>專長：</strong> 清脆歌聲、空中停留
           </div>
         </div>
-
         <div class="card">
           <div style="font-size: 36px;">🍃</div>
           <div class="card-title" style="color: var(--accent-green);">風</div>
@@ -731,7 +555,6 @@
             • <strong>行動：</strong> 接住樹葉送平安回家
           </div>
         </div>
-
         <div class="card">
           <div style="font-size: 36px;">⚽</div>
           <div class="card-title" style="color: var(--accent-purple);">小豆子</div>
@@ -745,14 +568,11 @@
     </div>
   </section>
 
-  <!-- =================================================================== -->
-  <!-- SLIDE 5: MAPS INTERACTIVE CARDS (MAPS 翻牌思考) -->
-  <!-- =================================================================== -->
+  <!-- SLIDE 5 -->
   <section class="slide" data-slide="5" data-section="深究思考">
     <div class="slide-inner">
       <div class="kicker">— MAPS 學習單 觀點探究 —</div>
       <h2 class="slide-title">大腦體操 <span class="highlight-gold">觸控翻牌看心法</span></h2>
-
       <div class="grid-3">
         <div class="flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
           <div class="flip-card-inner">
@@ -770,7 +590,6 @@
             </div>
           </div>
         </div>
-
         <div class="flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
           <div class="flip-card-inner">
             <div class="flip-front">
@@ -786,7 +605,6 @@
             </div>
           </div>
         </div>
-
         <div class="flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
           <div class="flip-card-inner">
             <div class="flip-front">
@@ -806,16 +624,12 @@
     </div>
   </section>
 
-  <!-- =================================================================== -->
-  <!-- SLIDE 6: WORKSHEET GAME (學習單 課文連連看) -->
-  <!-- =================================================================== -->
+  <!-- SLIDE 6 -->
   <section class="slide" data-slide="6" data-section="學習單遊戲">
     <div class="slide-inner">
       <div class="kicker">— 學習單任務一 課文小偵探 —</div>
       <h2 class="slide-title">大屏觸控連連看 <span class="highlight-cyan">人物與特徵配對</span></h2>
-      
       <p style="font-size: 18px; color: var(--ink-muted);">👉 學生請上台先點左邊人物，再點右邊對應的特徵！</p>
-
       <div class="match-container">
         <div class="match-column">
           <div class="match-item" data-id="1" onclick="selectMatch('left', 1, this)">
@@ -828,7 +642,6 @@
             <span>3. 小豆子 / 踢足球</span> <span>👉</span>
           </div>
         </div>
-
         <div class="match-column">
           <div class="match-item" data-id="3" onclick="selectMatch('right', 3, this)">
             <span>A. 活力十足，最喜歡在操場奔跑運動</span> <span>🎯</span>
@@ -841,26 +654,20 @@
           </div>
         </div>
       </div>
-
       <div id="match-msg" style="font-size: 20px; font-weight: 700; text-align: center; color: var(--accent-gold); min-height: 30px;"></div>
     </div>
   </section>
 
-  <!-- =================================================================== -->
-  <!-- SLIDE 7: VOCAB & PHONETICS GAME (生字語詞大考驗 - 大屏遊戲) -->
-  <!-- =================================================================== -->
+  <!-- SLIDE 7 -->
   <section class="slide" data-slide="7" data-section="生字語詞大屏測驗">
     <div class="slide-inner">
       <div class="kicker">— 大屏課堂測驗遊戲 🎮 —</div>
       <h2 class="slide-title">生字語詞大挑戰 <span class="highlight-gold">闖關搶答</span></h2>
-
       <div class="game-tabs">
         <div class="game-tab-btn active" id="tab1-btn" onclick="switchGameTab(1)">🔤 15個重點生字</div>
         <div class="game-tab-btn" id="tab2-btn" onclick="switchGameTab(2)">🎯 多音字大擂台</div>
         <div class="game-tab-btn" id="tab3-btn" onclick="switchGameTab(3)">🧩 詞語選擇題</div>
       </div>
-
-      <!-- TAB 1: 15 生字 -->
       <div id="game-tab-1">
         <div class="vocab-grid">
           <div class="vocab-touch-card" onclick="alert('【泥】ㄋㄧˊ：泥土、拖泥帶水'); soundEffect('card')">
@@ -910,8 +717,6 @@
           </div>
         </div>
       </div>
-
-      <!-- TAB 2: 多音字擂台 -->
       <div id="game-tab-2" style="display: none;">
         <div class="quiz-box">
           <div class="quiz-question">Q1. 風喜歡「四處」旅行，這裡的「處」應該讀作什麼？</div>
@@ -919,7 +724,6 @@
             <button class="quiz-opt-btn" onclick="checkQuiz(this, true)">A. ㄔㄨˋ (場所/地方)</button>
             <button class="quiz-opt-btn" onclick="checkQuiz(this, false)">B. ㄔㄨˇ (辦理/安頓)</button>
           </div>
-
           <div class="quiz-question" style="margin-top: 15px;">Q2. 爸爸去「銀行」領錢，這裡的「行」應該讀作什麼？</div>
           <div class="quiz-options">
             <button class="quiz-opt-btn" onclick="checkQuiz(this, false)">A. ㄒㄧㄥˊ (行走)</button>
@@ -927,8 +731,6 @@
           </div>
         </div>
       </div>
-
-      <!-- TAB 3: 詞語選擇題 -->
       <div id="game-tab-3" style="display: none;">
         <div class="quiz-box">
           <div class="quiz-question">Q3. 「小雲雀雖然沒有多彩的羽衣，卻有（ ）的歌聲。」空格應填入？</div>
@@ -943,14 +745,11 @@
     </div>
   </section>
 
-  <!-- =================================================================== -->
-  <!-- SLIDE 8: RHETORIC (四大修辭) -->
-  <!-- =================================================================== -->
+  <!-- SLIDE 8 -->
   <section class="slide" data-slide="8" data-section="修辭解析">
     <div class="slide-inner">
       <div class="kicker">— 文學修辭寶典 —</div>
       <h2 class="slide-title">詩歌中的四大靈魂修辭 <span class="highlight-pink">寫作魔法</span></h2>
-
       <div class="grid-4">
         <div class="card">
           <div style="font-size: 32px;">🗣️</div>
@@ -960,7 +759,6 @@
             • 風用長長的頭髮接住
           </div>
         </div>
-
         <div class="card">
           <div style="font-size: 32px;">🔄</div>
           <div class="card-title" style="font-size: 18px; color: var(--accent-cyan);">疊字法</div>
@@ -969,7 +767,6 @@
             • 閃閃發亮、慢慢落下
           </div>
         </div>
-
         <div class="card">
           <div style="font-size: 32px;">🎨</div>
           <div class="card-title" style="font-size: 18px; color: var(--accent-pink);">摹寫法</div>
@@ -979,7 +776,6 @@
             • 聽覺：清脆歌聲
           </div>
         </div>
-
         <div class="card">
           <div style="font-size: 32px;">🔗</div>
           <div class="card-title" style="font-size: 18px; color: var(--accent-green);">類疊（類句）</div>
@@ -992,23 +788,18 @@
     </div>
   </section>
 
-  <!-- =================================================================== -->
-  <!-- SLIDE 9: I AM A GREAT WRITER (我是大作家 - 照樣造句拼圖大挑戰) -->
-  <!-- =================================================================== -->
+  <!-- SLIDE 9 -->
   <section class="slide" data-slide="9" data-section="我是大作家">
     <div class="slide-inner">
       <div class="kicker">— 我是大作家 大屏互動遊戲 ✍️ —</div>
       <h2 class="slide-title">照樣造句拼圖大挑戰 <span class="highlight-gold">句型大師</span></h2>
-
       <div class="sentence-builder">
         <div style="font-size: 18px; color: var(--accent-gold); font-weight: 700;">
           📌 請點選下方積木，組合句子：「我是 [角色]，有一顆 [形容詞] 的心。」
         </div>
-
         <div class="slot-display" id="builder-output">
           我是 <span id="s1" class="highlight-cyan">【點選角色】</span>，有一顆 <span id="s2" class="highlight-pink">【點選特徵】</span> 的心。
         </div>
-
         <div style="font-weight: 700; color: var(--ink-muted); margin-top: 5px;">第一步：選擇角色 👤</div>
         <div class="slot-btn-group">
           <div class="slot-chip" onclick="setSlot('s1', '太陽')">☀️ 太陽</div>
@@ -1016,7 +807,6 @@
           <div class="slot-chip" onclick="setSlot('s1', '小豆子')">⚽ 小豆子</div>
           <div class="slot-chip" onclick="setSlot('s1', '小新星')">🌟 小新星</div>
         </div>
-
         <div style="font-weight: 700; color: var(--ink-muted); margin-top: 5px;">第二步：選擇特徵 ❤️</div>
         <div class="slot-btn-group">
           <div class="slot-chip" onclick="setSlot('s2', '熱情')">🔥 熱情</div>
@@ -1024,7 +814,6 @@
           <div class="slot-chip" onclick="setSlot('s2', '勇敢')">🦁 勇敢</div>
           <div class="slot-chip" onclick="setSlot('s2', '開朗')">😄 開朗</div>
         </div>
-
         <button class="big-btn" onclick="checkSentence()" style="margin-top: 10px;">
           🎉 朗讀句子並領取獎勵！
         </button>
@@ -1032,14 +821,11 @@
     </div>
   </section>
 
-  <!-- =================================================================== -->
-  <!-- SLIDE 10: SELF INTRO (自我介紹三部曲) -->
-  <!-- =================================================================== -->
+  <!-- SLIDE 10 -->
   <section class="slide" data-slide="10" data-section="口語表達">
     <div class="slide-inner">
       <div class="kicker">— 學習單 口語表達演練 —</div>
       <h2 class="slide-title">自我介紹三部曲 <span class="highlight-cyan">大方登場</span></h2>
-
       <div class="grid-3">
         <div class="card" style="border-top: 4px solid var(--accent-gold);">
           <div style="font-size: 32px;">👋</div>
@@ -1048,7 +834,6 @@
             「大家好！我叫王小豆，大家可以叫我小豆子。」
           </div>
         </div>
-
         <div class="card" style="border-top: 4px solid var(--accent-cyan);">
           <div style="font-size: 32px;">🌟</div>
           <div class="card-title" style="color: var(--accent-cyan);">二部曲：特質與專長</div>
@@ -1056,7 +841,6 @@
             「我是一個開朗的人，專長是踢足球，興趣是看漫畫……」
           </div>
         </div>
-
         <div class="card" style="border-top: 4px solid var(--accent-pink);">
           <div style="font-size: 32px;">🚀</div>
           <div class="card-title" style="color: var(--accent-pink);">三部曲：結語與期許</div>
@@ -1068,21 +852,16 @@
     </div>
   </section>
 
-  <!-- =================================================================== -->
-  <!-- SLIDE 11: GUESS WHO GAME (我是大作家 - 猜猜我是誰大屏活動) -->
-  <!-- =================================================================== -->
+  <!-- SLIDE 11 -->
   <section class="slide" data-slide="11" data-section="我是大作家">
     <div class="slide-inner">
       <div class="kicker">— 我是大作家 學習單實作 🎭 —</div>
       <h2 class="slide-title">《猜猜我是誰》 <span class="highlight-pink">大屏創作與猜猜遊戲</span></h2>
-
       <div class="writer-board">
         <div style="font-size: 18px; color: var(--accent-pink); font-weight: 700;">
           ✍️ 學生上台寫下《自我介紹短詩》，最後讓全班猜猜看是誰！
         </div>
-
         <textarea class="writer-input" id="writer-text" placeholder="例：回到學校，我是三年1班的同學。我最喜歡踢足球，大家都說我是熱情的好朋友。你知道我是誰嗎？"></textarea>
-
         <div style="display: flex; gap: 15px;">
           <button class="big-btn" onclick="publishStory()">
             🎭 戴上神秘面具（展示作品供全班猜測）
@@ -1091,21 +870,17 @@
             🔓 揭曉作者姓名！
           </button>
         </div>
-
         <div id="story-display-area" style="display: none; padding: 20px; background: rgba(255,255,255,0.08); border-radius: var(--radius-md); border-left: 5px solid var(--accent-gold); font-size: 22px; font-weight: 700; color: #fff;">
         </div>
       </div>
     </div>
   </section>
 
-  <!-- =================================================================== -->
-  <!-- SLIDE 12: BINGO & CONCLUSION (學習單 Bingo & 喚起行動) -->
-  <!-- =================================================================== -->
+  <!-- SLIDE 12 -->
   <section class="slide" data-slide="12" data-section="喚起行動">
     <div class="slide-inner">
       <div class="kicker">— 學習單任務三 —</div>
       <h2 class="slide-title">班級交友 Bingo 大搜查 <span class="highlight-gold">回到學校！</span></h2>
-
       <div class="grid-3" style="gap: 10px;">
         <div class="card" onclick="this.classList.toggle('matched'); soundEffect('correct')" style="cursor: pointer; text-align: center;">
           <div style="font-size: 24px;">⚽ 喜歡運動的人</div>
@@ -1126,16 +901,12 @@
           <div style="font-size: 24px;">🧹 會幫忙做家事</div>
         </div>
       </div>
-
       <div class="card" style="background: linear-gradient(135deg, var(--accent-gold), var(--accent-pink)); color: #000; text-align: center; padding: 20px; margin-top: 10px;">
         <h3 style="font-size: 26px; font-weight: 900;">🌈 大聲喊出：「你好，新朋友！回到學校真好！」</h3>
       </div>
     </div>
   </section>
 
-  <!-- =================================================================== -->
-  <!-- JAVASCRIPT LOGIC -->
-  <!-- =================================================================== -->
   <script>
     let currentSlide = 1;
     const totalSlides = 12;
@@ -1194,14 +965,12 @@
       }
     }
 
-    /* Web Audio Sound Synthesizer */
     function soundEffect(type) {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
+        osc.connect(gain); gain.connect(ctx.destination);
 
         if (type === 'correct') {
           osc.frequency.setValueAtTime(523.25, ctx.currentTime);
@@ -1209,27 +978,23 @@
           osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2);
           gain.gain.setValueAtTime(0.3, ctx.currentTime);
           gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
-          osc.start();
-          osc.stop(ctx.currentTime + 0.4);
+          osc.start(); osc.stop(ctx.currentTime + 0.4);
           triggerConfetti();
         } else if (type === 'wrong') {
           osc.frequency.setValueAtTime(220, ctx.currentTime);
           osc.frequency.setValueAtTime(180, ctx.currentTime + 0.15);
           gain.gain.setValueAtTime(0.3, ctx.currentTime);
           gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-          osc.start();
-          osc.stop(ctx.currentTime + 0.3);
+          osc.start(); osc.stop(ctx.currentTime + 0.3);
         } else if (type === 'card' || type === 'nav') {
           osc.frequency.setValueAtTime(400, ctx.currentTime);
           gain.gain.setValueAtTime(0.15, ctx.currentTime);
           gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-          osc.start();
-          osc.stop(ctx.currentTime + 0.1);
+          osc.start(); osc.stop(ctx.currentTime + 0.1);
         }
       } catch (e) {}
     }
 
-    /* Confetti Burst */
     function triggerConfetti() {
       const canvas = document.getElementById('confetti-canvas');
       const ctx = canvas.getContext('2d');
@@ -1241,13 +1006,11 @@
 
       for (let i = 0; i < 60; i++) {
         particles.push({
-          x: canvas.width / 2,
-          y: canvas.height / 2,
+          x: canvas.width / 2, y: canvas.height / 2,
           vx: (Math.random() - 0.5) * 12,
           vy: (Math.random() - 0.7) * 12,
           color: colors[Math.floor(Math.random() * colors.length)],
-          size: Math.random() * 8 + 4,
-          life: 1
+          size: Math.random() * 8 + 4, life: 1
         });
       }
 
@@ -1257,12 +1020,9 @@
         particles.forEach(p => {
           if (p.life > 0) {
             active = true;
-            p.x += p.vx;
-            p.y += p.vy;
-            p.vy += 0.3;
-            p.life -= 0.02;
-            ctx.fillStyle = p.color;
-            ctx.globalAlpha = Math.max(0, p.life);
+            p.x += p.vx; p.y += p.vy;
+            p.vy += 0.3; p.life -= 0.02;
+            ctx.fillStyle = p.color; ctx.globalAlpha = Math.max(0, p.life);
             ctx.fillRect(p.x, p.y, p.size, p.size);
           }
         });
@@ -1272,7 +1032,6 @@
       render();
     }
 
-    /* Game 1: Matching Game */
     let selectedLeft = null;
     function selectMatch(side, id, el) {
       soundEffect('card');
@@ -1286,7 +1045,7 @@
           el.classList.add('matched');
           const leftEl = document.querySelector(`.match-column:first-child .match-item[data-id="${id}"]`);
           if (leftEl) leftEl.classList.add('matched');
-          document.getElementById('match-msg').innerText = '🎉 連線成功！太棒了！';
+          document.getElementById('match-msg').innerText = '🎉 配對成功！太棒了！';
         } else {
           soundEffect('wrong');
           document.getElementById('match-msg').innerText = '❌ 配對不太對喔，再試試看！';
@@ -1296,7 +1055,6 @@
       }
     }
 
-    /* Tab Switcher */
     function switchGameTab(num) {
       soundEffect('card');
       document.querySelectorAll('.game-tab-btn').forEach(b => b.classList.remove('active'));
@@ -1308,15 +1066,12 @@
 
     function checkQuiz(btn, isCorrect) {
       if (isCorrect) {
-        btn.classList.add('correct');
-        soundEffect('correct');
+        btn.classList.add('correct'); soundEffect('correct');
       } else {
-        btn.classList.add('wrong');
-        soundEffect('wrong');
+        btn.classList.add('wrong'); soundEffect('wrong');
       }
     }
 
-    /* Sentence Builder */
     function setSlot(slotId, text) {
       soundEffect('card');
       document.getElementById(slotId).innerText = text;
@@ -1328,7 +1083,6 @@
       alert(`🎉 太棒了！句子寫得真好：\n「我是 ${s1}，有一顆 ${s2} 的心。」`);
     }
 
-    /* Writer Story */
     function publishStory() {
       const txt = document.getElementById('writer-text').value;
       if (!txt) { alert('請先在輸入框寫下內容喔！'); return; }

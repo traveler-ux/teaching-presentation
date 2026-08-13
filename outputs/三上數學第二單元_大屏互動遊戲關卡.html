@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎓 三上數學 第二單元《加與減》大屏隨機題庫遊戲 (徹底修復版)</title>
+<style>
+  :root {
+    --primary: #1a5f7a;
+    --primary-light: #008891;
+    --accent: #ff9f43;
+    --success: #10ac84;
+    --danger: #ee5253;
+    --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    --card-bg: rgba(255, 255, 255, 0.95);
+  }
+
+  * { box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    background: var(--bg-gradient);
+    height: 100vh;
+    overflow: hidden;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header Bar */
+  header {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    padding: 12px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+  }
+
+  .app-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  }
+
+  .score-badge {
+    background: linear-gradient(45deg, #ff9f43, #ff6b6b);
+    color: white;
+    padding: 8px 22px;
+    border-radius: 30px;
+    font-size: 22px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+
+  /* Navigation Tabs */
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .tab-btn {
+    background: rgba(255, 255, 255, 0.15);
+    color: #e0e0e0;
+    border: 2px solid rgba(255,255,255,0.2);
+    padding: 10px 20px;
+    font-size: 17px;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .tab-btn:hover, .tab-btn.active {
+    background: #ffffff;
+    color: #1a5f7a;
+    border-color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255,255,255,0.3);
+  }
+
+  /* Main Stage */
+  main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    position: relative;
+  }
+
+  .game-container {
+    width: 98%;
+    max-width: 1280px;
+    height: 98%;
+    background: var(--card-bg);
+    border-radius: 24px;
+    padding: 25px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    display: none;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .game-container.active {
+    display: flex;
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .level-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 3px dashed #008891;
+    padding-bottom: 12px;
+  }
+
+  .level-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1a5f7a;
+  }
+
+  .q-badge {
+    background: #0284c7;
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .instruction-box {
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 19px;
+    font-weight: 600;
+  }
+
+  /* Step-by-step Vertical Board (5 Column Layout - Completely Fixed NaN & Display) */
+  .v-board-container {
+    background: #ffffff;
+    border: 4px solid #cbd5e1;
+    border-radius: 24px;
+    padding: 20px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  }
+
+  .col-label-row {
+    display: grid;
+    grid-template-columns: 60px repeat(4, 85px);
+    gap: 10px;
+    margin-bottom: 6px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #475569;
+    text-align: center;
+  }
+
+  .v-grid {
+    display: grid;
+    grid-template-columns: 60px repeat(4, 85px);
+    gap: 10px;
+    font-family: monospace, 'Courier New', sans-serif;
+    font-size: 50px;
+    font-weight: 900;
+    text-align: center;
+  }
+
+  .v-cell {
+    width: 85px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #f8fafc;
+    color: #0f172a;
+    border: 2px solid #cbd5e1;
+  }
+
+  .v-op-cell {
+    width: 60px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    font-weight: 900;
+    color: #0284c7;
+    background: transparent;
+    border: none;
+  }
+
+  .v-cell.active-col {
+    background: #fef08a;
+    border: 4px solid #eab308;
+    animation: pulseCol 0.8s infinite alternate;
+  }
+
+  @keyframes pulseCol {
+    from { box-shadow: 0 0 6px #eab308; }
+    to { box-shadow: 0 0 22px #eab308; }
+  }
+
+  .v-carry-cell {
+    font-size: 28px;
+    color: #ef4444;
+    font-weight: bold;
+    height: 40px;
+    background: transparent;
+    border: none;
+  }
+
+  .v-ans-cell {
+    background: #ffffff;
+    border: 3px dashed #0284c7;
+    color: #0284c7;
+    font-size: 50px;
+  }
+
+  .v-divider {
+    grid-column: span 5;
+    height: 5px;
+    background: #0f172a;
+    margin: 6px 0;
+    border-radius: 3px;
+  }
+
+  /* Keypad UI */
+  .num-keypad {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 550px;
+    margin: 15px auto 0;
+  }
+
+  .key-btn {
+    background: #ffffff;
+    border: 3px solid #cbd5e1;
+    border-radius: 16px;
+    padding: 12px;
+    font-size: 28px;
+    font-weight: 900;
+    color: #1e293b;
+    cursor: pointer;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.06);
+    text-align: center;
+    transition: all 0.15s ease;
+  }
+
+  .key-btn:hover { border-color: #3b82f6; transform: translateY(-2px); }
+  .key-btn:active { transform: scale(0.95); background: #e2e8f0; }
+
+  /* GAME 2: Monster Subtraction Quiz (6 Monster Choice Cards) */
+  .g2-target-box {
+    background: #fff7ed;
+    border: 3px solid #fdba74;
+    border-radius: 20px;
+    padding: 15px 30px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .g2-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    flex: 1;
+    align-content: center;
+  }
+
+  .monster-card {
+    background: linear-gradient(145deg, #ffffff, #f1f5f9);
+    border: 4px solid #cbd5e1;
+    border-radius: 24px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  }
+
+  .monster-card:hover { transform: scale(1.06); border-color: #ef4444; box-shadow: 0 15px 35px rgba(239,68,68,0.2); }
+  .monster-avatar { font-size: 65px; margin-bottom: 5px; }
+  .monster-val { font-size: 38px; font-weight: 900; color: #1e293b; }
+
+  /* Action Footers */
+  .action-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+  }
+
+  .nav-btn-group { display: flex; gap: 12px; }
+
+  .action-btn {
+    padding: 12px 28px;
+    font-size: 20px;
+    font-weight: 800;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform 0.2s;
+  }
+
+  .btn-submit { background: #10b981; color: white; }
+  .btn-reset { background: #64748b; color: white; }
+  .btn-next { background: #3b82f6; color: white; }
+
+  /* Modal Overlay */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.75);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal-overlay.active { display: flex; }
+
+  .modal-content {
+    background: white;
+    padding: 35px;
+    border-radius: 26px;
+    text-align: center;
+    max-width: 540px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .modal-icon { font-size: 75px; margin-bottom: 15px; }
+  .modal-title { font-size: 32px; font-weight: 900; color: #1e293b; }
+  .modal-desc { font-size: 20px; color: #64748b; margin: 15px 0 25px; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="app-title">🎓 三上數學 第二單元《加與減》大屏隨機題庫遊戲</div>
+  <div class="score-badge">🏆 全班累計得分：<span id="global-score">0</span> 分</div>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="switchLevel(1)">一、從個位開始步步算 (數字無缺顯示)</button>
+  <button class="tab-btn" onclick="switchLevel(2)">二、零怪獸退位解密 (6隻怪獸隨機選項)</button>
+  <button class="tab-btn" onclick="switchLevel(3)">三、快手估算收銀員 (自主心算估算)</button>
+  <button class="tab-btn" onclick="switchLevel(4)">四、框框密碼偵探 (10+倒推題)</button>
+</nav>
+
+<main>
+  <!-- GAME 1 -->
+  <div id="level-1" class="game-container active">
+    <div class="level-header">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="level-title">➕ 小節一：從【個位】開始！直式加法分步算</div>
+        <div class="q-badge" id="g1-q-badge">隨機題目 #1</div>
+      </div>
+      <div class="instruction-box" id="g1-prompt" style="background:#fef08a; color:#854d0e;">
+        💡 請依照指示填寫個位數！
+      </div>
+    </div>
+    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+      <div class="v-board-container">
+        <div class="col-label-row">
+          <div></div><div>千位</div><div>百位</div><div>十位</div><div>個位</div>
+        </div>
+        <div class="v-grid">
+          <!-- Carry Row -->
+          <div class="v-op-cell"></div>
+          <div class="v-cell v-carry-cell" id="g1-c-th"></div>
+          <div class="v-cell v-carry-cell" id="g1-c-h"></div>
+          <div class="v-cell v-carry-cell" id="g1-c-t"></div>
+          <div class="v-cell v-carry-cell" id="g1-c-o"></div>
+
+          <!-- Num 1 Row -->
+          <div class="v-op-cell"></div>
+          <div class="v-cell" id="g1-n1-th"></div>
+          <div class="v-cell" id="g1-n1-h">5</div>
+          <div class="v-cell" id="g1-n1-t">8</div>
+          <div class="v-cell" id="g1-n1-o">9</div>
+
+          <!-- Num 2 Row -->
+          <div class="v-op-cell">+</div>
+          <div class="v-cell" id="g1-n2-th"></div>
+          <div class="v-cell" id="g1-n2-h">6</div>
+          <div class="v-cell" id="g1-n2-t">4</div>
+          <div class="v-cell" id="g1-n2-o">7</div>
+
+          <div class="v-divider"></div>
+
+          <!-- Ans Row -->
+          <div class="v-op-cell"></div>
+          <div class="v-cell v-ans-cell" id="g1-a-th">?</div>
+          <div class="v-cell v-ans-cell" id="g1-a-h">?</div>
+          <div class="v-cell v-ans-cell" id="g1-a-t">?</div>
+          <div class="v-cell v-ans-cell" id="g1-a-o">?</div>
+        </div>
+      </div>
+      <div class="num-keypad" id="g1-keypad"></div>
+    </div>
+    <div class="action-footer">
+      <button class="action-btn btn-reset" onclick="resetG1Step()">重算本步</button>
+      <div class="nav-btn-group">
+        <button class="action-btn btn-next" onclick="nextRandomG1()">隨機下一題 (換同學) ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME 2 -->
+  <div id="level-2" class="game-container">
+    <div class="level-header">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="level-title">➖ 小節二：零怪獸退位解密 (6隻怪獸隨機數字卡)</div>
+        <div class="q-badge" id="g2-q-badge">隨機題目 #1</div>
+      </div>
+      <div class="instruction-box">👾 任務：請點擊消滅帶有【正確計算答案】的減法怪獸！</div>
+    </div>
+    <div class="g2-target-box">
+      <div style="font-size: 22px; color: #ea580c; font-weight: bold;">🎯 請心算或筆算此題答案：</div>
+      <div style="font-size: 45px; font-weight: 900; color: #1e293b;" id="g2-eq-text">1000 - 345 = ？</div>
+    </div>
+    <div class="g2-grid" id="monster-container"></div>
+    <div class="action-footer">
+      <div></div>
+      <button class="action-btn btn-next" onclick="nextRandomG2()">隨機下一題怪獸 ➔</button>
+    </div>
+  </div>
+
+  <!-- GAME 3 -->
+  <div id="level-3" class="game-container">
+    <div class="level-header">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="level-title">🛒 小節三：快手估算收銀員 (自主心算估算，無預解提示)</div>
+        <div class="q-badge" id="g3-q-badge">隨機商品 #1</div>
+      </div>
+      <div class="instruction-box">💡 請心算估算商品總價，自主判斷預算是否足夠！</div>
+    </div>
+    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 30px;">
+      <div style="background: #f1f5f9; padding: 30px 50px; border-radius: 24px; border: 3px solid #cbd5e1; text-align: center; max-width: 650px;">
+        <div style="font-size: 22px; color: #64748b; font-weight: bold;">🛒 選購商品：</div>
+        <div style="font-size: 36px; font-weight: 900; color: #0284c7; margin: 10px 0;" id="g3-items-text">微波爐 $3280 ＋ 氣炸鍋 $4325</div>
+        <div style="font-size: 32px; font-weight: 900; color: #0f172a; margin-top: 15px; border-top: 2px dashed #94a3b8; padding-top: 15px;" id="g3-budget">帶去購物的現金預算：$ 8000 元</div>
+      </div>
+      <div style="display: flex; gap: 40px;">
+        <button class="action-btn" style="background: #10b981; color: white; font-size: 30px; padding: 20px 50px; border-radius: 20px;" onclick="chooseG3(true)">⭕ 預算足夠</button>
+        <button class="action-btn" style="background: #ef4444; color: white; font-size: 30px; padding: 20px 50px; border-radius: 20px;" onclick="chooseG3(false)">❌ 預算不足</button>
+      </div>
+    </div>
+    <div class="action-footer">
+      <div></div>
+      <button class="action-btn btn-next" onclick="nextRandomG3()">隨機下一題購物 ➔</button>
+    </div>
+  </div>
+
+  <!-- GAME 4 -->
+  <div id="level-4" class="game-container">
+    <div class="level-header">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="level-title">🔍 小節四：框框密碼偵探</div>
+        <div class="q-badge" id="g4-q-badge">隨機密碼 #1</div>
+      </div>
+      <div class="instruction-box" id="g4-prompt">🔍 請找出失蹤的數字框框答案！</div>
+    </div>
+    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 25px;">
+      <div style="font-size: 48px; font-weight: 900; background: #f8fafc; padding: 25px 50px; border-radius: 20px; border: 3px solid #38bdf8;" id="g4-eq">
+        □ + 350 = 800
+      </div>
+      <div style="font-size: 24px; color: #64748b;" id="g4-hint">提示倒推算式：800 - 350 = ?</div>
+      <div class="num-keypad" id="g4-keypad"></div>
+      <div style="font-size: 36px; font-weight: bold; color: #0284c7;" id="g4-input">輸入框框：?</div>
+    </div>
+    <div class="action-footer">
+      <button class="action-btn btn-reset" onclick="resetG4()">清除重填</button>
+      <div class="nav-btn-group">
+        <button class="action-btn btn-submit" onclick="checkG4()">確認破譯</button>
+        <button class="action-btn btn-next" onclick="nextRandomG4()">隨機下一題 ➔</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Modal -->
+<div class="modal-overlay" id="win-modal">
+  <div class="modal-content">
+    <div class="modal-icon" id="m-icon">🎉</div>
+    <div class="modal-title" id="m-title">太棒了！答對囉！</div>
+    <div class="modal-desc" id="m-desc">恭喜答對！獲得 100 分！</div>
+    <button class="action-btn btn-submit" style="width: 100%;" onclick="closeModalAndNext()">換下一位同學 (隨機下一題) ➔</button>
+  </div>
+</div>
+
+<script>
+  let globalScore = 0;
+  let currentActiveLvl = 1;
+
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  function playSound(type) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    if (type === 'correct') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+      osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
+      osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2);
+      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.5);
+    } else if (type === 'fanfare') {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+      osc.frequency.setValueAtTime(554.37, audioCtx.currentTime + 0.15);
+      osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.3);
+      osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.45);
+      gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.8);
+    } else if (type === 'wrong') {
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.3);
+    } else if (type === 'click') {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.05);
+    }
+  }
+
+  function addScore(pts) {
+    globalScore += pts;
+    document.getElementById('global-score').innerText = globalScore;
+  }
+
+  function switchLevel(lvl) {
+    playSound('click');
+    currentActiveLvl = lvl;
+    document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
+      btn.classList.toggle('active', idx === lvl - 1);
+    });
+    document.querySelectorAll('.game-container').forEach((ct, idx) => {
+      ct.classList.toggle('active', idx === lvl - 1);
+    });
+  }
+
+  // KEYPAD BUILDER
+  function buildKeypads() {
+    [1, 4].forEach(lvl => {
+      const pad = document.getElementById(`g${lvl}-keypad`);
+      pad.innerHTML = '';
+      for (let i = 0; i <= 9; i++) {
+        const btn = document.createElement('div');
+        btn.className = 'key-btn';
+        btn.innerText = i;
+        btn.onclick = () => handleKeyInput(lvl, i);
+        pad.appendChild(btn);
+      }
+    });
+  }
+
+  // --- GAME 1 LOGIC: STEP-BY-STEP CALCULATION FROM ONES PLACE (FULL 5-COLUMN DISPLAY) ---
+  const g1Pool = [
+    { n1: 589, n2: 647 },
+    { n1: 358, n2: 475 },
+    { n1: 1450, n2: 2890 },
+    { n1: 895, n2: 678 },
+    { n1: 2340, n2: 5670 },
+    { n1: 456, n2: 789 },
+    { n1: 3670, n2: 4850 },
+    { n1: 999, n2: 1 },
+    { n1: 2750, n2: 3850 },
+    { n1: 6075, n2: 2925 }
+  ];
+  let g1QNum = 0;
+  let g1CurrentQ = g1Pool[0];
+  let g1Step = 0; // 0: Ones, 1: Tens, 2: Hundreds, 3: Thousands
+  let g1Carries = { o: 0, t: 0, h: 0, th: 0 };
+  let g1Answers = { o: '?', t: '?', h: '?', th: '?' };
+
+  function nextRandomG1() {
+    g1QNum++;
+    g1CurrentQ = g1Pool[Math.floor(Math.random() * g1Pool.length)];
+    document.getElementById('g1-q-badge').innerText = `隨機題目 #${g1QNum}`;
+    g1Step = 0;
+    g1Carries = { o: 0, t: 0, h: 0, th: 0 };
+    g1Answers = { o: '?', t: '?', h: '?', th: '?' };
+    renderG1Step();
+  }
+
+  function getDigitVal(str, indexFromRight) {
+    const s = String(str).padStart(4, ' ');
+    const char = s[3 - indexFromRight];
+    return (char && char !== ' ') ? parseInt(char) : 0;
+  }
+
+  function renderG1Step() {
+    const s1 = String(g1CurrentQ.n1).padStart(4, ' ');
+    const s2 = String(g1CurrentQ.n2).padStart(4, ' ');
+
+    document.getElementById('g1-n1-th').innerText = s1[0] === ' ' ? '' : s1[0];
+    document.getElementById('g1-n1-h').innerText = s1[1] === ' ' ? '' : s1[1];
+    document.getElementById('g1-n1-t').innerText = s1[2] === ' ' ? '' : s1[2];
+    document.getElementById('g1-n1-o').innerText = s1[3] === ' ' ? '' : s1[3];
+
+    document.getElementById('g1-n2-th').innerText = s2[0] === ' ' ? '' : s2[0];
+    document.getElementById('g1-n2-h').innerText = s2[1] === ' ' ? '' : s2[1];
+    document.getElementById('g1-n2-t').innerText = s2[2] === ' ' ? '' : s2[2];
+    document.getElementById('g1-n2-o').innerText = s2[3] === ' ' ? '' : s2[3];
+
+    // Carries
+    document.getElementById('g1-c-th').innerText = g1Carries.th || '';
+    document.getElementById('g1-c-h').innerText = g1Carries.h || '';
+    document.getElementById('g1-c-t').innerText = g1Carries.t || '';
+    document.getElementById('g1-c-o').innerText = '';
+
+    // Answers
+    document.getElementById('g1-a-th').innerText = g1Answers.th;
+    document.getElementById('g1-a-h').innerText = g1Answers.h;
+    document.getElementById('g1-a-t').innerText = g1Answers.t;
+    document.getElementById('g1-a-o').innerText = g1Answers.o;
+
+    // Highlights
+    ['th', 'h', 't', 'o'].forEach(col => {
+      document.getElementById(`g1-n1-${col}`).classList.remove('active-col');
+      document.getElementById(`g1-n2-${col}`).classList.remove('active-col');
+      document.getElementById(`g1-a-${col}`).classList.remove('active-col');
+    });
+
+    const colMap = ['o', 't', 'h', 'th'];
+    const activeCol = colMap[g1Step];
+    const colNames = ['個位', '十位', '百位', '千位'];
+
+    if (g1Step < 4) {
+      document.getElementById(`g1-n1-${activeCol}`).classList.add('active-col');
+      document.getElementById(`g1-n2-${activeCol}`).classList.add('active-col');
+      document.getElementById(`g1-a-${activeCol}`).classList.add('active-col');
+
+      const v1 = getDigitVal(g1CurrentQ.n1, g1Step);
+      const v2 = getDigitVal(g1CurrentQ.n2, g1Step);
+      const cIn = g1Carries[activeCol] || 0;
+      const sum = v1 + v2 + cIn;
+
+      document.getElementById('g1-prompt').innerText = 
+        `💡 第 ${g1Step + 1} 步：請算【${colNames[g1Step]}】 ${v1} + ${v2}${cIn ? ' + 1(進位)' : ''} = ${sum} ➔ 請點擊下方數字鍵填寫【${colNames[g1Step]}】個位數 (${sum % 10})！`;
+    }
+  }
+
+  function handleKeyInput(lvl, num) {
+    playSound('click');
+    if (lvl === 1) {
+      const colMap = ['o', 't', 'h', 'th'];
+      const curCol = colMap[g1Step];
+
+      const v1 = getDigitVal(g1CurrentQ.n1, g1Step);
+      const v2 = getDigitVal(g1CurrentQ.n2, g1Step);
+      const cIn = g1Carries[curCol] || 0;
+      const sum = v1 + v2 + cIn;
+      const expectedDigit = sum % 10;
+      const nextCarry = Math.floor(sum / 10);
+
+      if (num === expectedDigit) {
+        playSound('correct');
+        g1Answers[curCol] = expectedDigit;
+        if (g1Step < 3 && nextCarry > 0) {
+          const nextCol = colMap[g1Step + 1];
+          g1Carries[nextCol] = nextCarry;
+        }
+        g1Step++;
+
+        // Auto skip thousands if no thousands digits and no carry
+        if (g1Step === 3) {
+          const th1 = getDigitVal(g1CurrentQ.n1, 3);
+          const th2 = getDigitVal(g1CurrentQ.n2, 3);
+          const cTh = g1Carries.th || 0;
+          if (th1 + th2 + cTh === 0) {
+            g1Answers.th = '';
+            g1Step = 4;
+          }
+        }
+
+        if (g1Step >= 4) {
+          if (g1Answers.th === '?') g1Answers.th = '';
+          renderG1Step();
+          addScore(100);
+          showModal("🎉 太棒了！從個位開始分步算對囉！", `成功一步步完成直式加法：${g1CurrentQ.n1} + ${g1CurrentQ.n2} = ${g1CurrentQ.n1 + g1CurrentQ.n2}！`, "⚡");
+        } else {
+          renderG1Step();
+        }
+      } else {
+        playSound('wrong');
+        alert(`計算錯誤喔！這一步的答案應該是 ${expectedDigit}！再試一次！`);
+      }
+    } else if (lvl === 4) {
+      if (g4AnsInput.length < 5) g4AnsInput += num;
+      document.getElementById('g4-input').innerText = `輸入框框：${g4AnsInput}`;
+    }
+  }
+
+  function resetG1Step() {
+    renderG1Step();
+  }
+
+  // --- GAME 2 LOGIC: 6 MONSTER CHOICE CARDS (1 CORRECT ANSWER + 5 DISTRACTORS) ---
+  const g2Pool = [
+    { expr: "1000 - 345", ans: 655 },
+    { expr: "800 - 247", ans: 553 },
+    { expr: "503 - 189", ans: 314 },
+    { expr: "2000 - 845", ans: 1155 },
+    { expr: "600 - 275", ans: 325 },
+    { expr: "5000 - 1320", ans: 3680 },
+    { expr: "1500 - 680", ans: 820 },
+    { expr: "4000 - 2150", ans: 1850 },
+    { expr: "900 - 438", ans: 462 },
+    { expr: "702 - 359", ans: 343 },
+    { expr: "1200 - 450", ans: 750 },
+    { expr: "3000 - 1420", ans: 1580 },
+    { expr: "604 - 288", ans: 316 },
+    { expr: "8000 - 3450", ans: 4550 },
+    { expr: "1000 - 789", ans: 211 }
+  ];
+  let g2QNum = 0;
+  let g2CurrentQ = g2Pool[0];
+
+  function nextRandomG2() {
+    g2QNum++;
+    g2CurrentQ = g2Pool[Math.floor(Math.random() * g2Pool.length)];
+    document.getElementById('g2-q-badge').innerText = `隨機題目 #${g2QNum}`;
+    document.getElementById('g2-eq-text').innerText = `${g2CurrentQ.expr} = ？`;
+
+    const container = document.getElementById('monster-container');
+    container.innerHTML = '';
+
+    // Generate 6 option choices (1 correct + 5 distractors)
+    const correctAns = g2CurrentQ.ans;
+    const options = new Set();
+    options.add(correctAns);
+
+    while (options.size < 6) {
+      const offset = (Math.floor(Math.random() * 9) + 1) * (Math.random() > 0.5 ? 10 : -10);
+      const wrong = Math.max(10, correctAns + offset);
+      if (wrong !== correctAns) options.add(wrong);
+    }
+
+    const shuffled = Array.from(options).sort(() => 0.5 - Math.random());
+    const monsterEmojis = ['👾', '👹', '👺', '👻', '🤖', '👽'];
+
+    shuffled.forEach((val, idx) => {
+      const card = document.createElement('div');
+      card.className = 'monster-card';
+      card.innerHTML = `
+        <div class="monster-avatar">${monsterEmojis[idx % monsterEmojis.length]}</div>
+        <div class="monster-val">${val}</div>
+      `;
+      card.onclick = () => {
+        if (val === correctAns) {
+          playSound('fanfare');
+          addScore(100);
+          card.style.transform = 'scale(0) rotate(360deg)';
+          card.style.opacity = '0';
+          setTimeout(() => {
+            showModal("👑 消滅怪獸成功！", `恭喜全班成功算出 ${g2CurrentQ.expr} = ${correctAns}！消滅退位減法怪獸！`, "🎁");
+          }, 300);
+        } else {
+          playSound('wrong');
+          alert(`消滅失敗！這隻怪獸的數字是 ${val}，不是 ${g2CurrentQ.expr} 的正確答案！再算一次！`);
+        }
+      };
+      container.appendChild(card);
+    });
+  }
+
+  // --- GAME 3 LOGIC: NO PRE-CALCULATED HINTS (Students estimate independently) ---
+  const g3Pool = [
+    { items: "微波爐 $3280 ＋ 氣炸鍋 $4325", budget: 8000, isEnough: true },
+    { items: "洗衣機 $8090 ＋ 智慧電視 $9090", budget: 15000, isEnough: false },
+    { items: "腳踏車 $3580 ＋ 吸塵器 $2950", budget: 6000, isEnough: false },
+    { items: "烘碗機 $1500 ＋ 靜音電風扇 $1005", budget: 3000, isEnough: true },
+    { items: "掃地機器人 $7005 ＋ 氣炸鍋 $4325", budget: 10000, isEnough: false },
+    { items: "除濕機 $6075 ＋ 微波爐 $3280", budget: 10000, isEnough: true }
+  ];
+  let g3QNum = 0;
+  let g3CurrentQ = g3Pool[0];
+
+  function nextRandomG3() {
+    g3QNum++;
+    g3CurrentQ = g3Pool[Math.floor(Math.random() * g3Pool.length)];
+    document.getElementById('g3-q-badge').innerText = `隨機商品 #${g3QNum}`;
+    document.getElementById('g3-items-text').innerText = g3CurrentQ.items;
+    document.getElementById('g3-budget').innerText = `帶去購物的現金預算：$ ${g3CurrentQ.budget} 元`;
+  }
+
+  function chooseG3(ans) {
+    if (ans === g3CurrentQ.isEnough) {
+      playSound('correct');
+      addScore(100);
+      showModal("🛒 自主估算完全正確！", `學生自主心算估算非常精準！預算判斷完全正確！`, "🎯");
+    } else {
+      playSound('wrong');
+      alert("估算不對喔！請在心中概算一下商品總價再決定！");
+    }
+  }
+
+  // --- GAME 4 LOGIC ---
+  const g4Pool = [
+    { eq: "□ + 350 = 800", hint: "提示倒推算式：800 - 350 = ?", ans: 450 },
+    { eq: "□ - 280 = 450", hint: "提示倒推算式：450 + 280 = ?", ans: 730 },
+    { eq: "500 - □ = 180", hint: "提示倒推算式：500 - 180 = ?", ans: 320 },
+    { eq: "□ + 450 = 900", hint: "提示倒推算式：900 - 450 = ?", ans: 450 },
+    { eq: "1000 - □ = 350", hint: "提示倒推算式：1000 - 350 = ?", ans: 650 }
+  ];
+  let g4QNum = 0;
+  let g4CurrentQ = g4Pool[0];
+  let g4AnsInput = '';
+
+  function nextRandomG4() {
+    g4QNum++;
+    g4CurrentQ = g4Pool[Math.floor(Math.random() * g4Pool.length)];
+    document.getElementById('g4-q-badge').innerText = `隨機密碼 #${g4QNum}`;
+    document.getElementById('g4-eq').innerText = g4CurrentQ.eq;
+    document.getElementById('g4-hint').innerText = g4CurrentQ.hint;
+    resetG4();
+  }
+
+  function resetG4() {
+    g4AnsInput = '';
+    document.getElementById('g4-input').innerText = `輸入框框：?`;
+  }
+
+  function checkG4() {
+    if (parseInt(g4AnsInput) === g4CurrentQ.ans) {
+      playSound('correct');
+      addScore(100);
+      showModal("🔍 成功破譯失蹤數字！", `成功算出框框等於 ${g4CurrentQ.ans}！`, "🔓");
+    } else {
+      playSound('wrong');
+      alert(`答案 ${g4AnsInput} 不對喔！請利用提示算式再試一次！`);
+    }
+  }
+
+  // Modal
+  function showModal(title, desc, icon = "🎉") {
+    document.getElementById('m-icon').innerText = icon;
+    document.getElementById('m-title').innerText = title;
+    document.getElementById('m-desc').innerText = desc;
+    document.getElementById('win-modal').classList.add('active');
+  }
+
+  function closeModalAndNext() {
+    playSound('click');
+    document.getElementById('win-modal').classList.remove('active');
+    if (currentActiveLvl === 1) nextRandomG1();
+    else if (currentActiveLvl === 2) nextRandomG2();
+    else if (currentActiveLvl === 3) nextRandomG3();
+    else if (currentActiveLvl === 4) nextRandomG4();
+  }
+
+  // Init
+  buildKeypads();
+  nextRandomG1();
+  nextRandomG2();
+  nextRandomG3();
+  nextRandomG4();
+</script>
+</body>
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎓 三上數學 第三單元《毫米與數線》大屏隨機題庫遊戲</title>
+<style>
+  :root {
+    --primary: #1a5f7a;
+    --primary-light: #008891;
+    --accent: #ff9f43;
+    --success: #10ac84;
+    --danger: #ee5253;
+    --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    --card-bg: rgba(255, 255, 255, 0.95);
+  }
+
+  * { box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+
+  body {
+    margin: 0; padding: 0;
+    font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    background: var(--bg-gradient);
+    height: 100vh; overflow: hidden;
+    color: #333; display: flex; flex-direction: column;
+  }
+
+  header {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    padding: 12px 30px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+  }
+
+  .app-title { font-size: 24px; font-weight: 800; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+  .score-badge {
+    background: linear-gradient(45deg, #ff9f43, #ff6b6b);
+    color: white; padding: 8px 22px; border-radius: 30px;
+    font-size: 22px; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+
+  nav { display: flex; justify-content: center; gap: 12px; padding: 10px 20px; background: rgba(0, 0, 0, 0.2); }
+  .tab-btn {
+    background: rgba(255, 255, 255, 0.15); color: #e0e0e0;
+    border: 2px solid rgba(255,255,255,0.2); padding: 10px 20px;
+    font-size: 17px; font-weight: bold; border-radius: 12px;
+    cursor: pointer; transition: all 0.3s ease;
+  }
+  .tab-btn:hover, .tab-btn.active {
+    background: #ffffff; color: #1a5f7a; border-color: #ffffff;
+    transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,255,255,0.3);
+  }
+
+  main { flex: 1; display: flex; justify-content: center; align-items: center; padding: 15px; position: relative; }
+  .game-container {
+    width: 98%; max-width: 1280px; height: 98%;
+    background: var(--card-bg); border-radius: 24px; padding: 25px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5); display: none;
+    flex-direction: column; position: relative; overflow: hidden;
+  }
+  .game-container.active { display: flex; animation: fadeIn 0.4s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+
+  .level-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 3px dashed #008891; padding-bottom: 12px; }
+  .level-title { font-size: 24px; font-weight: 800; color: #1a5f7a; }
+  .q-badge { background: #0284c7; color: white; padding: 6px 16px; border-radius: 20px; font-size: 18px; font-weight: bold; }
+  .instruction-box { background: #e0f2fe; color: #0369a1; padding: 10px 18px; border-radius: 12px; font-size: 19px; font-weight: 600; }
+
+  /* Option Buttons Grid */
+  .opt-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; max-width: 750px; margin: 20px auto; }
+  .opt-btn {
+    background: #ffffff; border: 3.5px solid #cbd5e1; border-radius: 20px; padding: 20px;
+    font-size: 28px; font-weight: 900; color: #1e293b; cursor: pointer; text-align: center;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.06); transition: all 0.2s ease;
+  }
+  .opt-btn:hover { border-color: #0284c7; transform: translateY(-3px); background: #f0f9ff; }
+  .opt-btn:active { transform: scale(0.96); }
+
+  /* Action Footers */
+  .action-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+  .action-btn {
+    padding: 12px 28px; font-size: 20px; font-weight: 800; border-radius: 14px; border: none; cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.2s;
+  }
+  .btn-submit { background: #10b981; color: white; }
+  .btn-next { background: #3b82f6; color: white; }
+
+  /* Modal */
+  .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.75); display: none; justify-content: center; align-items: center; z-index: 1000; }
+  .modal-overlay.active { display: flex; }
+  .modal-content { background: white; padding: 35px; border-radius: 26px; text-align: center; max-width: 540px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+  .modal-icon { font-size: 75px; margin-bottom: 15px; }
+  .modal-title { font-size: 32px; font-weight: 900; color: #1e293b; }
+  .modal-desc { font-size: 20px; color: #64748b; margin: 15px 0 25px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="app-title">🎓 三上數學 第三單元《毫米與數線》大屏隨機題庫遊戲</div>
+  <div class="score-badge">🏆 全班累計得分：<span id="global-score">0</span> 分</div>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="switchLevel(1)">一、毫米單位換算快答</button>
+  <button class="tab-btn" onclick="switchLevel(2)">二、直尺精準測量讀數</button>
+  <button class="tab-btn" onclick="switchLevel(3)">三、數線刻度小偵探</button>
+  <button class="tab-btn" onclick="switchLevel(4)">四、青蛙數線位移密碼鎖</button>
+</nav>
+
+<main>
+  <!-- LEVEL 1 -->
+  <div id="level-1" class="game-container active">
+    <div class="level-header">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="level-title">📏 小節一：毫米 (mm) 與公分 (cm) 單位換算快答</div>
+        <div class="q-badge" id="g1-q-badge">隨機題目 #1</div>
+      </div>
+      <div class="instruction-box">💡 記住：1 公分 (cm) ＝ 10 毫米 (mm)！點擊正確換算答案！</div>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+      <div style="font-size: 45px; font-weight: 900; color: #1e293b; background: #f8fafc; padding: 25px 60px; border-radius: 20px; border: 3px solid #0284c7; margin-bottom: 20px;" id="g1-q-text">
+        5 公分 8 毫米 ＝ ？ 毫米
+      </div>
+      <div class="opt-grid" id="g1-opts"></div>
+    </div>
+    <div class="action-footer">
+      <div></div>
+      <button class="action-btn btn-next" onclick="nextG1()">隨機下一題 ➔</button>
+    </div>
+  </div>
+
+  <!-- LEVEL 2 -->
+  <div id="level-2" class="game-container">
+    <div class="level-header">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="level-title">📐 小節二：直尺刻度對齊與讀數測量</div>
+        <div class="q-badge" id="g2-q-badge">隨機題目 #1</div>
+      </div>
+      <div class="instruction-box">💡 仔細觀察物體左端與右端的直尺刻度！</div>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; gap: 20px;">
+      <div style="background: #ffffff; border: 4px solid #cbd5e1; border-radius: 24px; padding: 30px 50px; width: 100%; max-width: 700px; text-align: center;">
+        <div style="font-size: 26px; font-weight: bold; color: #0284c7; margin-bottom: 15px;" id="g2-desc">物體左端對齊刻度 0 cm，右端指向：</div>
+        <div style="font-size: 50px; font-weight: 900; color: #1e293b;" id="g2-ruler-text">📏 7 cm 4 mm</div>
+      </div>
+      <div class="opt-grid" id="g2-opts"></div>
+    </div>
+    <div class="action-footer">
+      <div></div>
+      <button class="action-btn btn-next" onclick="nextG2()">隨機下一題 ➔</button>
+    </div>
+  </div>
+
+  <!-- LEVEL 3 -->
+  <div id="level-3" class="game-container">
+    <div class="level-header">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="level-title">📈 小節三：認識數線與刻度報讀</div>
+        <div class="q-badge" id="g3-q-badge">隨機題目 #1</div>
+      </div>
+      <div class="instruction-box">💡 觀察數線每一小格代表多少，找出箭頭所指的正確數字！</div>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; gap: 20px;">
+      <div style="background: #f8fafc; border: 3px solid #38bdf8; border-radius: 20px; padding: 25px 40px; width: 100%; max-width: 750px; text-align: center;">
+        <div style="font-size: 22px; color: #64748b; font-weight: bold;">數線刻度提示：</div>
+        <div style="font-size: 38px; font-weight: 900; color: #0284c7; margin: 15px 0;" id="g3-nl-text">
+          100 ➔ 110 ➔ 【 ? 】 ➔ 130
+        </div>
+      </div>
+      <div class="opt-grid" id="g3-opts"></div>
+    </div>
+    <div class="action-footer">
+      <div></div>
+      <button class="action-btn btn-next" onclick="nextG3()">隨機下一題 ➔</button>
+    </div>
+  </div>
+
+  <!-- LEVEL 4 -->
+  <div id="level-4" class="game-container">
+    <div class="level-header">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="level-title">🐸 小節四：青蛙跳跳樂 數線加減位移密碼鎖</div>
+        <div class="q-badge" id="g4-q-badge">隨機題目 #1</div>
+      </div>
+      <div class="instruction-box">💡 向右移動代表【加 (+)】，向左移動代表【減 (-)】！</div>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; gap: 20px;">
+      <div style="background: #fff7ed; border: 3px solid #fdba74; border-radius: 20px; padding: 25px 50px; text-align: center; max-width: 700px;">
+        <div style="font-size: 22px; color: #ea580c; font-weight: bold;">🐸 青蛙跳躍任務：</div>
+        <div style="font-size: 38px; font-weight: 900; color: #1e293b; margin-top: 10px;" id="g4-q-text">
+          從 450 向右跳 60 格，最後會停在哪裡？
+        </div>
+      </div>
+      <div class="opt-grid" id="g4-opts"></div>
+    </div>
+    <div class="action-footer">
+      <div></div>
+      <button class="action-btn btn-next" onclick="nextG4()">隨機下一題 ➔</button>
+    </div>
+  </div>
+</main>
+
+<div class="modal-overlay" id="win-modal">
+  <div class="modal-content">
+    <div class="modal-icon" id="m-icon">🎉</div>
+    <div class="modal-title" id="m-title">太棒了！答對囉！</div>
+    <div class="modal-desc" id="m-desc">獲得 100 分大獎勵！</div>
+    <button class="action-btn btn-submit" style="width: 100%;" onclick="closeModalAndNext()">換下一位同學 (隨機下一題) ➔</button>
+  </div>
+</div>
+
+<script>
+  let globalScore = 0;
+  let currentActiveLvl = 1;
+
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  function playSound(type) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    if (type === 'correct') {
+      osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+      osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+      osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+    } else if (type === 'wrong') {
+      osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+      osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+    }
+  }
+
+  function addScore(pts) { globalScore += pts; document.getElementById('global-score').innerText = globalScore; }
+  function switchLevel(lvl) {
+    currentActiveLvl = lvl;
+    document.querySelectorAll('.tab-btn').forEach((btn, idx) => btn.classList.toggle('active', idx === lvl - 1));
+    document.querySelectorAll('.game-container').forEach((ct, idx) => ct.classList.toggle('active', idx === lvl - 1));
+  }
+
+  // --- GAME 1: MILLIMETER UNIT CONVERSION ---
+  const g1Pool = [
+    { q: "5 公分 8 毫米 ＝ ？ 毫米", ans: "58 毫米", wrong: ["508 毫米", "580 毫米", "50 毫米"] },
+    { q: "45 毫米 ＝ ？ 公分 ？ 毫米", ans: "4 公分 5 毫米", wrong: ["45 公分 0 毫米", "40 公分 5 毫米", "4 公分 50 毫米"] },
+    { q: "8 公分 ＝ ？ 毫米", ans: "80 毫米", wrong: ["8 毫米", "800 毫米", "808 毫米"] },
+    { q: "92 毫米 ＝ ？ 公分 ？ 毫米", ans: "9 公分 2 毫米", wrong: ["92 公分 0 毫米", "90 公分 2 毫米", "9 公分 20 毫米"] },
+    { q: "12 公分 3 毫米 ＝ ？ 毫米", ans: "123 毫米", wrong: ["1203 毫米", "1230 毫米", "15 毫米"] }
+  ];
+  let g1Num = 0;
+  function nextG1() {
+    g1Num++;
+    const cur = g1Pool[Math.floor(Math.random() * g1Pool.length)];
+    document.getElementById('g1-q-badge').innerText = `隨機題目 #${g1Num}`;
+    document.getElementById('g1-q-text').innerText = cur.q;
+    const opts = [cur.ans, ...cur.wrong].sort(() => 0.5 - Math.random());
+    const box = document.getElementById('g1-opts'); box.innerHTML = '';
+    opts.forEach(opt => {
+      const btn = document.createElement('div'); btn.className = 'opt-btn'; btn.innerText = opt;
+      btn.onclick = () => {
+        if (opt === cur.ans) { playSound('correct'); addScore(100); showModal("🎉 單位換算全對囉！", `正確換算：${cur.q} ＝ ${cur.ans}！`, "📏"); }
+        else { playSound('wrong'); alert("換算不對喔！記得 1 公分 = 10 毫米！"); }
+      };
+      box.appendChild(btn);
+    });
+  }
+
+  // --- GAME 2: RULER MEASUREMENT ---
+  const g2Pool = [
+    { desc: "橡皮擦左端對齊刻度 0，右端指向：7 cm 4 mm", ans: "74 毫米", wrong: ["704 毫米", "740 毫米", "70 毫米"] },
+    { desc: "迴紋針左端對齊刻度 2 cm，右端指向 5 cm 8 mm", ans: "3 公分 8 毫米", wrong: ["5 公分 8 毫米", "2 公分 8 毫米", "38 公分"] },
+    { desc: "鉛筆長度為 14 cm 5 mm ＝ ？ 毫米", ans: "145 毫米", wrong: ["1405 毫米", "1450 毫米", "19 毫米"] }
+  ];
+  let g2Num = 0;
+  function nextG2() {
+    g2Num++;
+    const cur = g2Pool[Math.floor(Math.random() * g2Pool.length)];
+    document.getElementById('g2-q-badge').innerText = `隨機題目 #${g2Num}`;
+    document.getElementById('g2-desc').innerText = cur.desc;
+    const opts = [cur.ans, ...cur.wrong].sort(() => 0.5 - Math.random());
+    const box = document.getElementById('g2-opts'); box.innerHTML = '';
+    opts.forEach(opt => {
+      const btn = document.createElement('div'); btn.className = 'opt-btn'; btn.innerText = opt;
+      btn.onclick = () => {
+        if (opt === cur.ans) { playSound('correct'); addScore(100); showModal("📐 精準量體讀數正確！", `精準測量長度等於：${cur.ans}！`, "🎯"); }
+        else { playSound('wrong'); alert("讀數不對喔！注意直尺刻度對齊與相減！"); }
+      };
+      box.appendChild(btn);
+    });
+  }
+
+  // --- GAME 3: NUMBER LINE READING ---
+  const g3Pool = [
+    { text: "100 ➔ 110 ➔ 【 ? 】 ➔ 130", ans: "120", wrong: ["115", "125", "140"] },
+    { text: "450 ➔ 【 ? 】 ➔ 470 ➔ 480", ans: "460", wrong: ["455", "465", "490"] },
+    { text: "0 ➔ 50 ➔ 100 ➔ 【 ? 】 ➔ 200", ans: "150", wrong: ["120", "160", "180"] }
+  ];
+  let g3Num = 0;
+  function nextG3() {
+    g3Num++;
+    const cur = g3Pool[Math.floor(Math.random() * g3Pool.length)];
+    document.getElementById('g3-q-badge').innerText = `隨機題目 #${g3Num}`;
+    document.getElementById('g3-nl-text').innerText = cur.text;
+    const opts = [cur.ans, ...cur.wrong].sort(() => 0.5 - Math.random());
+    const box = document.getElementById('g3-opts'); box.innerHTML = '';
+    opts.forEach(opt => {
+      const btn = document.createElement('div'); btn.className = 'opt-btn'; btn.innerText = opt;
+      btn.onclick = () => {
+        if (opt === cur.ans) { playSound('correct'); addScore(100); showModal("📈 數線標示完全正確！", `精準找出數線刻度數字：${cur.ans}！`, "🔍"); }
+        else { playSound('wrong'); alert("數字不對喔！先算算每一小格代表多少！"); }
+      };
+      box.appendChild(btn);
+    });
+  }
+
+  // --- GAME 4: FROG NUMBER LINE SHIFT ---
+  const g4Pool = [
+    { q: "小青蛙原本在 450，先向右跳 60 格，最後停在哪裡？", ans: "510", wrong: ["390", "500", "520"] },
+    { q: "小青蛙原本在 800，先向左跳 150 格，最後停在哪裡？", ans: "650", wrong: ["950", "750", "600"] },
+    { q: "小青蛙原本在 300，向右跳 100 格，再向左跳 40 格，最後停在哪裡？", ans: "360", wrong: ["440", "340", "400"] }
+  ];
+  let g4Num = 0;
+  function nextG4() {
+    g4Num++;
+    const cur = g4Pool[Math.floor(Math.random() * g4Pool.length)];
+    document.getElementById('g4-q-badge').innerText = `隨機題目 #${g4Num}`;
+    document.getElementById('g4-q-text').innerText = cur.q;
+    const opts = [cur.ans, ...cur.wrong].sort(() => 0.5 - Math.random());
+    const box = document.getElementById('g4-opts'); box.innerHTML = '';
+    opts.forEach(opt => {
+      const btn = document.createElement('div'); btn.className = 'opt-btn'; btn.innerText = opt;
+      btn.onclick = () => {
+        if (opt === cur.ans) { playSound('correct'); addScore(100); showModal("🐸 青蛙位移成功！", `成功解開數線位移密碼：${cur.ans}！`, "🔓"); }
+        else { playSound('wrong'); alert("算錯囉！記住向右為加 (+)，向左為減 (-)！"); }
+      };
+      box.appendChild(btn);
+    });
+  }
+
+  function showModal(title, desc, icon = "🎉") {
+    document.getElementById('m-icon').innerText = icon;
+    document.getElementById('m-title').innerText = title;
+    document.getElementById('m-desc').innerText = desc;
+    document.getElementById('win-modal').classList.add('active');
+  }
+
+  function closeModalAndNext() {
+    document.getElementById('win-modal').classList.remove('active');
+    if (currentActiveLvl === 1) nextG1();
+    else if (currentActiveLvl === 2) nextG2();
+    else if (currentActiveLvl === 3) nextG3();
+    else if (currentActiveLvl === 4) nextG4();
+  }
+
+  // Init
+  nextG1(); nextG2(); nextG3(); nextG4();
+</script>
+</body>
+</html>

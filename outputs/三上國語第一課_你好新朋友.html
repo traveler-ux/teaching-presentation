@@ -3,34 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>三上南一國語 第一課 〈你好，新朋友〉 黃金四節課大屏互動簡報與遊戲</title>
+  <title>三上南一國語 第一課 〈你好，新朋友〉 可愛插畫大屏互動簡報與生字翻牌遊戲</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #0b1021;
-      --bg-card: #151c38;
-      --bg-card-hover: #1e284f;
-      --border-color: rgba(255, 255, 255, 0.15);
-      --ink-main: #f0f4fc;
-      --ink-muted: #a0aec0;
-      --ink-dim: #64748b;
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-hover: #334155;
+      --border-color: rgba(255, 255, 255, 0.18);
+      --ink-main: #f8fafc;
+      --ink-muted: #cbd5e1;
+      --ink-dim: #94a3b8;
       
-      --accent-gold: #ffb703;
-      --accent-cyan: #00d2d3;
-      --accent-pink: #ff4d6d;
-      --accent-green: #10b981;
-      --accent-purple: #9d4edd;
+      --accent-gold: #fbbf24;
+      --accent-cyan: #38bdf8;
+      --accent-pink: #f43f5e;
+      --accent-green: #34d399;
+      --accent-purple: #c084fc;
       
-      --t1: clamp(32px, 4vw, 52px);
+      --t1: clamp(34px, 4.2vw, 56px);
       --t2: clamp(22px, 2.8vw, 34px);
       --t3: clamp(16px, 1.8vw, 22px);
       --t4: 15px;
       
-      --radius-lg: 20px;
-      --radius-md: 14px;
-      --radius-sm: 8px;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; touch-action: manipulation; }
@@ -44,6 +44,19 @@
       height: 100vh;
       position: relative;
       user-select: none;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(251, 191, 36, 0.15) 0%, transparent 20%),
+        radial-gradient(circle at 50% 50%, rgba(244, 63, 94, 0.1) 0%, transparent 35%);
+    }
+
+    /* Cute Background Illustration SVG Overlay */
+    .bg-illustration {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.25;
     }
 
     #confetti-canvas {
@@ -82,25 +95,25 @@
       font-size: var(--t4);
       font-weight: 700;
       color: var(--accent-gold);
-      background: rgba(255, 183, 3, 0.15);
-      border: 1px solid rgba(255, 183, 3, 0.4);
+      background: rgba(251, 191, 36, 0.18);
+      border: 2px solid rgba(251, 191, 36, 0.5);
       padding: 8px 18px;
       border-radius: 30px;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
       letter-spacing: 1px;
     }
 
     .icon-btn {
-      background: rgba(21, 28, 56, 0.85);
-      border: 1px solid var(--border-color);
+      background: rgba(30, 41, 59, 0.85);
+      border: 2px solid var(--border-color);
       color: var(--ink-main);
-      padding: 8px 14px;
+      padding: 8px 16px;
       border-radius: 20px;
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
       display: flex; align-items: center; gap: 6px;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
       transition: all 0.2s;
       pointer-events: auto;
     }
@@ -118,11 +131,11 @@
       font-size: 16px; font-weight: 700;
       color: var(--ink-muted);
       background: rgba(15, 23, 42, 0.85);
-      border: 1px solid var(--border-color);
+      border: 2px solid var(--border-color);
       padding: 8px 18px;
       border-radius: 20px;
       z-index: 900;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
     }
 
     #key-hint {
@@ -136,8 +149,8 @@
       position: fixed;
       top: 50%; transform: translateY(-50%);
       width: 64px; height: 64px;
-      background: rgba(21, 28, 56, 0.85);
-      border: 2px solid var(--border-color);
+      background: rgba(30, 41, 59, 0.85);
+      border: 3px solid var(--border-color);
       border-radius: 50%;
       color: var(--ink-main);
       font-size: 26px;
@@ -145,14 +158,14 @@
       display: flex; align-items: center; justify-content: center;
       z-index: 950;
       transition: all 0.2s ease;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
       box-shadow: 0 4px 20px rgba(0,0,0,0.4);
     }
     .nav-btn:hover, .nav-btn:active {
       background: var(--accent-cyan);
       color: #000;
       border-color: var(--accent-cyan);
-      box-shadow: 0 0 25px rgba(0, 210, 211, 0.6);
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.6);
       transform: translateY(-50%) scale(1.1);
     }
 
@@ -167,6 +180,7 @@
       transform: translateY(20px);
       transition: opacity 0.4s ease, transform 0.4s ease;
       overflow-y: auto;
+      z-index: 10;
     }
     .slide.active {
       opacity: 1; pointer-events: auto;
@@ -198,21 +212,23 @@
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
     .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
 
     @media (max-width: 900px) {
-      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
       .slide { padding: 65px 20px 60px 20px; }
       .nav-btn { width: 48px; height: 48px; font-size: 20px; }
     }
 
     .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
+      background: rgba(30, 41, 59, 0.85);
+      border: 2px solid var(--border-color);
       border-radius: var(--radius-lg);
       padding: 22px;
       transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
       position: relative;
       box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
     }
     .card:hover {
       background: var(--bg-card-hover);
@@ -229,6 +245,45 @@
       line-height: 1.6;
     }
 
+    /* 3D Touch Flip Cards for Vocab (大屏生字翻牌卡) */
+    .vocab-flip-card {
+      perspective: 1000px;
+      min-height: 160px;
+      cursor: pointer;
+    }
+    .vocab-flip-inner {
+      position: relative; width: 100%; height: 100%;
+      text-align: center;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+    .vocab-flip-card.flipped .vocab-flip-inner {
+      transform: rotateY(180deg);
+    }
+    .vocab-flip-front, .vocab-flip-back {
+      position: absolute; inset: 0;
+      backface-visibility: hidden;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      border: 3px solid var(--border-color);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    .vocab-flip-front {
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      color: #fff;
+    }
+    .vocab-flip-front:hover {
+      border-color: var(--accent-gold);
+    }
+    .vocab-flip-back {
+      background: linear-gradient(145deg, #311042, #1e1b4b);
+      color: #fff; transform: rotateY(180deg);
+      border-color: var(--accent-gold);
+    }
+
+    /* General MAPS Flip Cards */
     .flip-card {
       perspective: 1000px;
       min-height: 200px;
@@ -262,39 +317,6 @@
       border-color: var(--accent-gold);
     }
 
-    .vocab-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 12px;
-    }
-    @media (max-width: 768px) {
-      .vocab-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-
-    .vocab-touch-card {
-      background: linear-gradient(145deg, #1e284f, #151c38);
-      border: 2px solid rgba(0, 210, 211, 0.3);
-      border-radius: var(--radius-md);
-      padding: 16px 10px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-    .vocab-touch-card:hover, .vocab-touch-card:active {
-      transform: scale(1.06);
-      border-color: var(--accent-gold);
-      box-shadow: 0 0 20px rgba(255, 183, 3, 0.4);
-    }
-    .vocab-char {
-      font-size: 34px; font-weight: 900;
-      color: var(--accent-gold);
-    }
-    .vocab-pinyin {
-      font-size: 14px; color: var(--accent-cyan);
-      margin-top: 4px; font-weight: 700;
-    }
-
     .game-tabs { display: flex; gap: 10px; margin-bottom: 10px; }
     .game-tab-btn {
       flex: 1; padding: 14px 20px;
@@ -308,7 +330,7 @@
     .game-tab-btn.active {
       background: var(--accent-gold);
       color: #000; border-color: var(--accent-gold);
-      box-shadow: 0 0 15px rgba(255, 183, 3, 0.5);
+      box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
     }
 
     .quiz-box {
@@ -327,15 +349,15 @@
       transition: all 0.2s ease; text-align: center;
     }
     .quiz-opt-btn:hover, .quiz-opt-btn:active {
-      background: rgba(0, 210, 211, 0.2); border-color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.2); border-color: var(--accent-cyan);
       transform: scale(1.02);
     }
     .quiz-opt-btn.correct {
-      background: rgba(16, 185, 129, 0.3) !important;
-      border-color: var(--accent-green) !important; color: #5eead4 !important;
+      background: rgba(52, 211, 153, 0.3) !important;
+      border-color: var(--accent-green) !important; color: #6ee7b7 !important;
     }
     .quiz-opt-btn.wrong {
-      background: rgba(255, 77, 109, 0.3) !important;
+      background: rgba(244, 63, 94, 0.3) !important;
       border-color: var(--accent-pink) !important; color: #fca5a5 !important;
     }
 
@@ -348,11 +370,11 @@
       transition: all 0.2s ease; display: flex; align-items: center; justify-content: space-between;
     }
     .match-item.selected {
-      border-color: var(--accent-gold); background: rgba(255, 183, 3, 0.2);
-      box-shadow: 0 0 15px rgba(255, 183, 3, 0.4);
+      border-color: var(--accent-gold); background: rgba(251, 191, 36, 0.2);
+      box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
     }
     .match-item.matched {
-      border-color: var(--accent-green); background: rgba(16, 185, 129, 0.2);
+      border-color: var(--accent-green); background: rgba(52, 211, 153, 0.2);
       color: #6ee7b7; pointer-events: none;
     }
 
@@ -364,7 +386,7 @@
     }
     .slot-display {
       font-size: 26px; font-weight: 700; padding: 20px;
-      background: rgba(255, 183, 3, 0.1);
+      background: rgba(251, 191, 36, 0.1);
       border: 2px dashed var(--accent-gold);
       border-radius: var(--radius-md);
       text-align: center; color: #fff; line-height: 1.5;
@@ -372,7 +394,7 @@
     .slot-btn-group { display: flex; flex-wrap: wrap; gap: 10px; }
     .slot-chip {
       padding: 12px 20px; font-size: 18px; font-weight: 700;
-      background: rgba(0, 210, 211, 0.15);
+      background: rgba(56, 189, 248, 0.15);
       border: 2px solid var(--accent-cyan); color: #fff;
       border-radius: 30px; cursor: pointer; transition: all 0.2s;
     }
@@ -398,11 +420,11 @@
       padding: 16px 28px; font-size: 20px; font-weight: 900;
       background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
       color: #fff; border: none; border-radius: 30px; cursor: pointer;
-      transition: all 0.2s; box-shadow: 0 4px 20px rgba(255, 77, 109, 0.4);
+      transition: all 0.2s; box-shadow: 0 4px 20px rgba(244, 63, 94, 0.4);
       display: flex; align-items: center; justify-content: center; gap: 10px;
     }
     .big-btn:hover, .big-btn:active {
-      transform: scale(1.05); box-shadow: 0 0 25px rgba(255, 77, 109, 0.7);
+      transform: scale(1.05); box-shadow: 0 0 25px rgba(244, 63, 94, 0.7);
     }
 
     .poem-box {
@@ -415,12 +437,21 @@
 </head>
 <body>
 
+  <!-- Cute SVG Illustration Overlay -->
+  <svg class="bg-illustration" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="150" cy="120" r="70" fill="#FBBF24" opacity="0.4" />
+    <path d="M100 220 Q150 180 200 220 T300 220" stroke="#38BDF8" stroke-width="6" fill="none" />
+    <path d="M1200 150 C1250 100, 1350 100, 1400 150 C1450 200, 1300 280, 1200 150 Z" fill="#34D399" opacity="0.3"/>
+    <circle cx="1300" cy="700" r="90" fill="#F43F5E" opacity="0.25"/>
+    <path d="M50 750 Q200 680 350 750 T650 750" stroke="#C084FC" stroke-width="8" stroke-dasharray="15 15" fill="none"/>
+  </svg>
+
   <canvas id="confetti-canvas"></canvas>
   <div id="progress-bar"></div>
 
   <div id="top-bar">
     <div class="top-left">
-      <div id="section-tag">第一節：引起動機與概覽</div>
+      <div id="section-tag">【第一節】引起動機與概覽</div>
       <button class="icon-btn" onclick="toggleFullscreen()">
         <span>📺</span> <span id="fs-txt">全螢幕大屏模式</span>
       </button>
@@ -444,11 +475,11 @@
         你好，<span class="highlight-gold">新朋友</span>！
       </h1>
       <p style="font-size: var(--t2); color: var(--ink-muted); max-width: 800px; margin-top: 10px;">
-        黃金四節課流程 • 角色分组朗讀 • MAPS 讀寫結合 • 大屏關卡遊戲
+        黃金四節課流程 • 3D 生字翻牌卡 • 角色朗讀 • 大屏關卡遊戲
       </p>
       <div style="display: flex; gap: 15px; margin-top: 30px;">
         <button class="big-btn" style="background: linear-gradient(135deg, var(--accent-cyan), #0284c7);" onclick="nextSlide()">
-          🚀 開始第一節課：電子書影片與角色朗讀
+          🚀 開啟黃金第一節課：動畫影片與角色朗讀
         </button>
       </div>
     </div>
@@ -458,23 +489,21 @@
   <section class="slide" data-slide="2" data-section="【第一節】引起動機與概覽">
     <div class="slide-inner">
       <div class="kicker">— 第一節課 步驟一 & 二 —</div>
-      <h2 class="slide-title">影片導引與 <span class="highlight-cyan">角色分組接龍朗讀</span></h2>
+      <h2 class="slide-title">動畫導引與 <span class="highlight-cyan">角色分組接龍朗讀</span></h2>
       <div class="grid-2">
         <div class="card" style="border-top: 4px solid var(--accent-gold);">
           <div style="font-size: 32px; margin-bottom: 8px;">🎬</div>
-          <div class="card-title" style="color: var(--accent-gold);">1. 電子書影片賞析 (5 min)</div>
+          <div class="card-title" style="color: var(--accent-gold);">1. 電子書動畫觀賞 (5 min)</div>
           <div class="card-desc" style="font-size: 18px;">
-            播放開學電子書動畫，全班感受太陽、雲雀、風與小豆子互相招呼的情境。
+            播放開學電子書動畫，全班感知太陽、雲雀、風與小豆子互相招呼的情境。
           </div>
         </div>
         <div class="card" style="border-top: 4px solid var(--accent-pink);">
           <div style="font-size: 32px; margin-bottom: 8px;">🎤</div>
           <div class="card-title" style="color: var(--accent-pink);">2. 四組角色接龍朗讀 (15 min)</div>
           <div class="card-desc" style="font-size: 18px;">
-            • 第一組 (太陽組)：朗讀第一段<br>
-            • 第二組 (雲雀組)：朗讀第二段<br>
-            • 第三組 (風組)：朗讀第三段<br>
-            • 第四組 (豆子組)：朗讀第四段
+            • 太陽組朗讀第一段 ➔ 雲雀組朗讀第二段<br>
+            • 風組朗讀第三段 ➔ 豆子組朗讀第四段！
           </div>
         </div>
       </div>
@@ -514,41 +543,87 @@
     </div>
   </section>
 
-  <!-- SLIDE 4 -->
+  <!-- SLIDE 4: 生字 3D 翻牌大卡片 (第二節課重點升級) -->
   <section class="slide" data-slide="4" data-section="【第二節】字詞硬筆與部首探險">
     <div class="slide-inner">
-      <div class="kicker">— 第二節課 步驟一 —</div>
-      <h2 class="slide-title">15個重點生字 <span class="highlight-cyan">硬筆筆順與部首</span></h2>
-      <div class="vocab-grid">
-        <div class="vocab-touch-card" onclick="alert('【泥】水部，共 8 畫。例：泥土、拖泥帶水'); soundEffect('card')">
-          <div class="vocab-char">泥</div><div class="vocab-pinyin">ㄋㄧˊ</div>
+      <div class="kicker">— 第二節課 3D 大屏生字翻牌遊戲 🎴 —</div>
+      <h2 class="slide-title">生字大探險 <span class="highlight-cyan">點擊大屏翻牌解鎖生字</span></h2>
+      <p style="font-size: 18px; color: var(--ink-muted);">👉 學生請上台點選卡片翻牌，看看背後的重點生字、筆畫與成語！</p>
+      
+      <div class="grid-5">
+        <!-- 1. 泥 -->
+        <div class="vocab-flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
+          <div class="vocab-flip-inner">
+            <div class="vocab-flip-front">
+              <div style="font-size: 20px; color: var(--accent-cyan); font-weight: 700;">ㄋㄧˊ</div>
+              <div style="font-size: 14px; margin-top: 5px;">水部 • 8畫</div>
+              <div style="font-size: 13px; color: var(--accent-gold); margin-top: 10px;">👉 點擊翻牌</div>
+            </div>
+            <div class="vocab-flip-back">
+              <div style="font-size: 36px; font-weight: 900; color: var(--accent-gold);">泥</div>
+              <div style="font-size: 13px; margin-top: 4px;">成語：拖泥帶水</div>
+            </div>
+          </div>
         </div>
-        <div class="vocab-touch-card" onclick="alert('【化】匕部，共 4 畫。例：化成、千變萬化'); soundEffect('card')">
-          <div class="vocab-char">化</div><div class="vocab-pinyin">ㄏㄨㄚˋ</div>
+
+        <!-- 2. 化 -->
+        <div class="vocab-flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
+          <div class="vocab-flip-inner">
+            <div class="vocab-flip-front">
+              <div style="font-size: 20px; color: var(--accent-cyan); font-weight: 700;">ㄏㄨㄚˋ</div>
+              <div style="font-size: 14px; margin-top: 5px;">匕部 • 4畫</div>
+              <div style="font-size: 13px; color: var(--accent-gold); margin-top: 10px;">👉 點擊翻牌</div>
+            </div>
+            <div class="vocab-flip-back">
+              <div style="font-size: 36px; font-weight: 900; color: var(--accent-gold);">化</div>
+              <div style="font-size: 13px; margin-top: 4px;">成語：千變萬化</div>
+            </div>
+          </div>
         </div>
-        <div class="vocab-touch-card" onclick="alert('【雀】隹部，共 11 畫。例：雲雀、孔雀'); soundEffect('card')">
-          <div class="vocab-char">雀</div><div class="vocab-pinyin">ㄑㄩㄝˋ</div>
+
+        <!-- 3. 雀 -->
+        <div class="vocab-flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
+          <div class="vocab-flip-inner">
+            <div class="vocab-flip-front">
+              <div style="font-size: 20px; color: var(--accent-cyan); font-weight: 700;">ㄑㄩㄝˋ</div>
+              <div style="font-size: 14px; margin-top: 5px;">隹部 • 11畫</div>
+              <div style="font-size: 13px; color: var(--accent-gold); margin-top: 10px;">👉 點擊翻牌</div>
+            </div>
+            <div class="vocab-flip-back">
+              <div style="font-size: 36px; font-weight: 900; color: var(--accent-gold);">雀</div>
+              <div style="font-size: 13px; margin-top: 4px;">詞語：雲雀、孔雀</div>
+            </div>
+          </div>
         </div>
-        <div class="vocab-touch-card" onclick="alert('【輕】車部，共 14 畫。例：輕快、輕鬆'); soundEffect('card')">
-          <div class="vocab-char">輕</div><div class="vocab-pinyin">ㄑㄧㄥ</div>
+
+        <!-- 4. 輕 -->
+        <div class="vocab-flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
+          <div class="vocab-flip-inner">
+            <div class="vocab-flip-front">
+              <div style="font-size: 20px; color: var(--accent-cyan); font-weight: 700;">ㄑㄧㄥ</div>
+              <div style="font-size: 14px; margin-top: 5px;">車部 • 14畫</div>
+              <div style="font-size: 13px; color: var(--accent-gold); margin-top: 10px;">👉 點擊翻牌</div>
+            </div>
+            <div class="vocab-flip-back">
+              <div style="font-size: 36px; font-weight: 900; color: var(--accent-gold);">輕</div>
+              <div style="font-size: 13px; margin-top: 4px;">詞語：輕快、輕鬆</div>
+            </div>
+          </div>
         </div>
-        <div class="vocab-touch-card" onclick="alert('【羽】羽部，共 6 畫。例：羽毛、羽衣'); soundEffect('card')">
-          <div class="vocab-char">羽</div><div class="vocab-pinyin">ㄩˇ</div>
-        </div>
-        <div class="vocab-touch-card" onclick="alert('【衣】衣部，共 6 畫。例：羽衣、衣服'); soundEffect('card')">
-          <div class="vocab-char">衣</div><div class="vocab-pinyin">ㄧ</div>
-        </div>
-        <div class="vocab-touch-card" onclick="alert('【脆】肉部，共 10 畫。例：清脆、乾脆'); soundEffect('card')">
-          <div class="vocab-char">脆</div><div class="vocab-pinyin">ㄘㄨㄟˋ</div>
-        </div>
-        <div class="vocab-touch-card" onclick="alert('【髮】髟部，共 15 畫。例：頭髮、千鈞一髮'); soundEffect('card')">
-          <div class="vocab-char">髮</div><div class="vocab-pinyin">ㄈㄚˇ</div>
-        </div>
-        <div class="vocab-touch-card" onclick="alert('【處】虍部，共 11 畫。例：四處、處理'); soundEffect('card')">
-          <div class="vocab-char">處</div><div class="vocab-pinyin">ㄔㄨˋ / ㄔㄨˇ</div>
-        </div>
-        <div class="vocab-touch-card" onclick="alert('【旅】方部，共 10 畫。例：旅行、旅客'); soundEffect('card')">
-          <div class="vocab-char">旅</div><div class="vocab-pinyin">ㄌㄩˇ</div>
+
+        <!-- 5. 脆 -->
+        <div class="vocab-flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
+          <div class="vocab-flip-inner">
+            <div class="vocab-flip-front">
+              <div style="font-size: 20px; color: var(--accent-cyan); font-weight: 700;">ㄘㄨㄟˋ</div>
+              <div style="font-size: 14px; margin-top: 5px;">肉部 • 10畫</div>
+              <div style="font-size: 13px; color: var(--accent-gold); margin-top: 10px;">👉 點擊翻牌</div>
+            </div>
+            <div class="vocab-flip-back">
+              <div style="font-size: 36px; font-weight: 900; color: var(--accent-gold);">脆</div>
+              <div style="font-size: 13px; margin-top: 4px;">詞語：清脆歌聲</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -947,7 +1022,7 @@
     function switchGameTab(num) {
       soundEffect('card');
       document.querySelectorAll('.game-tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(`tab${num}-btn`).classList.add('active');
+      document.getElementById(`tab${num}-btn`).classList.active;
       document.getElementById('game-tab-1').style.display = num === 1 ? 'block' : 'none';
       document.getElementById('game-tab-2').style.display = num === 2 ? 'block' : 'none';
       document.getElementById('game-tab-3').style.display = num === 3 ? 'block' : 'none';

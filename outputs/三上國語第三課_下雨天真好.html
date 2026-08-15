@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>三上南一國語 第三課 〈下雨天，真好〉 可愛插畫大屏互動簡報與硬筆字遊戲</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-hover: #334155;
+      --border-color: rgba(255, 255, 255, 0.18);
+      --ink-main: #f8fafc;
+      --ink-muted: #cbd5e1;
+      --ink-dim: #94a3b8;
+      
+      --accent-gold: #fbbf24;
+      --accent-cyan: #38bdf8;
+      --accent-pink: #f43f5e;
+      --accent-green: #34d399;
+      --accent-purple: #c084fc;
+      
+      --t1: clamp(34px, 4.2vw, 56px);
+      --t2: clamp(22px, 2.8vw, 34px);
+      --t3: clamp(16px, 1.8vw, 22px);
+      --t4: 15px;
+      
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; touch-action: manipulation; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--ink-main);
+      font-family: 'Noto Sans TC', sans-serif;
+      overflow: hidden; width: 100vw; height: 100vh; position: relative; user-select: none;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(52, 211, 153, 0.15) 0%, transparent 20%),
+        radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.1) 0%, transparent 35%);
+    }
+
+    .bg-illustration { position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.25; }
+    #confetti-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; }
+    #progress-bar { position: fixed; top: 0; left: 0; height: 6px; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-gold), var(--accent-pink), var(--accent-green)); width: 0%; z-index: 1000; transition: width 0.3s ease; }
+
+    #top-bar {
+      position: fixed; top: 15px; left: 20px; right: 20px;
+      display: flex; justify-content: space-between; align-items: center; z-index: 900; pointer-events: none;
+    }
+    .top-left { display: flex; align-items: center; gap: 12px; pointer-events: auto; }
+
+    #section-tag {
+      font-family: 'Noto Sans TC', sans-serif; font-size: var(--t4); font-weight: 700;
+      color: var(--accent-cyan); background: rgba(56, 189, 248, 0.18);
+      border: 2px solid rgba(56, 189, 248, 0.5); padding: 8px 18px; border-radius: 30px; backdrop-filter: blur(12px);
+    }
+
+    .icon-btn {
+      background: rgba(30, 41, 59, 0.85); border: 2px solid var(--border-color); color: var(--ink-main);
+      padding: 8px 16px; border-radius: 20px; font-size: 15px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; gap: 6px; backdrop-filter: blur(12px); transition: all 0.2s; pointer-events: auto;
+    }
+    .icon-btn:hover, .icon-btn:active { background: var(--accent-cyan); color: #000; border-color: var(--accent-cyan); transform: scale(1.05); }
+
+    #page-info {
+      position: fixed; bottom: 15px; right: 25px; font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: var(--ink-muted);
+      background: rgba(15, 23, 42, 0.85); border: 2px solid var(--border-color); padding: 8px 18px; border-radius: 20px; z-index: 900; backdrop-filter: blur(12px);
+    }
+
+    .nav-btn {
+      position: fixed; top: 50%; transform: translateY(-50%); width: 64px; height: 64px;
+      background: rgba(30, 41, 59, 0.85); border: 3px solid var(--border-color); border-radius: 50%;
+      color: var(--ink-main); font-size: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      z-index: 950; transition: all 0.2s ease; backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .nav-btn:hover, .nav-btn:active { background: var(--accent-cyan); color: #000; border-color: var(--accent-cyan); transform: translateY(-50%) scale(1.1); }
+    #prev-btn { left: 15px; } #next-btn { right: 15px; }
+
+    .slide {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      padding: 75px 85px 65px 85px; opacity: 0; pointer-events: none; transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease; overflow-y: auto; z-index: 10;
+    }
+    .slide.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .slide-inner { width: 100%; max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+
+    .kicker { font-size: var(--t4); font-weight: 700; color: var(--accent-cyan); letter-spacing: 2px; text-transform: uppercase; }
+    .slide-title { font-size: var(--t1); font-weight: 900; line-height: 1.25; color: #fff; }
+
+    .highlight-gold { color: var(--accent-gold); }
+    .highlight-cyan { color: var(--accent-cyan); }
+    .highlight-pink { color: var(--accent-pink); }
+    .highlight-green { color: var(--accent-green); }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+
+    @media (max-width: 900px) { .grid-2, .grid-3, .grid-5 { grid-template-columns: 1fr; } }
+
+    .card {
+      background: rgba(30, 41, 59, 0.85); border: 2px solid var(--border-color); border-radius: var(--radius-lg);
+      padding: 22px; transition: all 0.25s; position: relative; box-shadow: 0 8px 30px rgba(0,0,0,0.3); backdrop-filter: blur(10px);
+    }
+    .card:hover { background: var(--bg-card-hover); border-color: rgba(255, 255, 255, 0.3); }
+
+    .card-title { font-size: var(--t2); font-weight: 700; margin-bottom: 10px; }
+    .card-desc { font-size: var(--t3); color: var(--ink-muted); line-height: 1.6; }
+
+    /* 3D Vocab Flip Cards */
+    .vocab-flip-card { perspective: 1000px; min-height: 170px; cursor: pointer; }
+    .vocab-flip-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
+    .vocab-flip-card.flipped .vocab-flip-inner { transform: rotateY(180deg); }
+    .vocab-flip-front, .vocab-flip-back {
+      position: absolute; inset: 0; backface-visibility: hidden; border-radius: var(--radius-md); padding: 16px;
+      display: flex; flex-direction: column; justify-content: center; align-items: center; border: 3px solid var(--border-color);
+    }
+    .vocab-flip-front { background: linear-gradient(145deg, #1e293b, #0f172a); color: #fff; }
+    .vocab-flip-back { background: linear-gradient(145deg, #311042, #1e1b4b); color: #fff; transform: rotateY(180deg); border-color: var(--accent-cyan); }
+
+    .rice-grid-box {
+      width: 100px; height: 100px; border: 2px dashed var(--accent-cyan); position: relative; display: flex; align-items: center; justify-content: center;
+      font-size: 54px; font-weight: 900; color: var(--accent-cyan); background: rgba(56, 189, 248, 0.08); border-radius: 12px; margin: 0 auto;
+    }
+    .rice-grid-box::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to right, transparent 49%, rgba(56,189,248,0.3) 50%, transparent 51%), linear-gradient(to bottom, transparent 49%, rgba(56,189,248,0.3) 50%, transparent 51%);
+    }
+
+    .quiz-box { background: rgba(15, 23, 42, 0.9); border: 2px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+    .quiz-question { font-size: 22px; font-weight: 700; color: #fff; }
+    .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .quiz-opt-btn {
+      padding: 16px 20px; font-size: 20px; font-weight: 700; background: rgba(255,255,255,0.06);
+      border: 2px solid var(--border-color); color: #fff; border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .quiz-opt-btn:hover { background: rgba(56, 189, 248, 0.2); border-color: var(--accent-cyan); }
+    .quiz-opt-btn.correct { background: rgba(52, 211, 153, 0.3) !important; border-color: var(--accent-green) !important; color: #6ee7b7 !important; }
+
+    .big-btn {
+      padding: 16px 28px; font-size: 20px; font-weight: 900; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      color: #fff; border: none; border-radius: 30px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(56, 189, 248, 0.4);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .big-btn:hover { transform: scale(1.05); }
+  </style>
+</head>
+<body>
+
+  <svg class="bg-illustration" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="200" cy="150" r="80" fill="#38BDF8" opacity="0.3" />
+    <path d="M100 300 Q150 250 200 300 T300 300" stroke="#34D399" stroke-width="6" fill="none" />
+  </svg>
+
+  <canvas id="confetti-canvas"></canvas>
+  <div id="progress-bar"></div>
+
+  <div id="top-bar">
+    <div class="top-left">
+      <div id="section-tag">【第一節】引起動機與概覽</div>
+      <button class="icon-btn" onclick="toggleFullscreen()">
+        <span>📺</span> <span id="fs-txt">全螢幕大屏模式</span>
+      </button>
+      <button class="icon-btn" onclick="soundEffect('correct')">
+        <span>🔊</span> 音效測試
+      </button>
+    </div>
+  </div>
+
+  <button class="nav-btn" id="prev-btn" onclick="prevSlide()">❮</button>
+  <button class="nav-btn" id="next-btn" onclick="nextSlide()">❯</button>
+
+  <div id="page-info"><span id="curr-slide">1</span> / <span id="total-slides">7</span></div>
+
+  <!-- SLIDE 1 -->
+  <section class="slide active" data-slide="1" data-section="【第一節】引起動機與概覽">
+    <div class="slide-inner" style="text-align: center; align-items: center; justify-content: center; min-height: 70vh;">
+      <div class="kicker">— 南一國語三上 第三課 —</div>
+      <h1 class="slide-title" style="font-size: clamp(38px, 5.5vw, 68px);">
+        下雨天，<span class="highlight-cyan">真好</span>！
+      </h1>
+      <p style="font-size: var(--t2); color: var(--ink-muted); max-width: 800px; margin-top: 10px;">
+        雨水交響曲 • 感官摹寫 • 3D生字翻牌 • 硬筆字大師課
+      </p>
+      <div style="display: flex; gap: 15px; margin-top: 30px;">
+        <button class="big-btn" onclick="nextSlide()">
+          ☔ 開啟第三課大屏教學與遊戲
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 2 -->
+  <section class="slide" data-slide="2" data-section="【第一節】引起動機與概覽">
+    <div class="slide-inner">
+      <div class="kicker">— 第一節課 步驟一 & 二 —</div>
+      <h2 class="slide-title">雨聲情境與 <span class="highlight-cyan">感官摹寫朗讀</span></h2>
+      <div class="grid-2">
+        <div class="card" style="border-top: 4px solid var(--accent-cyan);">
+          <div style="font-size: 32px; margin-bottom: 8px;">🌧️</div>
+          <div class="card-title" style="color: var(--accent-cyan);">1. 聽聽看：滴滴答答樂章 (5 min)</div>
+          <div class="card-desc" style="font-size: 18px;">
+            播放下雨自然聲，感受雨滴踩水花的聲音摹寫！
+          </div>
+        </div>
+        <div class="card" style="border-top: 4px solid var(--accent-green);">
+          <div style="font-size: 32px; margin-bottom: 8px;">🌈</div>
+          <div class="card-title" style="color: var(--accent-green);">2. 四組感官接龍朗讀 (15 min)</div>
+          <div class="card-desc" style="font-size: 18px;">
+            • 第一組：朗讀烏雲與珍珠雨滴<br>• 第二組：朗讀雨鞋與踩水花<br>• 第三組：朗讀雨過天晴與彩虹
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: 生字 3D 翻牌卡 (第三課) -->
+  <section class="slide" data-slide="3" data-section="【第二節生字】3D 大屏翻牌遊戲">
+    <div class="slide-inner">
+      <div class="kicker">— 第二節課 3D 大屏生字翻牌遊戲 🎴 —</div>
+      <h2 class="slide-title">第三課生字 <span class="highlight-gold">點擊大屏翻牌解鎖</span></h2>
+      <div class="grid-5">
+        <div class="vocab-flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
+          <div class="vocab-flip-inner">
+            <div class="vocab-flip-front">
+              <div style="font-size: 20px; color: var(--accent-cyan);">ㄩˇ</div>
+              <div style="font-size: 14px;">雨部 • 8畫</div><div style="font-size: 12px; color: var(--accent-gold); margin-top: 8px;">👉 點擊翻牌</div>
+            </div>
+            <div class="vocab-flip-back">
+              <div style="font-size: 36px; font-weight: 900; color: var(--accent-cyan);">雨</div>
+              <div style="font-size: 13px;">雨滴、雨過天晴</div>
+            </div>
+          </div>
+        </div>
+        <div class="vocab-flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
+          <div class="vocab-flip-inner">
+            <div class="vocab-flip-front">
+              <div style="font-size: 20px; color: var(--accent-cyan);">ㄉㄧ</div>
+              <div style="font-size: 14px;">水部 • 14畫</div><div style="font-size: 12px; color: var(--accent-gold); margin-top: 8px;">👉 點擊翻牌</div>
+            </div>
+            <div class="vocab-flip-back">
+              <div style="font-size: 36px; font-weight: 900; color: var(--accent-cyan);">滴</div>
+              <div style="font-size: 13px;">水滴、滴滴答答</div>
+            </div>
+          </div>
+        </div>
+        <div class="vocab-flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
+          <div class="vocab-flip-inner">
+            <div class="vocab-flip-front">
+              <div style="font-size: 20px; color: var(--accent-cyan);">ㄘㄞˇ</div>
+              <div style="font-size: 14px;">足部 • 15畫</div><div style="font-size: 12px; color: var(--accent-gold); margin-top: 8px;">👉 點擊翻牌</div>
+            </div>
+            <div class="vocab-flip-back">
+              <div style="font-size: 36px; font-weight: 900; color: var(--accent-cyan);">踩</div>
+              <div style="font-size: 13px;">踩水花</div>
+            </div>
+          </div>
+        </div>
+        <div class="vocab-flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
+          <div class="vocab-flip-inner">
+            <div class="vocab-flip-front">
+              <div style="font-size: 20px; color: var(--accent-cyan);">ㄏㄨㄢ</div>
+              <div style="font-size: 14px;">欠部 • 15畫</div><div style="font-size: 12px; color: var(--accent-gold); margin-top: 8px;">👉 點擊翻牌</div>
+            </div>
+            <div class="vocab-flip-back">
+              <div style="font-size: 36px; font-weight: 900; color: var(--accent-cyan);">歡</div>
+              <div style="font-size: 13px;">歡樂、歡快的跳舞</div>
+            </div>
+          </div>
+        </div>
+        <div class="vocab-flip-card" onclick="this.classList.toggle('flipped'); soundEffect('card')">
+          <div class="vocab-flip-inner">
+            <div class="vocab-flip-front">
+              <div style="font-size: 20px; color: var(--accent-cyan);">ㄒㄧㄤˇ</div>
+              <div style="font-size: 14px;">音部 • 20畫</div><div style="font-size: 12px; color: var(--accent-gold); margin-top: 8px;">👉 點擊翻牌</div>
+            </div>
+            <div class="vocab-flip-back">
+              <div style="font-size: 36px; font-weight: 900; color: var(--accent-cyan);">響</div>
+              <div style="font-size: 13px;">響聲、響亮</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: 硬筆字大師課 -->
+  <section class="slide" data-slide="4" data-section="【第二節硬筆】硬筆字大師課">
+    <div class="slide-inner">
+      <div class="kicker">— 第二節課 生字硬筆字教學 ✒️ —</div>
+      <h2 class="slide-title">第三課生字 <span class="highlight-gold">間架結構與運筆秘訣</span></h2>
+      <div class="grid-5" style="margin-bottom: 10px;">
+        <div class="card" style="padding: 12px; text-align: center; cursor: pointer;" onclick="showCalli('雨', '獨體字', '雨部 8畫', '四點左右對稱呼應，四框安定平穩。')">
+          <div style="font-size: 28px; font-weight: 900; color: var(--accent-cyan);">雨</div>
+        </div>
+        <div class="card" style="padding: 12px; text-align: center; cursor: pointer;" onclick="showCalli('滴', '左右1:2', '水部 14畫', '三點水弧形，右側商字頭橫畫平穩。')">
+          <div style="font-size: 28px; font-weight: 900; color: var(--accent-cyan);">滴</div>
+        </div>
+        <div class="card" style="padding: 12px; text-align: center; cursor: pointer;" onclick="showCalli('踩', '左右1:2', '足部 15畫', '足字旁末筆變提，右側采字撇畫舒展。')">
+          <div style="font-size: 28px; font-weight: 900; color: var(--accent-cyan);">踩</div>
+        </div>
+        <div class="card" style="padding: 12px; text-align: center; cursor: pointer;" onclick="showCalli('歡', '左右1:1.5', '欠部 15畫', '左側雚字繁複要緊湊，右欠撇捺展開。')">
+          <div style="font-size: 28px; font-weight: 900; color: var(--accent-cyan);">歡</div>
+        </div>
+        <div class="card" style="padding: 12px; text-align: center; cursor: pointer;" onclick="showCalli('響', '上下結構', '音部 20畫', '音部蓋頂，下半部鄉字橫畫勻稱。')">
+          <div style="font-size: 28px; font-weight: 900; color: var(--accent-cyan);">響</div>
+        </div>
+      </div>
+
+      <div class="card" style="background: rgba(15, 23, 42, 0.9); border-color: var(--accent-cyan); display: flex; gap: 20px; align-items: center;">
+        <div class="rice-grid-box" id="calli-grid">雨</div>
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+          <div style="font-size: 22px; font-weight: 900; color: var(--accent-cyan);" id="calli-title">生字【雨】硬筆書寫秘訣</div>
+          <div style="font-size: 15px; color: var(--accent-gold);" id="calli-struct">結構：獨體字 | 部首：雨部 8畫</div>
+          <div style="font-size: 16px; color: #fff;" id="calli-desc">四點左右對稱呼應，四框安定，展現安定之美。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: 譬喻與聲音摹寫修辭 -->
+  <section class="slide" data-slide="5" data-section="【第三節修辭】譬喻與聲音摹寫">
+    <div class="slide-inner">
+      <div class="kicker">— 第三節課 形式深究 —</div>
+      <h2 class="slide-title">第三課靈魂修辭 <span class="highlight-cyan">譬喻與聲音摹寫</span></h2>
+      <div class="grid-3">
+        <div class="card">
+          <div style="font-size: 28px;">💎</div>
+          <div class="card-title" style="color: var(--accent-cyan);">譬喻法</div>
+          <div class="card-desc" style="font-size: 16px;">
+            「雨滴像一顆顆閃亮的珍珠」<br>將雨滴比喻為珍珠，極具視覺美感！
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-size: 28px;">🎶</div>
+          <div class="card-title" style="color: var(--accent-green);">聲音摹寫</div>
+          <div class="card-desc" style="font-size: 16px;">
+            「滴滴答答、清脆的響聲」<br>生動模擬大自然雨水的樂章！
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-size: 28px;">💃</div>
+          <div class="card-title" style="color: var(--accent-pink);">擬人法</div>
+          <div class="card-desc" style="font-size: 16px;">
+            「雨滴在樹葉上歡快的跳舞」<br>讓雨滴充滿動感與活力！
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6: 句型拼圖 -->
+  <section class="slide" data-slide="6" data-section="【第三節句型】「像……般……」拼圖">
+    <div class="slide-inner">
+      <div class="kicker">— 句型大師 拼圖大挑戰 🧩 —</div>
+      <h2 class="slide-title">「像……般……」 <span class="highlight-gold">譬喻積木組裝</span></h2>
+      <div class="quiz-box">
+        <div style="font-size: 20px; font-weight: 700; color: var(--accent-gold);">
+          📌 點選積木完成譬喻句：「雨滴像_____般從天空掉落。」
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="quiz-opt-btn" onclick="alert('🎉 譬喻句成功：雨滴像閃亮的珍珠般從天空掉落！'); soundEffect('correct')">💎 閃亮的珍珠</button>
+          <button class="quiz-opt-btn" onclick="alert('🎉 譬喻句成功：雲朵像綿軟的棉花糖般飄浮！'); soundEffect('correct')">☁️ 棉軟的棉花糖</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 7: 雨中交響曲卡發表 -->
+  <section class="slide" data-slide="7" data-section="【第四節發表】《雨中交響曲卡》">
+    <div class="slide-inner">
+      <div class="kicker">— 第四節課 雨天創作 🌧️ —</div>
+      <h2 class="slide-title">發表我們的 <span class="highlight-cyan">《雨中交響曲卡》</span></h2>
+      <div class="quiz-box">
+        <div style="font-size: 18px; color: var(--accent-cyan); font-weight: 700;">
+          ✍️ 寫下你在下雨天最喜歡做的一件事：
+        </div>
+        <textarea style="width: 100%; min-height: 100px; background: rgba(0,0,0,0.4); border: 2px solid var(--border-color); border-radius: 12px; color: #fff; padding: 12px; font-size: 18px;" placeholder="例：我最喜歡穿上黃色雨鞋踩水花，聽雨滴滴滴答答的唱歌！"></textarea>
+        <button class="big-btn" onclick="alert('🎉 恭喜發表作品！全班頒發雨天音樂家徽章！'); soundEffect('correct')">🌧️ 大屏公開展示《雨中交響曲》！</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    let currentSlide = 1; const totalSlides = 7;
+    document.addEventListener('DOMContentLoaded', () => { updateSlideDisplay(); setupKeyboardNav(); });
+
+    function updateSlideDisplay() {
+      document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+      const activeSlide = document.querySelector(`.slide[data-slide="${currentSlide}"]`);
+      if (activeSlide) {
+        activeSlide.classList.add('active');
+        document.getElementById('section-tag').innerText = activeSlide.getAttribute('data-section') || '國語教學';
+      }
+      document.getElementById('curr-slide').innerText = currentSlide;
+      document.getElementById('total-slides').innerText = totalSlides;
+      document.getElementById('progress-bar').style.width = `${(currentSlide / totalSlides) * 100}%`;
+    }
+
+    function nextSlide() { if (currentSlide < totalSlides) { currentSlide++; updateSlideDisplay(); soundEffect('nav'); } }
+    function prevSlide() { if (currentSlide > 1) { currentSlide--; updateSlideDisplay(); soundEffect('nav'); } }
+
+    function setupKeyboardNav() {
+      document.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+        if (e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
+        if (e.key === 'ArrowLeft') prevSlide();
+        if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+      });
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(() => {}); document.getElementById('fs-txt').innerText = '退出全螢幕'; }
+      else { document.exitFullscreen().catch(() => {}); document.getElementById('fs-txt').innerText = '全螢幕大屏模式'; }
+    }
+
+    function soundEffect(type) {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator(); const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        if (type === 'correct') {
+          osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+          osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
+          osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2);
+          gain.gain.setValueAtTime(0.3, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+          osc.start(); osc.stop(ctx.currentTime + 0.4); triggerConfetti();
+        } else if (type === 'card' || type === 'nav') {
+          osc.frequency.setValueAtTime(400, ctx.currentTime); gain.gain.setValueAtTime(0.15, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1); osc.start(); osc.stop(ctx.currentTime + 0.1);
+        }
+      } catch (e) {}
+    }
+
+    function triggerConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d'); canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+      const particles = []; const colors = ['#ffb703', '#00d2d3', '#ff4d6d', '#10b981', '#9d4edd'];
+      for (let i = 0; i < 60; i++) {
+        particles.push({ x: canvas.width / 2, y: canvas.height / 2, vx: (Math.random() - 0.5) * 12, vy: (Math.random() - 0.7) * 12, color: colors[Math.floor(Math.random() * colors.length)], size: Math.random() * 8 + 4, life: 1 });
+      }
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); let active = false;
+        particles.forEach(p => {
+          if (p.life > 0) {
+            active = true; p.x += p.vx; p.y += p.vy; p.vy += 0.3; p.life -= 0.02;
+            ctx.fillStyle = p.color; ctx.globalAlpha = Math.max(0, p.life); ctx.fillRect(p.x, p.y, p.size, p.size);
+          }
+        });
+        if (active) requestAnimationFrame(render); else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      render();
+    }
+
+    function showCalli(char, struct, rad, desc) {
+      soundEffect('card');
+      document.getElementById('calli-grid').innerText = char;
+      document.getElementById('calli-title').innerText = `生字【${char}】硬筆書寫秘訣`;
+      document.getElementById('calli-struct').innerText = `結構：${struct} | 部首：${rad}`;
+      document.getElementById('calli-desc').innerText = desc;
+    }
+  </script>
+</body>
+</html>

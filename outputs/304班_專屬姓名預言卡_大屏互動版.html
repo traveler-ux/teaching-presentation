@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>304 班專屬：姓名預言卡大屏互動系統</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;900&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b132b;
+      --bg-card: #1c2541;
+      --ink-title: #ffffff;
+      --ink-body: #e2e8f0;
+      --ink-muted: #94a3b8;
+      --primary: #48cae4;
+      --secondary: #ffb703;
+      --accent: #ff006e;
+      --success: #06d6a0;
+      --font-main: 'Noto Sans TC', sans-serif;
+      --font-num: 'Fredoka', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body {
+      background: var(--bg);
+      color: var(--ink-body);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 30px;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .title-area h1 {
+      font-size: 32px;
+      font-weight: 900;
+      color: #fff;
+    }
+    .title-area h1 span {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .title-area p {
+      font-size: 16px;
+      color: var(--ink-muted);
+      margin-top: 4px;
+    }
+
+    .top-btns {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-top {
+      background: rgba(28, 37, 65, 0.9);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-top:hover { background: var(--primary); color: #000; }
+
+    /* Cards Grid (5 Cards) */
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      flex: 1;
+      margin-bottom: 20px;
+    }
+
+    .name-card {
+      background: #111a33;
+      border: 2px solid #2a3b68;
+      border-radius: 18px;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      position: relative;
+    }
+    .name-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-4px);
+    }
+    .name-card.selected {
+      background: rgba(255, 183, 3, 0.12);
+      border-color: var(--secondary);
+      box-shadow: 0 0 25px rgba(255, 183, 3, 0.35);
+      transform: translateY(-8px);
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 12px;
+    }
+    .card-label {
+      font-size: 18px;
+      font-weight: 900;
+      color: #fff;
+    }
+    .card-status {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      background: rgba(0,0,0,0.4);
+      padding: 2px 10px;
+      border-radius: 10px;
+    }
+    .name-card.selected .card-status {
+      background: var(--secondary);
+      color: #000;
+    }
+
+    .name-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 8px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .name-item {
+      background: rgba(255,255,255,0.05);
+      padding: 8px 6px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: #e2e8f0;
+      transition: all 0.2s;
+    }
+    .name-card.selected .name-item {
+      color: #fff;
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* Bottom Control Bar */
+    .bottom-bar {
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 16px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    .status-sum {
+      font-size: 20px;
+      color: var(--ink-muted);
+    }
+    .sum-val {
+      font-family: var(--font-num);
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--secondary);
+      margin-left: 8px;
+    }
+
+    .action-group {
+      display: flex;
+      gap: 16px;
+    }
+    .btn-predict {
+      background: linear-gradient(135deg, var(--secondary), #f77f00);
+      color: #000;
+      font-size: 22px;
+      font-weight: 900;
+      border: none;
+      padding: 14px 36px;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(255, 183, 3, 0.4);
+      transition: all 0.2s;
+    }
+    .btn-predict:hover { transform: scale(1.05); }
+    .btn-reset {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 14px 24px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-reset:hover { background: rgba(255,255,255,0.2); }
+
+    /* Modal / Popups */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(12px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-box {
+      background: #1c2541;
+      border: 3px solid var(--secondary);
+      border-radius: 28px;
+      padding: 40px;
+      max-width: 600px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.8);
+      transform: scale(0.9);
+      transition: transform 0.3s;
+    }
+    .modal-overlay.active .modal-box { transform: scale(1); }
+
+    .student-reveal-name {
+      font-size: 56px;
+      font-weight: 900;
+      color: var(--secondary);
+      margin: 16px 0 8px;
+      letter-spacing: 2px;
+    }
+    .student-reveal-seat {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header>
+    <div class="title-area">
+      <h1>304 班專屬 <span>姓名預言卡大屏系統</span></h1>
+      <p>全班 29 位同學專屬二進位心靈感應 ｜ 點選卡片 ➔ 秒叫出同學名字！</p>
+    </div>
+    <div class="top-btns">
+      <button class="btn-top" onclick="showCheatSheet()">📖 老師速查名冊</button>
+      <button class="btn-top" onclick="showPrinciple()">💡 數學原理</button>
+      <button class="btn-top" onclick="toggleFullscreen()">⛶ 全螢幕</button>
+    </div>
+  </header>
+
+  <!-- 5 Cards Container -->
+  <main class="cards-container">
+
+    <div class="name-card" id="card-A" onclick="toggleCard('A', 1)">
+      <div class="card-head">
+        <div class="card-label">預言卡 A</div>
+        <div class="card-status" id="status-A">點擊選取</div>
+      </div>
+      <div class="name-list">
+        <div class="name-item">蔡博宇</div>
+        <div class="name-item">蕭翊展</div>
+        <div class="name-item">王家尉</div>
+        <div class="name-item">程士愷</div>
+        <div class="name-item">姚智允</div>
+        <div class="name-item">張徜泱</div>
+        <div class="name-item">莊博宇</div>
+        <div class="name-item">鄭敦仁</div>
+        <div class="name-item">陳薪妤</div>
+        <div class="name-item">楊語涔</div>
+        <div class="name-item">陳妍菱</div>
+        <div class="name-item">陳盈希</div>
+        <div class="name-item">陳綺蓁</div>
+        <div class="name-item">陳千用</div>
+        <div class="name-item">陳思婍</div>
+      </div>
+    </div>
+
+    <div class="name-card" id="card-B" onclick="toggleCard('B', 2)">
+      <div class="card-head">
+        <div class="card-label">預言卡 B</div>
+        <div class="card-status" id="status-B">點擊選取</div>
+      </div>
+      <div class="name-list">
+        <div class="name-item">高添程</div>
+        <div class="name-item">蕭翊展</div>
+        <div class="name-item">林靖筌</div>
+        <div class="name-item">程士愷</div>
+        <div class="name-item">張紘瑀</div>
+        <div class="name-item">張徜泱</div>
+        <div class="name-item">陳軍滔</div>
+        <div class="name-item">鄭敦仁</div>
+        <div class="name-item">殷苡庭</div>
+        <div class="name-item">楊語涔</div>
+        <div class="name-item">蔡昕妤</div>
+        <div class="name-item">陳盈希</div>
+        <div class="name-item">莊禹星</div>
+        <div class="name-item">陳千用</div>
+      </div>
+    </div>
+
+    <div class="name-card" id="card-C" onclick="toggleCard('C', 4)">
+      <div class="card-head">
+        <div class="card-label">預言卡 C</div>
+        <div class="card-status" id="status-C">點擊選取</div>
+      </div>
+      <div class="name-list">
+        <div class="name-item">白崇劭</div>
+        <div class="name-item">王家尉</div>
+        <div class="name-item">林靖筌</div>
+        <div class="name-item">程士愷</div>
+        <div class="name-item">呂宜潤</div>
+        <div class="name-item">莊博宇</div>
+        <div class="name-item">陳軍滔</div>
+        <div class="name-item">鄭敦仁</div>
+        <div class="name-item">陳姵穎</div>
+        <div class="name-item">陳妍菱</div>
+        <div class="name-item">蔡昕妤</div>
+        <div class="name-item">陳盈希</div>
+        <div class="name-item">陳宥綺</div>
+        <div class="name-item">陳思婍</div>
+      </div>
+    </div>
+
+    <div class="name-card" id="card-D" onclick="toggleCard('D', 8)">
+      <div class="card-head">
+        <div class="card-label">預言卡 D</div>
+        <div class="card-status" id="status-D">點擊選取</div>
+      </div>
+      <div class="name-list">
+        <div class="name-item">蔡宗霖</div>
+        <div class="name-item">姚智允</div>
+        <div class="name-item">張紘瑀</div>
+        <div class="name-item">張徜泱</div>
+        <div class="name-item">呂宜潤</div>
+        <div class="name-item">莊博宇</div>
+        <div class="name-item">陳軍滔</div>
+        <div class="name-item">鄭敦仁</div>
+        <div class="name-item">劉芷妤</div>
+        <div class="name-item">陳綺蓁</div>
+        <div class="name-item">莊禹星</div>
+        <div class="name-item">陳千用</div>
+        <div class="name-item">陳宥綺</div>
+        <div class="name-item">陳思婍</div>
+      </div>
+    </div>
+
+    <div class="name-card" id="card-E" onclick="toggleCard('E', 16)">
+      <div class="card-head">
+        <div class="card-label">預言卡 E</div>
+        <div class="card-status" id="status-E">點擊選取</div>
+      </div>
+      <div class="name-list">
+        <div class="name-item">鄭靖騰</div>
+        <div class="name-item">陳薪妤</div>
+        <div class="name-item">殷苡庭</div>
+        <div class="name-item">楊語涔</div>
+        <div class="name-item">陳姵穎</div>
+        <div class="name-item">陳妍菱</div>
+        <div class="name-item">蔡昕妤</div>
+        <div class="name-item">陳盈希</div>
+        <div class="name-item">劉芷妤</div>
+        <div class="name-item">陳綺蓁</div>
+        <div class="name-item">莊禹星</div>
+        <div class="name-item">陳千用</div>
+        <div class="name-item">陳宥綺</div>
+        <div class="name-item">陳思婍</div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Control Bar -->
+  <footer class="bottom-bar">
+    <div class="status-sum">
+      二進位權重累加：<span class="sum-val" id="sum-display">0</span>
+    </div>
+    <div class="action-group">
+      <button class="btn-predict" onclick="predictStudent()">🔮 大屏心靈感應揭曉！</button>
+      <button class="btn-reset" onclick="resetCards()">重新選擇</button>
+    </div>
+  </footer>
+
+  <!-- Reveal Modal -->
+  <div class="modal-overlay" id="modal-box" onclick="closeModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div id="modal-content"></div>
+      <button class="btn-predict" style="font-size: 18px; padding: 10px 30px; margin-top: 20px;" onclick="closeModal()">確定關閉</button>
+    </div>
+  </div>
+
+  <script>
+    const students = [{"seat": 1, "name": "蔡博宇", "gender": "男"}, {"seat": 2, "name": "高添程", "gender": "男"}, {"seat": 3, "name": "蕭翊展", "gender": "男"}, {"seat": 4, "name": "白崇劭", "gender": "男"}, {"seat": 5, "name": "王家尉", "gender": "男"}, {"seat": 6, "name": "林靖筌", "gender": "男"}, {"seat": 7, "name": "程士愷", "gender": "男"}, {"seat": 8, "name": "蔡宗霖", "gender": "男"}, {"seat": 9, "name": "姚智允", "gender": "男"}, {"seat": 10, "name": "張紘瑀", "gender": "男"}, {"seat": 11, "name": "張徜泱", "gender": "男"}, {"seat": 12, "name": "呂宜潤", "gender": "男"}, {"seat": 13, "name": "莊博宇", "gender": "男"}, {"seat": 14, "name": "陳軍滔", "gender": "男"}, {"seat": 15, "name": "鄭敦仁", "gender": "男"}, {"seat": 16, "name": "鄭靖騰", "gender": "男"}, {"seat": 17, "name": "陳薪妤", "gender": "女"}, {"seat": 18, "name": "殷苡庭", "gender": "女"}, {"seat": 19, "name": "楊語涔", "gender": "女"}, {"seat": 20, "name": "陳姵穎", "gender": "女"}, {"seat": 21, "name": "陳妍菱", "gender": "女"}, {"seat": 22, "name": "蔡昕妤", "gender": "女"}, {"seat": 23, "name": "陳盈希", "gender": "女"}, {"seat": 24, "name": "劉芷妤", "gender": "女"}, {"seat": 25, "name": "陳綺蓁", "gender": "女"}, {"seat": 26, "name": "莊禹星", "gender": "女"}, {"seat": 27, "name": "陳千用", "gender": "女"}, {"seat": 28, "name": "陳宥綺", "gender": "女"}, {"seat": 29, "name": "陳思婍", "gender": "女"}];
+    const cardsData = {"A": {"weight": 1, "bit": 0, "students": [{"seat": 1, "name": "蔡博宇", "gender": "男"}, {"seat": 3, "name": "蕭翊展", "gender": "男"}, {"seat": 5, "name": "王家尉", "gender": "男"}, {"seat": 7, "name": "程士愷", "gender": "男"}, {"seat": 9, "name": "姚智允", "gender": "男"}, {"seat": 11, "name": "張徜泱", "gender": "男"}, {"seat": 13, "name": "莊博宇", "gender": "男"}, {"seat": 15, "name": "鄭敦仁", "gender": "男"}, {"seat": 17, "name": "陳薪妤", "gender": "女"}, {"seat": 19, "name": "楊語涔", "gender": "女"}, {"seat": 21, "name": "陳妍菱", "gender": "女"}, {"seat": 23, "name": "陳盈希", "gender": "女"}, {"seat": 25, "name": "陳綺蓁", "gender": "女"}, {"seat": 27, "name": "陳千用", "gender": "女"}, {"seat": 29, "name": "陳思婍", "gender": "女"}]}, "B": {"weight": 2, "bit": 1, "students": [{"seat": 2, "name": "高添程", "gender": "男"}, {"seat": 3, "name": "蕭翊展", "gender": "男"}, {"seat": 6, "name": "林靖筌", "gender": "男"}, {"seat": 7, "name": "程士愷", "gender": "男"}, {"seat": 10, "name": "張紘瑀", "gender": "男"}, {"seat": 11, "name": "張徜泱", "gender": "男"}, {"seat": 14, "name": "陳軍滔", "gender": "男"}, {"seat": 15, "name": "鄭敦仁", "gender": "男"}, {"seat": 18, "name": "殷苡庭", "gender": "女"}, {"seat": 19, "name": "楊語涔", "gender": "女"}, {"seat": 22, "name": "蔡昕妤", "gender": "女"}, {"seat": 23, "name": "陳盈希", "gender": "女"}, {"seat": 26, "name": "莊禹星", "gender": "女"}, {"seat": 27, "name": "陳千用", "gender": "女"}]}, "C": {"weight": 4, "bit": 2, "students": [{"seat": 4, "name": "白崇劭", "gender": "男"}, {"seat": 5, "name": "王家尉", "gender": "男"}, {"seat": 6, "name": "林靖筌", "gender": "男"}, {"seat": 7, "name": "程士愷", "gender": "男"}, {"seat": 12, "name": "呂宜潤", "gender": "男"}, {"seat": 13, "name": "莊博宇", "gender": "男"}, {"seat": 14, "name": "陳軍滔", "gender": "男"}, {"seat": 15, "name": "鄭敦仁", "gender": "男"}, {"seat": 20, "name": "陳姵穎", "gender": "女"}, {"seat": 21, "name": "陳妍菱", "gender": "女"}, {"seat": 22, "name": "蔡昕妤", "gender": "女"}, {"seat": 23, "name": "陳盈希", "gender": "女"}, {"seat": 28, "name": "陳宥綺", "gender": "女"}, {"seat": 29, "name": "陳思婍", "gender": "女"}]}, "D": {"weight": 8, "bit": 3, "students": [{"seat": 8, "name": "蔡宗霖", "gender": "男"}, {"seat": 9, "name": "姚智允", "gender": "男"}, {"seat": 10, "name": "張紘瑀", "gender": "男"}, {"seat": 11, "name": "張徜泱", "gender": "男"}, {"seat": 12, "name": "呂宜潤", "gender": "男"}, {"seat": 13, "name": "莊博宇", "gender": "男"}, {"seat": 14, "name": "陳軍滔", "gender": "男"}, {"seat": 15, "name": "鄭敦仁", "gender": "男"}, {"seat": 24, "name": "劉芷妤", "gender": "女"}, {"seat": 25, "name": "陳綺蓁", "gender": "女"}, {"seat": 26, "name": "莊禹星", "gender": "女"}, {"seat": 27, "name": "陳千用", "gender": "女"}, {"seat": 28, "name": "陳宥綺", "gender": "女"}, {"seat": 29, "name": "陳思婍", "gender": "女"}]}, "E": {"weight": 16, "bit": 4, "students": [{"seat": 16, "name": "鄭靖騰", "gender": "男"}, {"seat": 17, "name": "陳薪妤", "gender": "女"}, {"seat": 18, "name": "殷苡庭", "gender": "女"}, {"seat": 19, "name": "楊語涔", "gender": "女"}, {"seat": 20, "name": "陳姵穎", "gender": "女"}, {"seat": 21, "name": "陳妍菱", "gender": "女"}, {"seat": 22, "name": "蔡昕妤", "gender": "女"}, {"seat": 23, "name": "陳盈希", "gender": "女"}, {"seat": 24, "name": "劉芷妤", "gender": "女"}, {"seat": 25, "name": "陳綺蓁", "gender": "女"}, {"seat": 26, "name": "莊禹星", "gender": "女"}, {"seat": 27, "name": "陳千用", "gender": "女"}, {"seat": 28, "name": "陳宥綺", "gender": "女"}, {"seat": 29, "name": "陳思婍", "gender": "女"}]}};
+    let selectedCards = new Set();
+
+    function toggleCard(cardKey, weight) {
+      const el = document.getElementById(`card-${cardKey}`);
+      const statusEl = document.getElementById(`status-${cardKey}`);
+      if (selectedCards.has(cardKey)) {
+        selectedCards.delete(cardKey);
+        el.classList.remove('selected');
+        statusEl.textContent = '點擊選取';
+      } else {
+        selectedCards.add(cardKey);
+        el.classList.add('selected');
+        statusEl.textContent = '✓ 已選中';
+      }
+      calculateSum();
+    }
+
+    function calculateSum() {
+      let sum = 0;
+      selectedCards.forEach(k => {
+        sum += cardsData[k].weight;
+      });
+      document.getElementById('sum-display').textContent = sum;
+    }
+
+    function resetCards() {
+      selectedCards.clear();
+      document.querySelectorAll('.name-card').forEach(c => c.classList.remove('selected'));
+      document.querySelectorAll('.card-status').forEach(s => s.textContent = '點擊選取');
+      document.getElementById('sum-display').textContent = '0';
+    }
+
+    function predictStudent() {
+      let sum = 0;
+      selectedCards.forEach(k => { sum += cardsData[k].weight; });
+      if (sum === 0) {
+        showModal('⚠️ 請同學先點擊【哪幾張卡片上有你的名字】！');
+        return;
+      }
+      const student = students.find(s => s.seat === sum);
+      if (student) {
+        const genderEmoji = student.gender === '男' ? '👦 帥氣男孩' : '👧 漂亮女孩';
+        showModal(`
+          <div style="font-size:24px; color:var(--ink-muted);">✨ 304 班心靈感應成功！ ✨</div>
+          <div class="student-reveal-name">${student.name}</div>
+          <div class="student-reveal-seat">座號：第 ${student.seat} 號（${genderEmoji}）</div>
+          <p style="font-size:20px; color:#fff; line-height:1.6;">
+            歡迎 <b>${student.name}</b> 同學來到 304 班大家庭！🎉
+          </p>
+        `);
+      } else {
+        showModal(`⚠️ 計算座號為 ${sum} 號，超出 304 班目前名冊範圍（1~29號）！請重新核對卡片！`);
+      }
+    }
+
+    function showCheatSheet() {
+      let html = '<div style="font-size:22px; font-weight:800; color:var(--primary); margin-bottom:12px;">📋 304 班座號與卡片速查表</div>';
+      html += '<div style="max-height:350px; overflow-y:auto; font-size:15px; text-align:left; line-height:1.8;">';
+      students.forEach(s => {
+        const inCards = Object.keys(cardsData).filter(k => cardsData[k].students.some(st => st.seat === s.seat)).join('、');
+        html += `<div><b>${s.seat < 10 ? '0'+s.seat : s.seat}號 ${s.name}</b> (${s.gender}) ➔ 卡片 ${inCards}</div>`;
+      });
+      html += '</div>';
+      showModal(html);
+    }
+
+    function showPrinciple() {
+      showModal(`
+        <div style="font-size:22px; font-weight:800; color:var(--secondary); margin-bottom:12px;">💡 二進位整數唯一分解原理</div>
+        <div style="text-align:left; font-size:16px; line-height:1.7; color:#e2e8f0;">
+          <p>• 5 張卡片權重分別為 <b>1, 2, 4, 8, 16</b>（即 2⁰, 2¹, 2², 2³, 2⁴）。</p>
+          <p>• 任何 1~31 的正整數，都能被【唯一分解】為這 5 個數字的和！</p>
+          <p>• 學生只要指出哪幾張卡片有名字，老師心算加總，就能 100% 算出座號！</p>
+        </div>
+      `);
+    }
+
+    function showModal(contentHtml) {
+      document.getElementById('modal-content').innerHTML = contentHtml;
+      document.getElementById('modal-box').classList.add('active');
+    }
+    function closeModal() {
+      document.getElementById('modal-box').classList.remove('active');
+    }
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+      else document.exitFullscreen().catch(() => {});
+    }
+  </script>
+</body>
+</html>

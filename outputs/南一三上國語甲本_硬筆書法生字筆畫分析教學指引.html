@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<title>南一版國小國語三上（甲本）硬筆書法代表性生字筆畫與間架結構分析指引</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;900&display=swap');
+
+  @page {
+    size: A4 portrait;
+    margin: 15mm 12mm 15mm 12mm;
+    @bottom-right {
+      content: counter(page);
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Noto Sans TC', "Microsoft JhengHei", sans-serif;
+    color: #1e293b;
+    background-color: #ffffff;
+    line-height: 1.6;
+    font-size: 11pt;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+
+  .header-box {
+    background: linear-gradient(135deg, #1e3a8a, #0f766e);
+    color: white;
+    padding: 20px 24px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  .header-title {
+    font-family: 'Noto Serif TC', "DFKai-SB", serif;
+    font-size: 22pt;
+    font-weight: 900;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .header-subtitle {
+    font-size: 13pt;
+    font-weight: 500;
+    color: #cbd5e1;
+  }
+
+  .badge-row {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .badge {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 9.5pt;
+  }
+
+  h2 {
+    font-size: 15pt;
+    color: #1e3a8a;
+    border-left: 6px solid #0f766e;
+    padding-left: 10px;
+    margin: 18px 0 10px 0;
+    font-weight: 700;
+  }
+
+  h3 {
+    font-size: 12.5pt;
+    color: #0f766e;
+    margin: 14px 0 6px 0;
+    font-weight: 700;
+  }
+
+  .intro-card {
+    background: #f8fafc;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+  }
+
+  .intro-card p {
+    margin-bottom: 6px;
+    font-size: 10.5pt;
+  }
+
+  .tips-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 15px;
+  }
+
+  .tip-box {
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 10pt;
+  }
+
+  .tip-box-title {
+    font-weight: 700;
+    color: #166534;
+    margin-bottom: 4px;
+  }
+
+  /* Table styling */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 16px 0;
+    font-size: 10pt;
+  }
+
+  th, td {
+    border: 1px solid #cbd5e1;
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  th {
+    background-color: #f1f5f9;
+    color: #1e3a8a;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .char-analysis-card {
+    border: 1.5px solid #94a3b8;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    background: #ffffff;
+    page-break-inside: avoid;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+  }
+
+  .char-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1.5px solid #e2e8f0;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+  }
+
+  .rice-box {
+    width: 56px;
+    height: 56px;
+    border: 1.5px dashed #d97706;
+    background: #fffbeb;
+    color: #b45309;
+    font-size: 30pt;
+    font-family: "DFKai-SB", "BiauKai", "Noto Serif TC", serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    position: relative;
+    font-weight: 900;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .rice-box::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      linear-gradient(to right, transparent 49%, rgba(217, 119, 6, 0.25) 50%, transparent 51%),
+      linear-gradient(to bottom, transparent 49%, rgba(217, 119, 6, 0.25) 50%, transparent 51%);
+  }
+
+  .char-meta {
+    flex: 1;
+  }
+
+  .char-name {
+    font-size: 15pt;
+    font-weight: 900;
+    color: #1e3a8a;
+  }
+
+  .char-tags {
+    display: flex;
+    gap: 8px;
+    margin-top: 2px;
+    font-size: 9.5pt;
+    color: #475569;
+  }
+
+  .char-tag-pill {
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 700;
+  }
+
+  .char-body-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    font-size: 9.8pt;
+  }
+
+  .item-label {
+    font-weight: 700;
+    color: #0f766e;
+  }
+
+  .item-warn {
+    color: #b91c1c;
+    font-weight: 700;
+  }
+
+  .item-jingle {
+    background: #fef3c7;
+    border-left: 3.5px solid #f59e0b;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: #92400e;
+    font-weight: 700;
+    margin-top: 6px;
+    grid-column: span 2;
+  }
+
+  .lesson-banner {
+    background: #0f766e;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 13pt;
+    font-weight: 700;
+    margin: 18px 0 12px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-note {
+    font-size: 9pt;
+    color: #64748b;
+    text-align: center;
+    margin-top: 20px;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 8px;
+  }
+</style>
+</head>
+<body>
+
+  <!-- 封面與總覽 -->
+  <div class="header-box">
+    <div class="header-title">南一版國小國語三上（甲本）</div>
+    <div class="header-title" style="font-size: 18pt; margin-top: 4px;">硬筆書法代表性生字筆畫與間架結構分析指引</div>
+    <div class="header-subtitle">依據國小國語三上生字語詞簿（甲本）• 整合專業寫字教練與硬筆書法教學法</div>
+    <div class="badge-row">
+      <span class="badge">全冊 6 課精選 24 個代表字</span>
+      <span class="badge">米字格間架定位</span>
+      <span class="badge">主筆解析與診斷糾錯</span>
+      <span class="badge">趣味記憶口訣</span>
+    </div>
+  </div>
+
+  <h2>壹、硬筆書法教學核心理念與基本功</h2>
+  
+  <div class="intro-card">
+    <p><strong>教學指導思想（融合吳明亮老師與陳寶嘉教練教學法）：</strong></p>
+    <p>1. <strong>字如積木，拆解部首</strong>：透過造字原理說明生字部件，掌握「左右高低」、「上下覆載」與「穿插避讓」原則。</p>
+    <p>2. <strong>幫每一個字找主筆</strong>：每個字如同偶像劇，必有「男主角」或「女主角」（最舒展、最挺拔的關鍵筆畫）。主筆突出，全字神采自現。</p>
+    <p>3. <strong>米字格定位與黃金比例</strong>：善用米字格「左1左2、右1右2」，控制字的「頭小身體長、上緊下鬆、左窄右寬」，切忌寫成「大頭鬼」或「左右分家」。</p>
+    <p>4. <strong>字不碰框，留有呼吸</strong>：硬筆字不可塞滿格子，最長筆畫亦不可撞擊邊框，保留四周留白方顯優雅大氣。</p>
+  </div>
+
+  <div class="tips-grid">
+    <div class="tip-box">
+      <div class="tip-box-title">✒️ 基本運筆四字訣</div>
+      • <strong>起筆</strong>：輕落頓筆，確立方位。<br>
+      • <strong>行筆</strong>：穩健勻速，力道均勻。<br>
+      • <strong>轉折</strong>：稍頓換向，方圓有致。<br>
+      • <strong>收筆</strong>：回鋒或出尖，舒展不滯。
+    </div>
+    <div class="tip-box">
+      <div class="tip-box-title">💡 經典筆畫童趣口訣</div>
+      • <strong>口/曰部</strong>：上寬下窄，底橫微托。<br>
+      • <strong>長撇長捺</strong>：穿裙子要拉開～拉長～<br>
+      • <strong>挑畫（提）</strong>：提水桶，由下往上提！<br>
+      • <strong>臥鉤</strong>：小船盪啊盪，蓄力往上鉤！
+    </div>
+  </div>
+
+  <!-- 第一課 -->
+  <div class="lesson-banner">
+    <span>第一課 〈你好，新朋友〉</span>
+    <span style="font-size: 10pt; font-weight: normal;">全課生字：泥、化、雀、輕、羽、衣、脆、髮、處、旅、行、平、男、朗、足</span>
+  </div>
+
+  <!-- 1. 泥 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">泥</div>
+      <div class="char-meta">
+        <div class="char-name">泥 <span style="font-size: 11pt; color: #64748b;">(ㄋㄧˊ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">水部</span>
+          <span class="char-tag-pill">8畫</span>
+          <span class="char-tag-pill">左右結構 (1:2)</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>左窄右寬（比例 1:2）。三點水呈弧形排列，左側留出空間讓右側「尼」字伸展。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>右側「尼」之豎彎鉤（底弧圓潤，向右上方出尖，托住全字）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>三點水前兩點為斜點，第三筆由左下向右上「提」出，筆尖指向右側尸部橫折。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>三點水寫成筆直一條線；右側尸字寫太大導致左右撞車。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「三點水彎如月牙，右邊尼字坐沙發，豎彎鉤展顯挺拔！」
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 輕 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">輕</div>
+      <div class="char-meta">
+        <div class="char-name">輕 <span style="font-size: 11pt; color: #64748b;">(ㄑㄧㄥ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">車部</span>
+          <span class="char-tag-pill">14畫</span>
+          <span class="char-tag-pill">左右結構 (1:1.5)</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>左右結構。左側「車」字部首窄長避讓，末筆橫改為「提」；右側「巠」三橫等距平行。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>右側「巠」之中豎（貫穿上下，垂直挺拔，如頂天立地之梁）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>左車旁之「日」部要扁緊；右部「巠」第一橫稍長，中橫短，底橫托住全字。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>左邊「車」末筆仍寫成長橫，戳入右側部件；右側三橫間距不均。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「車旁瘦身變成提，巠字三橫排整齊，中豎挺立氣自怡！」
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 髮 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">髮</div>
+      <div class="char-meta">
+        <div class="char-name">髮 <span style="font-size: 11pt; color: #64748b;">(ㄈㄚˇ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">髟部</span>
+          <span class="char-tag-pill">15畫</span>
+          <span class="char-tag-pill">上下結構 (1:1)</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>上下結構。上部「髟」長撇大氣覆蓋；下部「犮」緊縮居於長撇右下方。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>上部「長」之長撇與右下「犮」之長捺（穿裙子向右下舒展）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>「髟」字右邊三撇（彡）要等距、由上至下逐漸變長；下部友/犮字不可寫太大。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>寫成上下分家，字身拉得過長；下部「犮」漏寫右上之一點。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「三撇如長髮飄飄，犮字藏在長裙角，上緊下鬆不潦草！」
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. 處 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">處</div>
+      <div class="char-meta">
+        <div class="char-name">處 <span style="font-size: 11pt; color: #64748b;">(ㄔㄨˋ/ㄔㄨˇ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">虍部</span>
+          <span class="char-tag-pill">11畫</span>
+          <span class="char-tag-pill">半包圍結構</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>半包圍結構（左上包圍）。虎字頭雄渾端正，左撇向左下大開展；下部「夂」向右伸展。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>下部「夂」之長捺（厚重有力，向右下方開展以平衡左撇）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>虎字頭橫鉤要收緊，下部「夂」的橫撇要縮入虎頭之內，捺畫大膽伸出。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>虎字頭撇畫太直或太短，導致下部「夂」無處安放、整體傾斜。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「虎頭如瓦簷，長撇覆半邊，夂字長捺展，穩坐如泰山！」
+      </div>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- 第三課 -->
+  <div class="lesson-banner">
+    <span>第三課 〈下課十分鐘〉</span>
+    <span style="font-size: 10pt; font-weight: normal;">全課生字：短、鐘、鬼、鬧、準、朝、蹈、表、暢、無、總、響、忘、盡、責</span>
+  </div>
+
+  <!-- 1. 短 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">短</div>
+      <div class="char-meta">
+        <div class="char-name">短 <span style="font-size: 11pt; color: #64748b;">(ㄉㄨㄢˇ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">矢部</span>
+          <span class="char-tag-pill">12畫</span>
+          <span class="char-tag-pill">左右結構 (1:1.2)</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>左右結構。左側「矢」字窄而收斂（捺改點）；右側「豆」字上下端正居中。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>右側「豆」之底橫（平穩長橫，承載全字重心）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>「矢」之撇畫要短促，長捺變為向右下頓點以避讓右邊；「豆」之口部要扁。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>左側「矢」的橫畫寫太長，穿過右側「豆」；底橫過短顯得頭重腳輕。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「矢字收斂捺變點，豆字居中口扁圓，平穩長橫托在底！」
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 表 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">表</div>
+      <div class="char-meta">
+        <div class="char-name">表 <span style="font-size: 11pt; color: #64748b;">(ㄅㄧㄠˇ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">衣部</span>
+          <span class="char-tag-pill">8畫</span>
+          <span class="char-tag-pill">獨體/上下結構</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>上緊下鬆。上半部三橫平行等距，中豎居中垂直貫穿；下半部撇捺大開大闔。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>下半部長撇與長捺（如同穿著芭蕾舞裙向兩側展翅）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>上三橫第一橫短，第二橫最短，第三橫稍長；中豎不可偏斜；下撇捺起筆於中心點。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>三橫間距忽大忽小；撇捺縮在一起，字形顯得拘束縮小。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「三橫等距中豎立，長撇長捺穿裙子，左右舒展真美麗！」
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 鬧 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">鬧</div>
+      <div class="char-meta">
+        <div class="char-name">鬧 <span style="font-size: 11pt; color: #64748b;">(ㄋㄠˋ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">鬥部</span>
+          <span class="char-tag-pill">15畫</span>
+          <span class="char-tag-pill">半包圍結構</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>半包圍（門/鬥部外框）。兩邊外框如門扇挺立（左低右稍高），內部「市」居正中。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>內部「市」字之中豎（懸針豎正對米字格中心豎線）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>外框左豎垂直，右橫折鉤要方正剛勁；內部「市」字點橫分明，巾部緊湊。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>外框寫太窄把市字擠扁；市字偏左或偏右導致重心歪斜。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「門開兩扇寬又正，市字安坐正中央，懸針立地氣軒昂！」
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. 響 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">響</div>
+      <div class="char-meta">
+        <div class="char-name">響 <span style="font-size: 11pt; color: #64748b;">(ㄒㄧㄤˇ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">音部</span>
+          <span class="char-tag-pill">21畫</span>
+          <span class="char-tag-pill">上下結構 (1.2:1)</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>上下結構。上部「鄉」左右緊密排布；下部「音」寬扁平穩如基石托住上方。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>下部「音」之底橫（平整長橫，穩健托底）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>繁複字筆畫要細而有力，不可粗重黏結；「鄉」字三撇平行；「音」立部上緊下寬。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>筆畫繁多導致寫出格子；上部鄉字左右分太開，字形鬆散。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「鄉字緊湊筆筆清，音字平穩托在底，字高神清不擁擠！」
+      </div>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- 第五課 -->
+  <div class="lesson-banner">
+    <span>第五課 〈火大了〉</span>
+    <span style="font-size: 10pt; font-weight: normal;">全課生字：龍、沖、體、兄、吐、轉、歪、防、警、鈴、注、員、傷、死、諒</span>
+  </div>
+
+  <!-- 1. 龍 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">龍</div>
+      <div class="char-meta">
+        <div class="char-name">龍 <span style="font-size: 11pt; color: #64748b;">(ㄌㄨㄥˊ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">龍部</span>
+          <span class="char-tag-pill">16畫</span>
+          <span class="char-tag-pill">左右結構 (1:1.2)</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>左右結構。左部立字頭緊湊、月字底瘦長；右側橫折彎鉤舒展大方，靈動流暢。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>右側之豎彎鉤（曲中帶勁，向右圓轉伸展，顯現神龍擺尾之勢）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>左側筆畫緊密收斂；右側三橫撇等距分佈，末筆豎彎鉤圓轉流暢出尖。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>右側豎彎鉤寫成直角生硬折筆；右部筆畫雜亂無章。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「左立月字挺且瘦，右邊龍尾圓轉彎，神氣飛揚字中仙！」
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 防 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">防</div>
+      <div class="char-meta">
+        <div class="char-name">防 <span style="font-size: 11pt; color: #64748b;">(ㄈㄤˊ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">阜部 (阝)</span>
+          <span class="char-tag-pill">7畫</span>
+          <span class="char-tag-pill">左右結構 (1:1.5)</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>左右結構。左耳旁（阝）窄而小巧，垂露豎直立；右側「方」橫折鉤開展有力。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>右側「方」之橫折鉤與長撇（橫斜折勾蓄力，長撇由右上向左下穿插）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>左耳旁彎鉤要圓潤，不可過大；右「方」字第一點居中，橫畫微微上揚。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>左耳旁寫得比右側方字還大；方字之橫折鉤傾倒不穩。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「左耳小巧豎垂露，方字橫折舒展步，撇向左穿相互護！」
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 警 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">警</div>
+      <div class="char-meta">
+        <div class="char-name">警 <span style="font-size: 11pt; color: #64748b;">(ㄐㄧㄥˇ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">言部</span>
+          <span class="char-tag-pill">20畫</span>
+          <span class="char-tag-pill">上下結構 (1.3:1)</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>上下結構。上部「敬」左右緊密配合（左草頭句、右反文）；下部「言」扁平平穩居中。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>上部「敬」反文旁之長捺與下部「言」第一長橫（平衡全字層次）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>上部「敬」不可過長；下部「言」之第一橫最長，其餘三短橫與底「口」收緊。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>上下拉得過長變成「竹竿字」；下部言字歪斜偏離中心軸線。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「上敬扁寬捺有力，下言平穩托底基，中軸對齊立天地！」
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. 傷 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">傷</div>
+      <div class="char-meta">
+        <div class="char-name">傷 <span style="font-size: 11pt; color: #64748b;">(ㄕㄤ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">人部 (亻)</span>
+          <span class="char-tag-pill">13畫</span>
+          <span class="char-tag-pill">左右結構 (1:2)</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>左右結構。左側單人旁挺拔修長；右側「𥏫/易部」上小下大，層次分明。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>右下方「勿」部之長撇與橫折鉤（斜撇平行，折鉤剛勁有力）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>單人旁撇斜豎直；右側人字頭撇短捺縮，中間日部扁小，下部兩撇等距。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>單人旁太斜導致人仰馬翻；右邊各部件堆疊過高。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「單人挺直站如松，右邊部件緊相從，撇撇流暢力道融！」
+      </div>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- 第七課 -->
+  <div class="lesson-banner">
+    <span>第七課 〈最年輕的奶奶〉</span>
+    <span style="font-size: 10pt; font-weight: normal;">全課生字：背、斑、皺、淘、懂、凡、梳、夾、藏、捏、摺、仔、藝、術、創</span>
+  </div>
+
+  <!-- 1. 背 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">背</div>
+      <div class="char-meta">
+        <div class="char-name">背 <span style="font-size: 11pt; color: #64748b;">(ㄅㄟˋ/ㄅㄟ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">肉部 (月)</span>
+          <span class="char-tag-pill">9畫</span>
+          <span class="char-tag-pill">上下結構 (1:1.2)</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>上下結構。上部「北」左右相背而立、左縮右伸；下部「月」字瘦長苗條。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>上部「北」右側之豎彎鉤（向右上方舒展，打破對稱死板）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>上「北」左邊豎撇帶提，右邊撇短豎彎鉤長；下部月字兩橫靠左不碰右豎。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>上部北字寫太寬太大變成「大頭鬼」；下部月字寫太胖。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「北字相背左縮右，月字苗條在下頭，頭小身修美姿流！」
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 斑 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">斑</div>
+      <div class="char-meta">
+        <div class="char-name">斑 <span style="font-size: 11pt; color: #64748b;">(ㄅㄢ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">文部</span>
+          <span class="char-tag-pill">12畫</span>
+          <span class="char-tag-pill">左中右結構 (1:1:1)</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>左中右結構（雙王夾文）。左王提筆避讓，中間文字瘦小居中，右王橫平豎直。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>右側「王」之底橫（平整有力，為全字最寬之收筆）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>左王末橫變提；中間「文」撇捺收斂變為點點；右王三橫等距，底橫微長。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>三個部件各不相讓，字形散開寫出格子外；中間文部撇捺伸太長。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「雙王夾文排整齊，左王避讓末筆提，中間文縮右王立！」
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 夾 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">夾</div>
+      <div class="char-meta">
+        <div class="char-name">夾 <span style="font-size: 11pt; color: #64748b;">(ㄐㄧㄚˊ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">大部</span>
+          <span class="char-tag-pill">7畫</span>
+          <span class="char-tag-pill">包容/穿插結構</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>對稱穿插結構。外部「大」長撇長捺如張開雙臂，內部兩側各一小撇點對稱依託。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>「大」之長撇與長捺（主筆舒展，左右對稱平衡）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>橫畫平穩居中，中撇長而流暢，捺畫自交點向右下伸展；內部兩小人/撇點均勻分置。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>撇捺未拉開，內部兩組撇點無處容身；主撇歪斜導致字體傾倒。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「大字展臂護兩旁，長撇長捺如裙裳，內部對稱不慌張！」
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. 創 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">創</div>
+      <div class="char-meta">
+        <div class="char-name">創 <span style="font-size: 11pt; color: #64748b;">(ㄔㄨㄤˋ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">刀部 (刂)</span>
+          <span class="char-tag-pill">12畫</span>
+          <span class="char-tag-pill">左右結構 (2:1)</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>左右結構。左側「倉」寬大厚重、撇捺覆蓋；右側「刂」（立刀旁）窄而修長挺拔。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>右側立刀旁之「豎鉤」（長直挺拔，垂直下行蓄力出鉤）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>左「倉」之人字頭撇捺要舒展，下部口與橫折收緊；右立刀短豎偏上，豎鉤垂直深沉。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>右立刀寫得比左倉還寬；左倉下部過長導致重心下墜。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「左倉寬闊人字蓋，右立刀挺豎鉤開，左寬右窄顯風采！」
+      </div>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- 第九課 -->
+  <div class="lesson-banner">
+    <span>第九課 〈穿白袍的醫生伯伯〉</span>
+    <span style="font-size: 10pt; font-weight: normal;">全課生字：醫、穿、袍、戴、筒、啄、備、幹、敲、毒、蘋、般、溫、乖、藥</span>
+  </div>
+
+  <!-- 1. 穿 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">穿</div>
+      <div class="char-meta">
+        <div class="char-name">穿 <span style="font-size: 11pt; color: #64748b;">(ㄔㄨㄢ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">穴部</span>
+          <span class="char-tag-pill">9畫</span>
+          <span class="char-tag-pill">上下結構 (1:1)</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>上下結構。上部「穴」寶蓋舒展覆蓋如屋頂；下部「牙」字中心垂直挺立。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>下部「牙」之豎折撇與斜鉤（斜鉤主筆挺拔出神）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>穴寶蓋之撇點呼應，橫鉤方正；下部「牙」橫微斜，豎折順勢而下，斜勾向右下伸出。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>穴寶蓋寫太窄無法覆蓋牙字；牙字豎折過於肥大。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「穴寶蓋如屋頂張，牙字居中立樑柱，上蓋下承安穩住！」
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 戴 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">戴</div>
+      <div class="char-meta">
+        <div class="char-name">戴 <span style="font-size: 11pt; color: #64748b;">(ㄉㄞˋ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">戈部</span>
+          <span class="char-tag-pill">17畫</span>
+          <span class="char-tag-pill">右上包圍結構</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>半包圍/穿插結構。左半部部件層層疊緊（土、車、田/共）；右上「戈」斜鉤如長弓滿月。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>右上「戈」之斜鉤（全字靈魂，由右上貫通至右下，蓄力出鉤）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>左半部各部件橫畫緊密平行；右上斜鉤起筆要高，弧度自然，末筆撇點乾脆。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>斜鉤太直太僵硬；左邊部件散開導致右邊無處落筆。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「左邊部件層層疊，右上戈鉤如彎月，大弓張滿氣勢烈！」
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 幹 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">幹</div>
+      <div class="char-meta">
+        <div class="char-name">幹 <span style="font-size: 11pt; color: #64748b;">(ㄍㄢˋ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">干部</span>
+          <span class="char-tag-pill">13畫</span>
+          <span class="char-tag-pill">左右結構 (1.2:1)</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>左右結構。左側「龺」（十+日+十）上下疊緊；右側「干」末豎垂直垂露。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>右側「干」之長豎（懸針/垂露垂直挺拔，如樹幹頂立）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>左部日字扁平，兩十部橫畫平行；右側干字兩橫上短下稍長，長豎直貫到底。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>左邊龺字寫太長；右邊干字長豎歪斜。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「左邊日十字字疊，右邊長豎頂天立，枝幹挺拔站得直！」
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. 藥 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">藥</div>
+      <div class="char-meta">
+        <div class="char-name">藥 <span style="font-size: 11pt; color: #64748b;">(ㄧㄠˋ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">艸部</span>
+          <span class="char-tag-pill">19畫</span>
+          <span class="char-tag-pill">上中下結構</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>上中下結構。草字頭覆蓋上方；中層「樂」之白居中、雙么對稱；下層「木」底橫撇捺托底。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>底層「木」之撇捺（向左右開展，平穩承載上方繁複結構）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>草字頭兩短橫分明；中間白字上寬下窄，兩側么字收緊；底木字撇捺舒展。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>各層高度控制不當變成過長；中間么字過大將白字擠歪。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「草頭分立白居中，雙么對稱木托底，繁而不亂層次清！」
+      </div>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- 第十一課 -->
+  <div class="lesson-banner">
+    <span>第十一課 〈石虎的告白〉</span>
+    <span style="font-size: 10pt; font-weight: normal;">全課生字：額、虎、貓、臺、灣、獨、萬、祖、蛙、捉、類、占、雞、肉、威</span>
+  </div>
+
+  <!-- 1. 虎 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">虎</div>
+      <div class="char-meta">
+        <div class="char-name">虎 <span style="font-size: 11pt; color: #64748b;">(ㄏㄨˇ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">虍部</span>
+          <span class="char-tag-pill">8畫</span>
+          <span class="char-tag-pill">半包圍結構</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>半包圍結構。上部短豎短橫端正；左撇長而舒展向左下延伸；內部「几」安穩居中。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>左側長撇與內部「几」之豎彎鉤（左右呼應，穩如磐石）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>虎字頭橫鉤短促有力，長撇順勢向左下送出；內部几字豎直彎圓，出鉤挺拔。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>長撇太直太僵；內部几字寫太大衝出包圍圈。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「長撇大氣如虎鬚，內部几字穩立足，威風凜凜石中王！」
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 臺 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">臺</div>
+      <div class="char-meta">
+        <div class="char-name">臺 <span style="font-size: 11pt; color: #64748b;">(ㄊㄞˊ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">至部</span>
+          <span class="char-tag-pill">14畫</span>
+          <span class="char-tag-pill">上中下結構</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>三層疊加。上部「吉」（士+口）緊湊端正；中部「冖」（禿寶蓋）橫抱承接；下部「至」長橫托底。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>底層「至」之末筆長橫（全字基石，平穩厚重，微向右揚）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>上吉字之「士」上橫長下橫短；中禿寶蓋寬於上吉；底至字土部居中，長橫承托全臺。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>三層中心軸線未對齊，字體歪斜；底橫過短顯得頭重腳輕。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「上吉扁緊中蓋闊，下至端坐長橫托，三層疊立穩巍峨！」
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 灣 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">灣</div>
+      <div class="char-meta">
+        <div class="char-name">灣 <span style="font-size: 11pt; color: #64748b;">(ㄨㄢ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">水部</span>
+          <span class="char-tag-pill">25畫</span>
+          <span class="char-tag-pill">左右結構 (1:2.5)</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>左右結構（極繁複字）。左側三點水修長提筆；右側「彎」上部雙弓夾言、下部弓字穩健。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>右下「弓」字之豎折折鉤（蓄力圓轉，承載全字繁複筆劃）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>全字25畫，線條必須細勁分明，不可粗胖黏合；雙弓與言部要緊密收斂。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>筆畫過重擠成一團黑塊；右部上下脫節變成兩個字。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「三點水引清泉流，雙弓夾言筆精細，下弓圓轉海灣奇！」
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. 獨 -->
+  <div class="char-analysis-card">
+    <div class="char-header">
+      <div class="rice-box">獨</div>
+      <div class="char-meta">
+        <div class="char-name">獨 <span style="font-size: 11pt; color: #64748b;">(ㄉㄨˊ)</span></div>
+        <div class="char-tags">
+          <span class="char-tag-pill">犬部 (犭)</span>
+          <span class="char-tag-pill">16畫</span>
+          <span class="char-tag-pill">左右結構 (1:2)</span>
+        </div>
+      </div>
+    </div>
+    <div class="char-body-grid">
+      <div>
+        <span class="item-label">【間架結構】：</span>左右結構。反犬旁（犭）弧度優雅挺立；右側「蜀」字上四字頭扁寬、下虫字端正。
+      </div>
+      <div>
+        <span class="item-label">【關鍵主筆】：</span>右下「虫」字之提筆與右下斜點（呼應提筆，重心穩健）。
+      </div>
+      <div>
+        <span class="item-label">【運筆要點】：</span>反犬旁彎鉤弧度流暢；右側「蜀」之橫折勾方正，虫部中豎垂直居中。
+      </div>
+      <div>
+        <span class="item-warn">【常見盲點】：</span>反犬旁寫得過於笨重；右側蜀字包得過死無呼吸感。
+      </div>
+      <div class="item-jingle">
+        🎯 <strong>記憶口訣：</strong>「反犬靈巧立身旁，蜀字端莊四部寬，獨立天地展昂揚！」
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    本教材依據南一版 115 學年度國小國語三上甲本生字語詞簿設計 • 專為三年級硬筆書法教學與板書範寫提供之專業指引
+  </div>
+
+</body>
+</html>

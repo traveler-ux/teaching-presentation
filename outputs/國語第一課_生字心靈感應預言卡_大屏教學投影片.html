@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>第一課〈你好，新朋友〉生字心靈感應預言卡：大屏教學投影片</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;900&family=Fredoka:wght@600;700&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --bg-card: #151c2e;
+      --border-color: rgba(255, 255, 255, 0.15);
+      --ink-title: #ffffff;
+      --ink-body: #e2e8f0;
+      --ink-muted: #94a3b8;
+      
+      --primary: #38bdf8;
+      --secondary: #fbbf24;
+      --accent: #f43f5e;
+      --success: #34d399;
+      --purple: #c084fc;
+      
+      --font-main: 'Noto Sans TC', sans-serif;
+      --font-kai: "DFKai-SB", "BiauKai", "Noto Serif TC", serif;
+      --font-num: 'Fredoka', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink-body);
+      font-family: var(--font-main);
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 30%),
+        radial-gradient(circle at 90% 80%, rgba(251, 191, 36, 0.15) 0%, transparent 30%),
+        radial-gradient(circle at 50% 50%, rgba(192, 132, 252, 0.08) 0%, transparent 40%);
+    }
+
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent), var(--success));
+      width: 0%;
+      z-index: 1000;
+      transition: width 0.3s ease;
+    }
+
+    /* Top Control Bar */
+    #top-bar {
+      position: fixed;
+      top: 15px;
+      left: 24px;
+      right: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 900;
+      pointer-events: none;
+    }
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      pointer-events: auto;
+    }
+    #section-tag {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--secondary);
+      background: rgba(251, 191, 36, 0.18);
+      border: 1.5px solid rgba(251, 191, 36, 0.5);
+      padding: 6px 16px;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+    }
+    .icon-btn {
+      background: rgba(21, 28, 46, 0.85);
+      border: 1.5px solid var(--border-color);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 18px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s;
+      pointer-events: auto;
+    }
+    .icon-btn:hover {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+    }
+
+    #page-info {
+      position: fixed;
+      bottom: 15px;
+      right: 25px;
+      font-family: var(--font-num);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      background: rgba(15, 23, 42, 0.85);
+      border: 1.5px solid var(--border-color);
+      padding: 6px 16px;
+      border-radius: 20px;
+      z-index: 900;
+      backdrop-filter: blur(10px);
+    }
+
+    /* Nav Buttons */
+    .nav-btn {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 58px;
+      height: 58px;
+      background: rgba(21, 28, 46, 0.85);
+      border: 2px solid var(--border-color);
+      border-radius: 50%;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 950;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .nav-btn:hover {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+      transform: translateY(-50%) scale(1.1);
+    }
+    #prev-btn { left: 18px; }
+    #next-btn { right: 18px; }
+
+    /* Slide container */
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 70px 85px 60px 85px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      overflow-y: auto;
+      z-index: 10;
+    }
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .slide-inner {
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .kicker {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .slide-title {
+      font-size: clamp(28px, 3.6vw, 48px);
+      font-weight: 900;
+      line-height: 1.25;
+      color: #fff;
+    }
+
+    .highlight-gold { color: var(--secondary); }
+    .highlight-cyan { color: var(--primary); }
+    .highlight-pink { color: var(--accent); }
+    .highlight-green { color: var(--success); }
+    .highlight-purple { color: var(--purple); }
+
+    /* Grids */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+
+    .card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: 20px;
+      padding: 20px;
+      transition: all 0.25s;
+      position: relative;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+    }
+    .card:hover {
+      border-color: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    /* Ritual Step Card */
+    .ritual-card {
+      background: linear-gradient(160deg, #111a33, #0d1326);
+      border: 2px solid #23335d;
+      border-radius: 20px;
+      padding: 22px 18px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .ritual-icon {
+      font-size: 42px;
+      line-height: 1;
+    }
+    .ritual-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--secondary);
+    }
+    .ritual-desc {
+      font-size: 15px;
+      color: var(--ink-body);
+      line-height: 1.6;
+    }
+
+    /* Character Card Box (2x4 Grid) */
+    .vocab-grid-8 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .vocab-box {
+      background: linear-gradient(145deg, #111a33, #0f172a);
+      border: 2px solid #2a3b68;
+      border-radius: 16px;
+      padding: 14px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .vocab-box:hover {
+      border-color: var(--secondary);
+      transform: scale(1.04);
+      background: rgba(251, 191, 36, 0.08);
+    }
+    .vocab-big-char {
+      font-family: var(--font-kai);
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 1.1;
+    }
+    .vocab-meta {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+    .vocab-word {
+      font-size: 12px;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+
+    .hint-banner {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1.5px solid var(--border-color);
+      border-radius: 14px;
+      padding: 10px 18px;
+      font-size: 15px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    /* 15 All Vocab Grid */
+    .vocab-all-box {
+      background: #111a33;
+      border: 1.5px solid #23335d;
+      border-radius: 14px;
+      padding: 10px 8px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.2s;
+    }
+    .vocab-all-box:hover {
+      border-color: var(--secondary);
+      transform: scale(1.05);
+    }
+    .vocab-all-num {
+      font-family: var(--font-num);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--secondary);
+    }
+    .vocab-all-char {
+      font-family: var(--font-kai);
+      font-size: 32px;
+      font-weight: 900;
+      color: #fff;
+      margin: 2px 0;
+    }
+    .vocab-all-pinyin {
+      font-size: 11px;
+      color: var(--primary);
+    }
+    .vocab-all-card {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--success);
+      margin-top: 3px;
+      background: rgba(52, 211, 153, 0.15);
+      padding: 1px 6px;
+      border-radius: 8px;
+    }
+
+    .big-btn {
+      padding: 14px 32px;
+      font-size: 20px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--secondary), #f59e0b);
+      color: #000;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 6px 25px rgba(251, 191, 36, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .big-btn:hover { transform: scale(1.05); }
+  </style>
+</head>
+<body>
+
+  <canvas id="confetti-canvas"></canvas>
+  <div id="progress-bar"></div>
+
+  <!-- Top Bar -->
+  <div id="top-bar">
+    <div class="top-left">
+      <div id="section-tag">第 1 頁 • 封面引導</div>
+      <button class="icon-btn" onclick="toggleFullscreen()">
+        <span>📺</span> <span id="fs-txt">全螢幕模式</span>
+      </button>
+      <button class="icon-btn" onclick="soundEffect('reveal')">
+        <span>🔊</span> 音效測試
+      </button>
+    </div>
+  </div>
+
+  <button class="nav-btn" id="prev-btn" onclick="prevSlide()">❮</button>
+  <button class="nav-btn" id="next-btn" onclick="nextSlide()">❯</button>
+
+  <div id="page-info"><span id="curr-slide">1</span> / <span id="total-slides">8</span></div>
+
+  <!-- SLIDE 1: 封面 -->
+  <section class="slide active" data-slide="1" data-section="第 1 頁 • 封面引導">
+    <div class="slide-inner" style="text-align: center; align-items: center; justify-content: center; min-height: 70vh;">
+      <div class="kicker">— 南一國語三上 第一課〈你好，新朋友〉 —</div>
+      <h1 class="slide-title" style="font-size: clamp(36px, 5vw, 64px); margin-top: 6px;">
+        🔮 生字心靈感應 • <span class="highlight-gold">魔術預言卡</span>
+      </h1>
+      <p style="font-size: 20px; color: var(--ink-muted); max-width: 800px; margin: 12px 0 24px;">
+        在心裡默選一個生字 ➔ 看著預言卡發送信號 ➔ 老師瞬間看穿你的心思！
+      </p>
+      <div style="display: flex; gap: 14px;">
+        <button class="big-btn" onclick="nextSlide()">
+          🚀 開啟生字魔術儀式
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 2: 施展魔術的畫面（魔術儀式引導） -->
+  <section class="slide" data-slide="2" data-section="第 2 頁 • 施展魔術儀式">
+    <div class="slide-inner">
+      <div class="kicker">— 進入心靈感應頻率 —</div>
+      <h2 class="slide-title">🔮 施展魔術儀式：<span class="highlight-purple">心靈感應四部曲</span></h2>
+      <div class="grid-4">
+        <div class="ritual-card" style="border-color: var(--primary);">
+          <div class="ritual-icon">🤫</div>
+          <div class="ritual-title" style="color: var(--primary);">1. 默想生字</div>
+          <div class="ritual-desc">
+            在第一課 15 個生字中，暗暗選定 <b>1 個生字</b>，千萬不要說出口！
+          </div>
+        </div>
+        <div class="ritual-card" style="border-color: var(--secondary);">
+          <div class="ritual-icon">👀</div>
+          <div class="ritual-title" style="color: var(--secondary);">2. 凝視卡片</div>
+          <div class="ritual-desc">
+            仔細觀察接下來出現的 <b>4 張預言卡</b>，尋找你心裡想的那個字！
+          </div>
+        </div>
+        <div class="ritual-card" style="border-color: var(--accent);">
+          <div class="ritual-icon">📡</div>
+          <div class="ritual-title" style="color: var(--accent);">3. 心靈連線</div>
+          <div class="ritual-desc">
+            如果卡片上有你的字，就在心裡對老師<b>發送信號</b>（或上台點選）！
+          </div>
+        </div>
+        <div class="ritual-card" style="border-color: var(--success);">
+          <div class="ritual-icon">✨</div>
+          <div class="ritual-title" style="color: var(--success);">4. 瞬間召喚</div>
+          <div class="ritual-desc">
+            老師將感應你的腦波，<b>一秒在黑板與大屏上</b>召喚出你的生字！
+          </div>
+        </div>
+      </div>
+      <div class="hint-banner" style="color: var(--secondary); border-color: rgba(251, 191, 36, 0.4);">
+        ✨ 全班準備好接收心靈訊號了嗎？請按下【❯】進入第一張預言卡！
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: 預言卡 A (權重 1) -->
+  <section class="slide" data-slide="3" data-section="第 3 頁 • 預言卡 A">
+    <div class="slide-inner">
+      <div class="kicker">— 靈能權重：1 —</div>
+      <h2 class="slide-title">✨ 預言卡 A：<span class="highlight-cyan">奇數靈能卡</span></h2>
+      <div class="vocab-grid-8">
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--primary);">泥</div><div class="vocab-meta">ㄋㄧˊ • 水部 8畫</div><div class="vocab-word">泥土、爛泥</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--primary);">雀</div><div class="vocab-meta">ㄑㄩㄝˋ • 隹部 11畫</div><div class="vocab-word">麻雀、雀躍</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--primary);">羽</div><div class="vocab-meta">ㄩˇ • 羽部 6畫</div><div class="vocab-word">羽毛、羽球</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--primary);">脆</div><div class="vocab-meta">ㄘㄨㄟˋ • 肉部 10畫</div><div class="vocab-word">清脆、酥脆</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--primary);">處</div><div class="vocab-meta">ㄔㄨˋ • 虍部 11畫</div><div class="vocab-word">到處、好處</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--primary);">行</div><div class="vocab-meta">ㄒㄧㄥˊ • 行部 6畫</div><div class="vocab-word">行動、行走</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--primary);">男</div><div class="vocab-meta">ㄋㄢˊ • 田部 7畫</div><div class="vocab-word">男生、男孩</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--primary);">足</div><div class="vocab-meta">ㄗㄨˊ • 足部 7畫</div><div class="vocab-word">足球、充足</div></div>
+      </div>
+      <div class="hint-banner" style="color: var(--primary); border-color: rgba(56, 189, 248, 0.4);">
+        👉 想一想：你心裡默選的生字，有出現在這張【卡片 A】上嗎？（有 ➔ 記住信號 A！）
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: 預言卡 B (權重 2) -->
+  <section class="slide" data-slide="4" data-section="第 4 頁 • 預言卡 B">
+    <div class="slide-inner">
+      <div class="kicker">— 靈能權重：2 —</div>
+      <h2 class="slide-title">🌟 預言卡 B：<span class="highlight-gold">雙數靈能卡</span></h2>
+      <div class="vocab-grid-8">
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--secondary);">化</div><div class="vocab-meta">ㄏㄨㄚˋ • 匕部 4畫</div><div class="vocab-word">變化、化身</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--secondary);">雀</div><div class="vocab-meta">ㄑㄩㄝˋ • 隹部 11畫</div><div class="vocab-word">麻雀、雀躍</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--secondary);">衣</div><div class="vocab-meta">ㄧ • 衣部 6畫</div><div class="vocab-word">衣服、毛衣</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--secondary);">脆</div><div class="vocab-meta">ㄘㄨㄟˋ • 肉部 10畫</div><div class="vocab-word">清脆、酥脆</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--secondary);">旅</div><div class="vocab-meta">ㄌㄩˇ • 方部 10畫</div><div class="vocab-word">旅行、旅客</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--secondary);">行</div><div class="vocab-meta">ㄒㄧㄥˊ • 行部 6畫</div><div class="vocab-word">行動、行走</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--secondary);">朗</div><div class="vocab-meta">ㄌㄤˇ • 月部 10畫</div><div class="vocab-word">晴朗、朗讀</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--secondary);">足</div><div class="vocab-meta">ㄗㄨˊ • 足部 7畫</div><div class="vocab-word">足球、充足</div></div>
+      </div>
+      <div class="hint-banner" style="color: var(--secondary); border-color: rgba(251, 191, 36, 0.4);">
+        👉 想一想：你心裡默選的生字，有出現在這張【卡片 B】上嗎？（有 ➔ 記住信號 B！）
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: 預言卡 C (權重 4) -->
+  <section class="slide" data-slide="5" data-section="第 5 頁 • 預言卡 C">
+    <div class="slide-inner">
+      <div class="kicker">— 靈能權重：4 —</div>
+      <h2 class="slide-title">🔮 預言卡 C：<span class="highlight-pink">四方靈能卡</span></h2>
+      <div class="vocab-grid-8">
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--accent);">輕</div><div class="vocab-meta">ㄑㄧㄥ • 車部 14畫</div><div class="vocab-word">輕快、輕鬆</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--accent);">羽</div><div class="vocab-meta">ㄩˇ • 羽部 6畫</div><div class="vocab-word">羽毛、羽球</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--accent);">衣</div><div class="vocab-meta">ㄧ • 衣部 6畫</div><div class="vocab-word">衣服、毛衣</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--accent);">脆</div><div class="vocab-meta">ㄘㄨㄟˋ • 肉部 10畫</div><div class="vocab-word">清脆、酥脆</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--accent);">平</div><div class="vocab-meta">ㄆㄧㄥˊ • 干部 5畫</div><div class="vocab-word">平安、平常</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--accent);">男</div><div class="vocab-meta">ㄋㄢˊ • 田部 7畫</div><div class="vocab-word">男生、男孩</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--accent);">朗</div><div class="vocab-meta">ㄌㄤˇ • 月部 10畫</div><div class="vocab-word">晴朗、朗讀</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--accent);">足</div><div class="vocab-meta">ㄗㄨˊ • 足部 7畫</div><div class="vocab-word">足球、充足</div></div>
+      </div>
+      <div class="hint-banner" style="color: var(--accent); border-color: rgba(244, 63, 94, 0.4);">
+        👉 想一想：你心裡默選的生字，有出現在這張【卡片 C】上嗎？（有 ➔ 記住信號 C！）
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6: 預言卡 D (權重 8) -->
+  <section class="slide" data-slide="6" data-section="第 6 頁 • 預言卡 D">
+    <div class="slide-inner">
+      <div class="kicker">— 靈能權重：8 —</div>
+      <h2 class="slide-title">💫 預言卡 D：<span class="highlight-purple">八方靈能卡</span></h2>
+      <div class="vocab-grid-8">
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--purple);">髮</div><div class="vocab-meta">ㄈㄚˇ • 髟部 15畫</div><div class="vocab-word">頭髮、理髮</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--purple);">處</div><div class="vocab-meta">ㄔㄨˋ • 虍部 11畫</div><div class="vocab-word">到處、好處</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--purple);">旅</div><div class="vocab-meta">ㄌㄩˇ • 方部 10畫</div><div class="vocab-word">旅行、旅客</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--purple);">行</div><div class="vocab-meta">ㄒㄧㄥˊ • 行部 6畫</div><div class="vocab-word">行動、行走</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--purple);">平</div><div class="vocab-meta">ㄆㄧㄥˊ • 干部 5畫</div><div class="vocab-word">平安、平常</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--purple);">男</div><div class="vocab-meta">ㄋㄢˊ • 田部 7畫</div><div class="vocab-word">男生、男孩</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--purple);">朗</div><div class="vocab-meta">ㄌㄤˇ • 月部 10畫</div><div class="vocab-word">晴朗、朗讀</div></div>
+        <div class="vocab-box"><div class="vocab-big-char" style="color: var(--purple);">足</div><div class="vocab-meta">ㄗㄨˊ • 足部 7畫</div><div class="vocab-word">足球、充足</div></div>
+      </div>
+      <div class="hint-banner" style="color: var(--purple); border-color: rgba(192, 132, 252, 0.4);">
+        👉 想一想：你心裡默選的生字，有出現在這張【卡片 D】上嗎？（有 ➔ 記住信號 D！）
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 7: 全部 15 個生字總覽與編號 -->
+  <section class="slide" data-slide="7" data-section="第 7 頁 • 全課生字總覽">
+    <div class="slide-inner">
+      <div class="kicker">— 第一課全生字密碼大全 —</div>
+      <h2 class="slide-title">📚 第一課 15 個生字 <span class="highlight-gold">靈能編號總覽 (01~15)</span></h2>
+      <div class="grid-5">
+        <div class="vocab-all-box"><div class="vocab-all-num">#01</div><div class="vocab-all-char">泥</div><div class="vocab-all-pinyin">ㄋㄧˊ • 水部</div><div class="vocab-all-card">卡片 A</div></div>
+        <div class="vocab-all-box"><div class="vocab-all-num">#02</div><div class="vocab-all-char">化</div><div class="vocab-all-pinyin">ㄏㄨㄚˋ • 匕部</div><div class="vocab-all-card">卡片 B</div></div>
+        <div class="vocab-all-box"><div class="vocab-all-num">#03</div><div class="vocab-all-char">雀</div><div class="vocab-all-pinyin">ㄑㄩㄝˋ • 隹部</div><div class="vocab-all-card">卡片 A, B</div></div>
+        <div class="vocab-all-box"><div class="vocab-all-num">#04</div><div class="vocab-all-char">輕</div><div class="vocab-all-pinyin">ㄑㄧㄥ • 車部</div><div class="vocab-all-card">卡片 C</div></div>
+        <div class="vocab-all-box"><div class="vocab-all-num">#05</div><div class="vocab-all-char">羽</div><div class="vocab-all-pinyin">ㄩˇ • 羽部</div><div class="vocab-all-card">卡片 A, C</div></div>
+        <div class="vocab-all-box"><div class="vocab-all-num">#06</div><div class="vocab-all-char">衣</div><div class="vocab-all-pinyin">ㄧ • 衣部</div><div class="vocab-all-card">卡片 B, C</div></div>
+        <div class="vocab-all-box"><div class="vocab-all-num">#07</div><div class="vocab-all-char">脆</div><div class="vocab-all-pinyin">ㄘㄨㄟˋ • 肉部</div><div class="vocab-all-card">卡片 A, B, C</div></div>
+        <div class="vocab-all-box"><div class="vocab-all-num">#08</div><div class="vocab-all-char">髮</div><div class="vocab-all-pinyin">ㄈㄚˇ • 髟部</div><div class="vocab-all-card">卡片 D</div></div>
+        <div class="vocab-all-box"><div class="vocab-all-num">#09</div><div class="vocab-all-char">處</div><div class="vocab-all-pinyin">ㄔㄨˋ • 虍部</div><div class="vocab-all-card">卡片 A, D</div></div>
+        <div class="vocab-all-box"><div class="vocab-all-num">#10</div><div class="vocab-all-char">旅</div><div class="vocab-all-pinyin">ㄌㄩˇ • 方部</div><div class="vocab-all-card">卡片 B, D</div></div>
+        <div class="vocab-all-box"><div class="vocab-all-num">#11</div><div class="vocab-all-char">行</div><div class="vocab-all-pinyin">ㄒㄧㄥˊ • 行部</div><div class="vocab-all-card">卡片 A, B, D</div></div>
+        <div class="vocab-all-box"><div class="vocab-all-num">#12</div><div class="vocab-all-char">平</div><div class="vocab-all-pinyin">ㄆㄧㄥˊ • 干部</div><div class="vocab-all-card">卡片 C, D</div></div>
+        <div class="vocab-all-box"><div class="vocab-all-num">#13</div><div class="vocab-all-char">男</div><div class="vocab-all-pinyin">ㄋㄢˊ • 田部</div><div class="vocab-all-card">卡片 A, C, D</div></div>
+        <div class="vocab-all-box"><div class="vocab-all-num">#14</div><div class="vocab-all-char">朗</div><div class="vocab-all-pinyin">ㄌㄤˇ • 月部</div><div class="vocab-all-card">卡片 B, C, D</div></div>
+        <div class="vocab-all-box"><div class="vocab-all-num">#15</div><div class="vocab-all-char">足</div><div class="vocab-all-pinyin">ㄗㄨˊ • 足部</div><div class="vocab-all-card">卡片 A, B, C, D</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 8: 數學魔術原理揭秘 -->
+  <section class="slide" data-slide="8" data-section="第 8 頁 • 魔法原理解密">
+    <div class="slide-inner">
+      <div class="kicker">— 魔術背後的科學力量 —</div>
+      <h2 class="slide-title">💡 心靈感應大解密：<span class="highlight-cyan">二進位魔法定理</span></h2>
+      <div class="card" style="border-color: var(--primary);">
+        <div style="font-size: 20px; font-weight: 800; color: var(--secondary); margin-bottom: 12px;">
+          🧮 二進位整數唯一分解定理（Binary Decomposition）：
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 16px; line-height: 1.7;">
+          <div>• <b>4 張卡片的靈能權重：</b>卡片 A = <b>1</b>（2⁰）、卡片 B = <b>2</b>（2¹）、卡片 C = <b>4</b>（2²）、卡片 D = <b>8</b>（2³）。</div>
+          <div>• <b>唯一分解定理：</b>任何 1～15 號生字，都能被<b>【唯一分解】</b>為這 4 個權重的加總！</div>
+          <div>• <b>實例 1（生字：羽）：</b>羽是 05 號 ➔ 5 = 1 + 4 ➔ 恰好出現在【卡片 A】與【卡片 C】！</div>
+          <div>• <b>實例 2（生字：行）：</b>行是 11 號 ➔ 11 = 1 + 2 + 8 ➔ 恰好出現在【卡片 A, B, D】！</div>
+          <div>• <b>老師的心算密技：</b>只要學生說出有哪幾張卡片，將權重心算相加，就能秒知生字並在黑板寫出！</div>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 10px;">
+        <button class="big-btn" onclick="triggerConfetti(); soundEffect('reveal');">
+          🎉 恭喜解鎖生字魔術大師成就！
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 8;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateSlideDisplay();
+      setupKeyboardNav();
+    });
+
+    function updateSlideDisplay() {
+      document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+      const activeSlide = document.querySelector(`.slide[data-slide="${currentSlide}"]`);
+      if (activeSlide) {
+        activeSlide.classList.add('active');
+        document.getElementById('section-tag').innerText = activeSlide.getAttribute('data-section') || '國語教學';
+      }
+      document.getElementById('curr-slide').innerText = currentSlide;
+      document.getElementById('total-slides').innerText = totalSlides;
+      document.getElementById('progress-bar').style.width = `${(currentSlide / totalSlides) * 100}%`;
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlideDisplay();
+        soundEffect('nav');
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlideDisplay();
+        soundEffect('nav');
+      }
+    }
+
+    function setupKeyboardNav() {
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
+        if (e.key === 'ArrowLeft') prevSlide();
+        if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+      });
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+        document.getElementById('fs-txt').innerText = '退出全螢幕';
+      } else {
+        document.exitFullscreen().catch(() => {});
+        document.getElementById('fs-txt').innerText = '全螢幕模式';
+      }
+    }
+
+    function soundEffect(type) {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (type === 'reveal') {
+          osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+          osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
+          osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2);
+          gain.gain.setValueAtTime(0.3, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.5);
+        } else if (type === 'nav') {
+          osc.frequency.setValueAtTime(400, ctx.currentTime);
+          gain.gain.setValueAtTime(0.12, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.08);
+        }
+      } catch (e) {}
+    }
+
+    function triggerConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const particles = [];
+      const colors = ['#fbbf24', '#38bdf8', '#f43f5e', '#34d399', '#c084fc', '#f59e0b'];
+
+      for (let i = 0; i < 80; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          vx: (Math.random() - 0.5) * 16,
+          vy: (Math.random() - 0.7) * 16,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          size: Math.random() * 8 + 5,
+          life: 1
+        });
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let active = false;
+        particles.forEach(p => {
+          if (p.life > 0) {
+            active = true;
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.35;
+            p.life -= 0.02;
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = Math.max(0, p.life);
+            ctx.fillRect(p.x, p.y, p.size, p.size);
+          }
+        });
+        if (active) requestAnimationFrame(render);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      render();
+    }
+  </script>
+</body>
+</html>

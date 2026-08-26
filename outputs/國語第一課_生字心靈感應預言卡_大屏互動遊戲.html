@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>國語第一課〈你好，新朋友〉：生字心靈感應預言卡大屏互動遊戲</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;900&family=Fredoka:wght@600;700&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --bg-card: #151c2e;
+      --border-color: rgba(255, 255, 255, 0.15);
+      --ink-title: #ffffff;
+      --ink-body: #e2e8f0;
+      --ink-muted: #94a3b8;
+      
+      --primary: #38bdf8;
+      --secondary: #fbbf24;
+      --accent: #f43f5e;
+      --success: #34d399;
+      --purple: #c084fc;
+      
+      --font-main: 'Noto Sans TC', sans-serif;
+      --font-kai: "DFKai-SB", "BiauKai", "Noto Serif TC", serif;
+      --font-num: 'Fredoka', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; touch-action: manipulation; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink-body);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 24px;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.12) 0%, transparent 30%),
+        radial-gradient(circle at 85% 85%, rgba(251, 191, 36, 0.12) 0%, transparent 30%),
+        radial-gradient(circle at 50% 50%, rgba(192, 132, 252, 0.08) 0%, transparent 40%);
+    }
+
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Top Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .title-area h1 {
+      font-size: clamp(24px, 3.2vw, 34px);
+      font-weight: 900;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .title-area h1 span {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .title-area p {
+      font-size: 15px;
+      color: var(--ink-muted);
+      margin-top: 3px;
+    }
+
+    .top-btns {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-top {
+      background: rgba(21, 28, 46, 0.9);
+      border: 1.5px solid var(--border-color);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-top:hover {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    /* 4 Cards Container */
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      flex: 1;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 1024px) {
+      .cards-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .card-box {
+      background: linear-gradient(160deg, #111a33, #0d1326);
+      border: 2.5px solid #23335d;
+      border-radius: 20px;
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      position: relative;
+    }
+    .card-box:hover {
+      border-color: var(--primary);
+      transform: translateY(-4px);
+    }
+    .card-box.selected {
+      background: linear-gradient(160deg, rgba(251, 191, 36, 0.18), rgba(245, 158, 11, 0.08));
+      border-color: var(--secondary);
+      box-shadow: 0 0 30px rgba(251, 191, 36, 0.4);
+      transform: translateY(-8px);
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 1.5px solid rgba(255,255,255,0.1);
+      margin-bottom: 12px;
+    }
+    .card-label {
+      font-size: 19px;
+      font-weight: 900;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .card-box.selected .card-label {
+      color: var(--secondary);
+    }
+    .card-status {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      background: rgba(0,0,0,0.5);
+      padding: 3px 10px;
+      border-radius: 12px;
+      transition: all 0.2s;
+    }
+    .card-box.selected .card-status {
+      background: var(--secondary);
+      color: #000;
+    }
+
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .vocab-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 10px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .card-box.selected .vocab-item {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(251, 191, 36, 0.3);
+    }
+
+    .vocab-char {
+      font-family: var(--font-kai);
+      font-size: 32px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.1;
+    }
+    .card-box.selected .vocab-char {
+      color: var(--secondary);
+    }
+    .vocab-sub {
+      font-size: 12px;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+
+    /* Bottom Control Bar */
+    .bottom-bar {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-color);
+      border-radius: 20px;
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .status-sum {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .status-badge {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: var(--primary);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 15px;
+      font-weight: 700;
+      transition: all 0.3s;
+    }
+    .card-count-badge {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      color: var(--ink-body);
+    }
+    .card-count-badge span {
+      font-family: var(--font-num);
+      font-weight: 700;
+      color: var(--secondary);
+      font-size: 16px;
+    }
+
+    /* 老師專屬極低對比暗色代碼，大屏遠看如背景微光，講台近看清晰可辨 */
+    .stealth-code {
+      font-size: 12px;
+      font-family: 'Courier New', monospace;
+      color: #243254;
+      letter-spacing: 1px;
+      user-select: none;
+      margin-left: 8px;
+    }
+
+    .action-group {
+      display: flex;
+      gap: 12px;
+    }
+    .btn-predict {
+      background: linear-gradient(135deg, var(--secondary), #f59e0b);
+      color: #000;
+      font-size: 20px;
+      font-weight: 900;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-predict:hover { transform: scale(1.05); }
+
+    .btn-reset {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 12px 20px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-reset:hover { background: rgba(255,255,255,0.2); }
+
+    /* Reveal Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(14px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      padding: 20px;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+    .modal-box {
+      background: #151c2e;
+      border: 3px solid var(--secondary);
+      border-radius: 28px;
+      padding: 36px 40px;
+      max-width: 650px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.85);
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .modal-overlay.active .modal-box { transform: scale(1); }
+
+    .rice-grid-reveal {
+      width: 110px;
+      height: 110px;
+      border: 2.5px dashed var(--secondary);
+      background: rgba(251, 191, 36, 0.1);
+      color: var(--secondary);
+      font-size: 72px;
+      font-family: var(--font-kai);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 16px;
+      position: relative;
+      font-weight: 900;
+      margin: 16px auto 12px;
+      box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
+    }
+    .rice-grid-reveal::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: 
+        linear-gradient(to right, transparent 49%, rgba(251, 191, 36, 0.3) 50%, transparent 51%),
+        linear-gradient(to bottom, transparent 49%, rgba(251, 191, 36, 0.3) 50%, transparent 51%);
+    }
+
+    .reveal-meta {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .calligraphy-tip-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-left: 4px solid var(--secondary);
+      border-radius: 8px;
+      padding: 12px 16px;
+      text-align: left;
+      margin: 16px 0;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #f1f5f9;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Top Header -->
+  <header>
+    <div class="title-area">
+      <h1>第一課〈你好，新朋友〉 <span>生字心靈感應預言卡</span></h1>
+      <p>南一三上國語 ｜ 二進位心靈感應魔法 ｜ 點選卡片 ➔ 秒看穿心裡想的生字！</p>
+    </div>
+    <div class="top-btns">
+      <button class="btn-top" onclick="showCheatSheet()">📖 老師生字速查表</button>
+      <button class="btn-top" onclick="showPrinciple()">💡 數學與教學原理</button>
+      <button class="btn-top" onclick="randomChallenge()">🎲 隨機挑戰</button>
+      <button class="btn-top" onclick="toggleFullscreen()">⛶ 全螢幕</button>
+    </div>
+  </header>
+
+  <!-- 4 Cards Container -->
+  <main class="cards-container">
+
+    <!-- Card A (Weight 1) -->
+    <div class="card-box" id="card-A" onclick="toggleCard('A', 1)">
+      <div class="card-head">
+        <div class="card-label">✨ 預言卡 A</div>
+        <div class="card-status" id="status-A">點擊選取</div>
+      </div>
+      <div class="vocab-grid">
+        <div class="vocab-item"><div class="vocab-char">泥</div><div class="vocab-sub">8畫 水部</div></div>
+        <div class="vocab-item"><div class="vocab-char">雀</div><div class="vocab-sub">11畫 隹部</div></div>
+        <div class="vocab-item"><div class="vocab-char">羽</div><div class="vocab-sub">6畫 羽部</div></div>
+        <div class="vocab-item"><div class="vocab-char">脆</div><div class="vocab-sub">10畫 肉部</div></div>
+        <div class="vocab-item"><div class="vocab-char">處</div><div class="vocab-sub">11畫 虍部</div></div>
+        <div class="vocab-item"><div class="vocab-char">行</div><div class="vocab-sub">6畫 行部</div></div>
+        <div class="vocab-item"><div class="vocab-char">男</div><div class="vocab-sub">7畫 田部</div></div>
+        <div class="vocab-item"><div class="vocab-char">足</div><div class="vocab-sub">7畫 足部</div></div>
+      </div>
+    </div>
+
+    <!-- Card B (Weight 2) -->
+    <div class="card-box" id="card-B" onclick="toggleCard('B', 2)">
+      <div class="card-head">
+        <div class="card-label">🌟 預言卡 B</div>
+        <div class="card-status" id="status-B">點擊選取</div>
+      </div>
+      <div class="vocab-grid">
+        <div class="vocab-item"><div class="vocab-char">化</div><div class="vocab-sub">4畫 匕部</div></div>
+        <div class="vocab-item"><div class="vocab-char">雀</div><div class="vocab-sub">11畫 隹部</div></div>
+        <div class="vocab-item"><div class="vocab-char">衣</div><div class="vocab-sub">6畫 衣部</div></div>
+        <div class="vocab-item"><div class="vocab-char">脆</div><div class="vocab-sub">10畫 肉部</div></div>
+        <div class="vocab-item"><div class="vocab-char">旅</div><div class="vocab-sub">10畫 方部</div></div>
+        <div class="vocab-item"><div class="vocab-char">行</div><div class="vocab-sub">6畫 行部</div></div>
+        <div class="vocab-item"><div class="vocab-char">朗</div><div class="vocab-sub">10畫 月部</div></div>
+        <div class="vocab-item"><div class="vocab-char">足</div><div class="vocab-sub">7畫 足部</div></div>
+      </div>
+    </div>
+
+    <!-- Card C (Weight 4) -->
+    <div class="card-box" id="card-C" onclick="toggleCard('C', 4)">
+      <div class="card-head">
+        <div class="card-label">🔮 預言卡 C</div>
+        <div class="card-status" id="status-C">點擊選取</div>
+      </div>
+      <div class="vocab-grid">
+        <div class="vocab-item"><div class="vocab-char">輕</div><div class="vocab-sub">14畫 車部</div></div>
+        <div class="vocab-item"><div class="vocab-char">羽</div><div class="vocab-sub">6畫 羽部</div></div>
+        <div class="vocab-item"><div class="vocab-char">衣</div><div class="vocab-sub">6畫 衣部</div></div>
+        <div class="vocab-item"><div class="vocab-char">脆</div><div class="vocab-sub">10畫 肉部</div></div>
+        <div class="vocab-item"><div class="vocab-char">平</div><div class="vocab-sub">5畫 干部</div></div>
+        <div class="vocab-item"><div class="vocab-char">男</div><div class="vocab-sub">7畫 田部</div></div>
+        <div class="vocab-item"><div class="vocab-char">朗</div><div class="vocab-sub">10畫 月部</div></div>
+        <div class="vocab-item"><div class="vocab-char">足</div><div class="vocab-sub">7畫 足部</div></div>
+      </div>
+    </div>
+
+    <!-- Card D (Weight 8) -->
+    <div class="card-box" id="card-D" onclick="toggleCard('D', 8)">
+      <div class="card-head">
+        <div class="card-label">💫 預言卡 D</div>
+        <div class="card-status" id="status-D">點擊選取</div>
+      </div>
+      <div class="vocab-grid">
+        <div class="vocab-item"><div class="vocab-char">髮</div><div class="vocab-sub">15畫 髟部</div></div>
+        <div class="vocab-item"><div class="vocab-char">處</div><div class="vocab-sub">11畫 虍部</div></div>
+        <div class="vocab-item"><div class="vocab-char">旅</div><div class="vocab-sub">10畫 方部</div></div>
+        <div class="vocab-item"><div class="vocab-char">行</div><div class="vocab-sub">6畫 行部</div></div>
+        <div class="vocab-item"><div class="vocab-char">平</div><div class="vocab-sub">5畫 干部</div></div>
+        <div class="vocab-item"><div class="vocab-char">男</div><div class="vocab-sub">7畫 田部</div></div>
+        <div class="vocab-item"><div class="vocab-char">朗</div><div class="vocab-sub">10畫 月部</div></div>
+        <div class="vocab-item"><div class="vocab-char">足</div><div class="vocab-sub">7畫 足部</div></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Control Bar -->
+  <footer class="bottom-bar">
+    <div class="status-sum">
+      <span class="status-badge" id="resonance-status">🔮 等待選取卡片...</span>
+      <span class="card-count-badge">已鎖定 <span id="card-count-display">0</span> 張卡片</span>
+      <span class="stealth-code" title="系統連線識別碼">#W301-<span id="sum-display">00</span></span>
+    </div>
+    <div class="action-group">
+      <button class="btn-predict" onclick="predictCharacter()">🔮 生字心靈感應・瞬間召喚！</button>
+      <button class="btn-reset" onclick="resetCards()">重新選取</button>
+    </div>
+  </footer>
+
+  <!-- Reveal Modal -->
+  <div class="modal-overlay" id="modal-box" onclick="closeModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div id="modal-content"></div>
+      <button class="btn-predict" style="font-size: 17px; padding: 10px 28px; margin: 16px auto 0;" onclick="closeModal()">確定關閉</button>
+    </div>
+  </div>
+
+  <script>
+    // 第一課 15 個生字資料庫與硬筆字解析
+    const vocabList = [
+      { id: 1, char: "泥", pinyin: "ㄋㄧˊ", radical: "水", strokes: 8, words: "泥土、爛泥", tip: "左窄右寬 (1:2)。三點水弧形排列，提筆指向右；右側「尼」豎彎鉤圓潤托底！" },
+      { id: 2, char: "化", pinyin: "ㄏㄨㄚˋ", radical: "匕", strokes: 4, words: "變化、化身", tip: "單人旁直立；右側「匕」撇短豎彎鉤舒展，注意撇不過中線！" },
+      { id: 3, char: "雀", pinyin: "ㄑㄩㄝˋ", radical: "隹", strokes: 11, words: "麻雀、雀躍", tip: "上小下大。上部「少」撇畫收斂；下部「隹」四橫等距，底橫托住全字！" },
+      { id: 4, char: "輕", pinyin: "ㄑㄧㄥ", radical: "車", strokes: 14, words: "輕快、輕鬆", tip: "左窄右寬。左側「車」窄長且末橫改「提」；右「巠」三橫平行、中豎垂直挺拔！" },
+      { id: 5, char: "羽", pinyin: "ㄩˇ", radical: "羽", strokes: 6, words: "羽毛、羽球", tip: "左右同形。左「習」略小，右「習」略大，兩挑畫提水桶迅速出尖！" },
+      { id: 6, char: "衣", pinyin: "ㄧ", radical: "衣", strokes: 6, words: "衣服、毛衣", tip: "點居中，橫微揚；撇向左下送出，長捺穿裙子大膽向右下舒展！" },
+      { id: 7, char: "脆", pinyin: "ㄘㄨㄟˋ", radical: "肉", strokes: 10, words: "清脆、酥脆", tip: "左側月字旁瘦長；右側「危」上部短撇橫折緊湊，下部橫折鉤剛勁有力！" },
+      { id: 8, char: "髮", pinyin: "ㄈㄚˇ", radical: "髟", strokes: 15, words: "頭髮、短髮", tip: "上部「髟」長撇舒展如長裙；右下「犮」撇捺交會流暢，上緊下鬆！" },
+      { id: 9, char: "處", pinyin: "ㄔㄨˋ", radical: "虍", strokes: 11, words: "到處、好處", tip: "半包圍結構。虎字頭長撇向左下延伸；下部「夂」長捺厚重托底，穩如泰山！" },
+      { id: 10, char: "旅", pinyin: "ㄌㄩˇ", radical: "方", strokes: 10, words: "旅行、旅客", tip: "左「方」橫折鉤開展；右部上小撇收緊，下部長撇穿插避讓，結構靈動！" },
+      { id: 11, char: "行", pinyin: "ㄒㄧㄥˊ", radical: "行", strokes: 6, words: "行動、行走", tip: "左右爭讓。左「彳」雙撇斜直；右「亍」短橫平、豎鉤垂直懸針！" },
+      { id: 12, char: "平", pinyin: "ㄆㄧㄥˊ", radical: "干", strokes: 5, words: "平安、平常", tip: "上橫短，下橫（主橫）大膽拉長；中豎懸針正中直立，左右對稱！" },
+      { id: 13, char: "男", pinyin: "ㄋㄢˊ", radical: "田", strokes: 7, words: "男生、男孩", tip: "上部「田」上寬下窄、四角安定；下部「力」橫折鉤蓄力、長撇向左送出！" },
+      { id: 14, char: "朗", pinyin: "ㄌㄤˇ", radical: "月", strokes: 10, words: "晴朗、朗讀", tip: "左右等寬。左「良」橫折均勻；右「月」瘦長端正，兩橫靠左不碰右！" },
+      { id: 15, char: "足", pinyin: "ㄗㄨˊ", radical: "足", strokes: 7, words: "足球、充足", tip: "上部口字扁方；中豎垂直；下部撇短捺長，如大步向前踏出！" }
+    ];
+
+    const cardsData = {
+      "A": { weight: 1, chars: [1, 3, 5, 7, 9, 11, 13, 15] },
+      "B": { weight: 2, chars: [2, 3, 6, 7, 10, 11, 14, 15] },
+      "C": { weight: 4, chars: [4, 5, 6, 7, 12, 13, 14, 15] },
+      "D": { weight: 8, chars: [8, 9, 10, 11, 12, 13, 14, 15] }
+    };
+
+    let selectedCards = new Set();
+
+    function toggleCard(cardKey, weight) {
+      const el = document.getElementById(`card-${cardKey}`);
+      const statusEl = document.getElementById(`status-${cardKey}`);
+      if (selectedCards.has(cardKey)) {
+        selectedCards.delete(cardKey);
+        el.classList.remove('selected');
+        statusEl.textContent = '點擊選取';
+        soundEffect('click_off');
+      } else {
+        selectedCards.add(cardKey);
+        el.classList.add('selected');
+        statusEl.textContent = '✓ 已選中';
+        soundEffect('click_on');
+      }
+      calculateSum();
+    }
+
+    function calculateSum() {
+      let sum = 0;
+      selectedCards.forEach(k => { sum += cardsData[k].weight; });
+      const count = selectedCards.size;
+      document.getElementById('card-count-display').textContent = count;
+      const statusBadge = document.getElementById('resonance-status');
+      if (count === 0) {
+        statusBadge.textContent = '🔮 等待選取卡片...';
+        statusBadge.style.borderColor = 'rgba(56, 189, 248, 0.4)';
+        statusBadge.style.color = 'var(--primary)';
+      } else {
+        statusBadge.textContent = '✨ 靈能共振鎖定中...';
+        statusBadge.style.borderColor = 'rgba(251, 191, 36, 0.6)';
+        statusBadge.style.color = 'var(--secondary)';
+      }
+      // 老師專屬暗碼（如 #W301-05）
+      document.getElementById('sum-display').textContent = sum === 0 ? '00' : (sum < 10 ? '0' + sum : sum);
+    }
+
+    function resetCards() {
+      selectedCards.clear();
+      document.querySelectorAll('.card-box').forEach(c => c.classList.remove('selected'));
+      document.querySelectorAll('.card-status').forEach(s => s.textContent = '點擊選取');
+      document.getElementById('card-count-display').textContent = '0';
+      const statusBadge = document.getElementById('resonance-status');
+      statusBadge.textContent = '🔮 等待選取卡片...';
+      statusBadge.style.borderColor = 'rgba(56, 189, 248, 0.4)';
+      statusBadge.style.color = 'var(--primary)';
+      document.getElementById('sum-display').textContent = '00';
+      soundEffect('reset');
+    }
+
+    function predictCharacter() {
+      let sum = 0;
+      selectedCards.forEach(k => { sum += cardsData[k].weight; });
+      if (sum === 0) {
+        soundEffect('wrong');
+        showModal('<h3>⚠️ 請同學先點選【哪幾張卡片上有你想的生字】！</h3>');
+        return;
+      }
+      const vocab = vocabList.find(v => v.id === sum);
+      if (vocab) {
+        soundEffect('reveal');
+        triggerConfetti();
+        showModal(`
+          <div style="font-size:22px; color:var(--primary); font-weight:700;">✨ 生字心靈感應成功！ ✨</div>
+          <div class="rice-grid-reveal">${vocab.char}</div>
+          <div class="reveal-meta">【${vocab.char}】注音：${vocab.pinyin} ｜ 部首：${vocab.radical}部 (${vocab.strokes}畫)</div>
+          <div style="font-size:18px; color:#fff; margin-bottom:10px;">📚 常用語詞：<b>${vocab.words}</b></div>
+          <div class="calligraphy-tip-card">
+            <b>✒️ 硬筆書法大師秘訣：</b><br>
+            ${vocab.tip}
+          </div>
+          <p style="font-size:16px; color:var(--secondary); font-weight:700;">
+            🎉 全班一起在空中書空【${vocab.char}】，並用【${vocab.char}】造一個句子！
+          </p>
+        `);
+      } else {
+        soundEffect('wrong');
+        showModal(`<h3>⚠️ 計算代碼為 ${sum}，超出第一課 15 個生字範圍！請重新確認卡片！</h3>`);
+      }
+    }
+
+    function showCheatSheet() {
+      soundEffect('click_on');
+      let html = '<div style="font-size:22px; font-weight:800; color:var(--primary); margin-bottom:12px;">📋 第一課 15 生字與預言卡速查表</div>';
+      html += '<div style="max-height:360px; overflow-y:auto; font-size:15px; text-align:left; line-height:1.8; padding-right:6px;">';
+      vocabList.forEach(v => {
+        const inCards = Object.keys(cardsData).filter(k => cardsData[k].chars.includes(v.id)).join('、');
+        html += `<div style="border-bottom:1px solid rgba(255,255,255,0.08); padding:4px 0;">
+          <b>${v.id < 10 ? '0'+v.id : v.id}. 【${v.char}】</b> (${v.pinyin} / ${v.radical}部) ➔ 卡片 <b>${inCards}</b>
+        </div>`;
+      });
+      html += '</div>';
+      showModal(html);
+    }
+
+    function showPrinciple() {
+      soundEffect('click_on');
+      showModal(`
+        <div style="font-size:22px; font-weight:800; color:var(--secondary); margin-bottom:12px;">💡 二進位魔術與教學原理</div>
+        <div style="text-align:left; font-size:15.5px; line-height:1.7; color:#e2e8f0;">
+          <p>• <b>4 張預言卡</b>的權重分別為 <b>1, 2, 4, 8</b>（即 2⁰, 2¹, 2², 2³）。</p>
+          <p>• 第一課 1~15 號生字，都能被<b>【唯一分解】</b>為這 4 個權重的和！</p>
+          <p>• 學生只要指出哪幾張卡片有該生字，大屏將選取的卡片權重相加，就能 100% 瞬間召喚出對應生字與硬筆字口訣！</p>
+        </div>
+      `);
+    }
+
+    function randomChallenge() {
+      resetCards();
+      const randIndex = Math.floor(Math.random() * vocabList.length);
+      const target = vocabList[randIndex];
+      soundEffect('reveal');
+      showModal(`
+        <div style="font-size:22px; color:var(--secondary); font-weight:700;">🎲 隨機生字大挑戰！</div>
+        <div class="rice-grid-reveal">${target.char}</div>
+        <div class="reveal-meta">請同學挑戰：找找看【${target.char}】出現在哪幾張預言卡上？</div>
+        <div class="calligraphy-tip-card">
+          <b>🎯 挑戰任務：</b><br>
+          1. 在大屏上點選所有含有【${target.char}】的預言卡！<br>
+          2. 點擊「瞬間召喚」驗證你的眼力與計算！
+        </div>
+      `);
+    }
+
+    function showModal(contentHtml) {
+      document.getElementById('modal-content').innerHTML = contentHtml;
+      document.getElementById('modal-box').classList.add('active');
+    }
+    function closeModal() {
+      document.getElementById('modal-box').classList.remove('active');
+    }
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+      else document.exitFullscreen().catch(() => {});
+    }
+
+    // Web Audio Sound Effects
+    function soundEffect(type) {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (type === 'reveal') {
+          osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+          osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
+          osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2);
+          gain.gain.setValueAtTime(0.3, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.5);
+        } else if (type === 'click_on') {
+          osc.frequency.setValueAtTime(440, ctx.currentTime);
+          gain.gain.setValueAtTime(0.15, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.08);
+        } else if (type === 'click_off') {
+          osc.frequency.setValueAtTime(330, ctx.currentTime);
+          gain.gain.setValueAtTime(0.12, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.08);
+        } else if (type === 'wrong') {
+          osc.frequency.setValueAtTime(220, ctx.currentTime);
+          gain.gain.setValueAtTime(0.2, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.3);
+        } else if (type === 'reset') {
+          osc.frequency.setValueAtTime(300, ctx.currentTime);
+          gain.gain.setValueAtTime(0.1, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.15);
+        }
+      } catch (e) {}
+    }
+
+    // Confetti Fireworks Animation
+    function triggerConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const particles = [];
+      const colors = ['#fbbf24', '#38bdf8', '#f43f5e', '#34d399', '#c084fc', '#f59e0b'];
+
+      for (let i = 0; i < 70; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          vx: (Math.random() - 0.5) * 14,
+          vy: (Math.random() - 0.7) * 14,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          size: Math.random() * 8 + 5,
+          life: 1
+        });
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let active = false;
+        particles.forEach(p => {
+          if (p.life > 0) {
+            active = true;
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.35;
+            p.life -= 0.02;
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = Math.max(0, p.life);
+            ctx.fillRect(p.x, p.y, p.size, p.size);
+          }
+        });
+        if (active) requestAnimationFrame(render);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      render();
+    }
+  </script>
+</body>
+</html>

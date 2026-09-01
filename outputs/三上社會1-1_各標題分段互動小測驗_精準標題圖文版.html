@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>三上社會 1-1 各標題分段互動小測驗（精準標題圖文版）</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;800;900&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #080d1a;
+      --bg-card: rgba(30, 41, 59, 0.88);
+      --border-card: rgba(255, 255, 255, 0.12);
+      --primary: #38bdf8;
+      --primary-glow: rgba(56, 189, 248, 0.4);
+      --accent-gold: #fbbf24;
+      --accent-coral: #fb7185;
+      --accent-emerald: #34d399;
+      --accent-purple: #c084fc;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-family: 'Noto Sans TC', 'Outfit', system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 15%, rgba(56, 189, 248, 0.18) 0%, transparent 40%),
+        radial-gradient(circle at 90% 85%, rgba(251, 191, 36, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(192, 132, 252, 0.08) 0%, transparent 55%);
+    }
+
+    /* Top Navigation Bar */
+    header {
+      padding: 0.85rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-card);
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .badge-unit {
+      background: rgba(56, 189, 248, 0.18);
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+
+    .topic-selector {
+      display: flex;
+      gap: 0.4rem;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 0.3rem;
+      border-radius: 14px;
+      border: 1px solid var(--border-card);
+    }
+
+    .topic-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.45rem 0.9rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .topic-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .topic-btn.active {
+      background: var(--primary);
+      color: #000;
+      font-weight: 800;
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .score-badge {
+      background: rgba(251, 191, 36, 0.15);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
+      padding: 0.35rem 0.9rem;
+      border-radius: 9999px;
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-box {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 24px;
+      padding: 2.2rem;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cute Header Banner */
+    .banner-cute {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-card);
+      border-radius: 18px;
+      padding: 1.2rem 1.6rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .banner-icon {
+      font-size: 3.2rem;
+      width: 72px;
+      height: 72px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    .banner-info h2 {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .banner-info p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Quiz Bar & Questions */
+    .quiz-status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+    }
+
+    .q-badge {
+      color: var(--accent-gold);
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .progress-track {
+      flex: 1;
+      max-width: 320px;
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin: 0 1.2rem;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 20%;
+      background: linear-gradient(90deg, var(--primary), var(--accent-emerald));
+      transition: width 0.3s ease;
+    }
+
+    .question-box {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid var(--border-card);
+      border-radius: 18px;
+      padding: 1.4rem 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .question-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .opt-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 2px solid var(--border-card);
+      color: var(--text-main);
+      padding: 1.1rem 1.4rem;
+      border-radius: 16px;
+      font-size: 1.12rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .opt-btn:hover:not(:disabled) {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px var(--primary-glow);
+    }
+
+    .opt-btn.correct {
+      background: rgba(52, 211, 153, 0.25) !important;
+      border-color: var(--accent-emerald) !important;
+      color: #fff !important;
+    }
+
+    .opt-btn.wrong {
+      background: rgba(251, 113, 133, 0.25) !important;
+      border-color: var(--accent-coral) !important;
+      color: #fff !important;
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+
+    .explain-card {
+      display: none;
+      background: rgba(52, 211, 153, 0.15);
+      border: 1px solid var(--accent-emerald);
+      border-radius: 14px;
+      padding: 1.1rem 1.5rem;
+      margin-bottom: 1.2rem;
+      font-size: 1.05rem;
+      line-height: 1.55;
+      color: #e2e8f0;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .explain-card.wrong-hint {
+      background: rgba(251, 113, 133, 0.15);
+      border-color: var(--accent-coral);
+    }
+
+    .action-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-next {
+      background: linear-gradient(135deg, var(--primary), #0284c7);
+      color: #000;
+      border: none;
+      padding: 0.75rem 1.8rem;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-next:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    /* Result View */
+    .result-view {
+      display: none;
+      text-align: center;
+      padding: 1.5rem;
+    }
+
+    .medal-icon {
+      font-size: 4.5rem;
+      margin-bottom: 0.75rem;
+      animation: bounce 2s infinite ease-in-out;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .result-title {
+      font-size: 2.3rem;
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-score {
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--accent-gold);
+      margin-bottom: 0.8rem;
+    }
+
+    @media (max-width: 768px) {
+      .options-grid { grid-template-columns: 1fr; }
+      .topic-selector { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header>
+    <div class="brand">
+      <span class="badge-unit">🏫 三上社會 1-1</span>
+      <strong style="font-size: 1.05rem;">我和我的家人 · 4大標題分段互動小測驗</strong>
+    </div>
+
+    <div class="topic-selector">
+      <button class="topic-btn active" onclick="selectTopic(0)">🌱 1.成員的改變</button>
+      <button class="topic-btn" onclick="selectTopic(1)">✍️ 2.命名的方式</button>
+      <button class="topic-btn" onclick="selectTopic(2)">🪶 3.原住民命名</button>
+      <button class="topic-btn" onclick="selectTopic(3)">🤝 4.尊重大家姓名</button>
+    </div>
+
+    <div class="header-right">
+      <div class="score-badge" id="live-score">🏆 本章得分：0 分</div>
+      <button class="topic-btn" onclick="toggleFullScreen()" style="border: 1px solid var(--border-card);">⛶ 全螢幕</button>
+    </div>
+  </header>
+
+  <!-- Main Slide -->
+  <main>
+
+    <!-- Quiz View -->
+    <div class="card-box" id="quiz-container">
+      
+      <!-- Cute Banner -->
+      <div class="banner-cute">
+        <div class="banner-icon" id="topic-icon">🌱</div>
+        <div class="banner-info">
+          <h2 id="topic-title">標題一：家庭成員的改變</h2>
+          <p id="topic-desc">理解家庭人數因出生、結婚、就學、離世等原因產生增減，體會家人彼此包容適應之重要。</p>
+        </div>
+      </div>
+
+      <!-- Status Bar -->
+      <div class="quiz-status-row">
+        <div class="q-badge" id="q-number">📌 第 1 / 5 題</div>
+        <div class="progress-track">
+          <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+        <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-muted);" id="q-status-tag">✨ 可愛闖關中</div>
+      </div>
+
+      <!-- Question Title Box -->
+      <div class="question-box">
+        <div class="question-title" id="question-text">載入題目中...</div>
+      </div>
+
+      <!-- Options -->
+      <div class="options-grid" id="options-box"></div>
+
+      <!-- Explanation Card -->
+      <div class="explain-card" id="explain-box"></div>
+
+      <!-- Actions -->
+      <div class="action-row">
+        <div style="font-size: 0.9rem; color: var(--text-muted);">💡 點選最適合的答案，即時看解析！</div>
+        <button class="btn-next" id="btn-next" onclick="nextQuestion()" style="display: none;">下一題 ➔</button>
+      </div>
+
+    </div>
+
+    <!-- Result View -->
+    <div class="card-box result-view" id="result-container">
+      <div class="medal-icon">🎖️</div>
+      <h2 class="result-title" id="res-title">本標題通關成功！</h2>
+      <div class="result-score" id="res-score">100 分</div>
+      <p style="font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2rem auto;" id="res-desc">
+        太棒了！你已經完整掌握了本標題的核心重點，給自己一個大大的讚！
+      </p>
+      <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+        <button class="btn-next" onclick="restartTopic()">🔄 重新測驗本標題</button>
+        <button class="btn-next" id="btn-next-topic" onclick="goNextTopic()" style="background: var(--accent-gold);">🚀 前往下一標題挑戰</button>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Web Audio Sound Synth
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playAudio(isCorrect) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (isCorrect) {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+        osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2); // G5
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+      } else {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(240, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(180, audioCtx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      }
+    }
+
+    // 4 Precise Subsections from User & Textbook
+    const topicsData = [
+      {
+        id: 0,
+        title: "標題一：家庭成員的改變",
+        icon: "🌱",
+        desc: "理解家庭人數因出生、結婚、就學、離世等原因產生增減，體會家人彼此包容適應之重要。",
+        questions: [
+          {
+            q: "下列哪一種情況會讓家裡的成員人數「增加」？",
+            icon: "💒",
+            opts: [
+              "(A) 叔叔結婚，嬸嬸搬進家裡一起生活",
+              "(B) 哥哥去外縣市讀大學住宿舍",
+              "(C) 姊姊出國打工實習",
+              "(D) 祖父搬到安養中心養病"
+            ],
+            ans: 0,
+            exp: "✅ 正確！結婚、新生兒誕生或收養，都會讓家庭同住的成員人數增加！"
+          },
+          {
+            q: "小玉家最近迎來剛出生的妹妹，家裡變得很忙碌。身為大姊的小玉最好怎麼做？",
+            icon: "🍼",
+            opts: [
+              "(A) 討厭妹妹搶走父母的注意力",
+              "(B) 主動幫忙拿尿布、保持安靜並體貼父母的辛苦",
+              "(C) 故意在房間大哭大鬧",
+              "(D) 拒絕跟妹妹住在同一個家"
+            ],
+            ans: 1,
+            exp: "✅ 太棒了！體貼父母照顧嬰兒的辛勞，主動幫忙分擔簡單家務，是大哥哥大姊姊的榜樣！"
+          },
+          {
+            q: "當家庭因為親人離世或長輩生病搬走而人數減少時，家庭成員應該如何面對？",
+            icon: "🕯️",
+            opts: [
+              "(A) 互相指責抱怨",
+              "(B) 互相關心安慰，一同分擔生活責任走過悲傷",
+              "(C) 假裝親人從沒存在過",
+              "(D) 不再跟其他家人說話"
+            ],
+            ans: 1,
+            exp: "✅ 正確！面對人數減少與生活變動，家人之間更需要彼此溫暖擁抱、互相扶持。"
+          },
+          {
+            q: "關於家庭成員的改變，下列哪一項敘述是「最正確」的觀念？",
+            icon: "🏡",
+            opts: [
+              "(A) 每個家庭的成員人數永遠固定不會變",
+              "(B) 人數增加時學會接納與分享，人數減少時互相扶持",
+              "(C) 只要家庭成員有變動，家就毀了",
+              "(D) 只有小嬰兒出生才算家庭改變"
+            ],
+            ans: 1,
+            exp: "✅ 滿分！家庭成員增減是人生的常態，只要互相關愛，家永遠是最堅強的後盾！"
+          },
+          {
+            q: "媽媽收養了一隻流浪小狗，全家人一起照顧牠。這件事給家庭帶來了什麼意義？",
+            icon: "🐶",
+            opts: [
+              "(A) 增加大家的家務負擔很討厭",
+              "(B) 迎來新的生命夥伴，培養全家人的愛心與責任感",
+              "(C) 沒什麼特別意義",
+              "(D) 讓家裡變得很髒亂"
+            ],
+            ans: 1,
+            exp: "✅ 正確！新生命夥伴的加入能為家庭帶來歡樂，也凝聚全家人的愛心與責任感！"
+          }
+        ]
+      },
+      {
+        id: 1,
+        title: "標題二：命名的方式",
+        icon: "✍️",
+        desc: "認識姓名是個人身分代表，理解從父/母姓、家族字輩、生辰祝福與長輩期許。",
+        questions: [
+          {
+            q: "在臺灣的法律中，新生兒的姓氏可以如何決定？",
+            icon: "📜",
+            opts: [
+              "(A) 只能跟隨父親的姓氏",
+              "(B) 父母可以共同約定從父姓或從母姓",
+              "(C) 由里長抽籤決定",
+              "(D) 只能跟隨祖父的姓氏"
+            ],
+            ans: 1,
+            exp: "✅ 正確！臺灣法律落實性別平等，父母可以共同約定讓孩子從父姓或從母姓。"
+          },
+          {
+            q: "許多長輩在為孩子取名字時，常會寄託什麼心意？",
+            icon: "🎁",
+            opts: [
+              "(A) 長輩對孩子的祝福、健康平安或品德優良的期望",
+              "(B) 只是隨便翻報紙湊字",
+              "(C) 為了讓名字很難寫被處罰",
+              "(D) 為了在學校嘲笑同學"
+            ],
+            ans: 0,
+            exp: "✅ 正確！每一個名字都凝聚著家族長輩最深切的愛、祝福與美好的期盼。"
+          },
+          {
+            q: "堂兄弟的名字第二個字都是「建」（如：建華、建國、建志），這種命名通常依據？",
+            icon: "🌳",
+            opts: [
+              "(A) 抽籤決定",
+              "(B) 家族的「字輩（輩分）」傳統",
+              "(C) 學校老師的規定",
+              "(D) 鄰居的想法"
+            ],
+            ans: 1,
+            exp: "✅ 正確！許多漢人家族有族譜，會按照世代輩分的「字輩」為同輩孩子取名以辨識長幼。"
+          },
+          {
+            q: "有些人的名字取為「震宇」（氣宇非凡）或「詠晴」（開朗如晴天），代表名字具有？",
+            icon: "☀️",
+            opts: [
+              "(A) 專屬的涵義與美麗的寓意",
+              "(B) 完全沒有意義的符號",
+              "(C) 讓人記不住的名字",
+              "(D) 恐嚇別人的作用"
+            ],
+            ans: 0,
+            exp: "✅ 正確！名字裡的每一個字都經過挑選，代表著父母對我們性格與未來的美好祝福。"
+          },
+          {
+            q: "名字對我們每一個人來說，最重要的價值是什麼？",
+            icon: "🌟",
+            opts: [
+              "(A) 拿來跟別人炫耀",
+              "(B) 代表個人的身分識別、人格尊嚴與長輩滿滿的愛",
+              "(C) 隨時可以丟掉的東西",
+              "(D) 只是為了應付考試"
+            ],
+            ans: 1,
+            exp: "✅ 滿分！姓名是個人的代表與人格尊嚴的象徵，我們要珍惜自己的名字！"
+          }
+        ]
+      },
+      {
+        id: 2,
+        title: "標題三：原住民的命名",
+        icon: "🪶",
+        desc: "理解臺灣原住民族群多元的命名文化（親子連名制、家屋名制、親從子名制與大自然意涵）。",
+        questions: [
+          {
+            q: "泰雅族作家「瓦歷斯·諾幹」，前面是自己的名，後面是父親的名字「諾幹」。這稱為？",
+            icon: "🏹",
+            opts: [
+              "(A) 從母姓制",
+              "(B) 父子連名制（親子連名制）",
+              "(C) 羅馬拼音制",
+              "(D) 抽籤命名制"
+            ],
+            ans: 1,
+            exp: "✅ 正確！泰雅族、賽夏族等族群採【父子連名制】，記錄父子血脈代代相傳！"
+          },
+          {
+            q: "排灣族與魯凱族的命名文化中，常會把什麼名稱加入名字中以象徵家族地位？",
+            icon: "🏛️",
+            opts: [
+              "(A) 學校名稱",
+              "(B) 「家屋名」或氏族名",
+              "(C) 寵物名字",
+              "(D) 縣市名稱"
+            ],
+            ans: 1,
+            exp: "✅ 正確！排灣族與魯凱族有獨特的【家屋制度】，名字中常帶有家屋名稱以表家族傳承！"
+          },
+          {
+            q: "達悟族（雅美族）在有了孩子之後，長輩會改變稱謂（如「夏曼」代表某人之父），這稱為？",
+            icon: "🛶",
+            opts: [
+              "(A) 親從子名制",
+              "(B) 單一姓名制",
+              "(C) 國字翻譯制",
+              "(D) 永久固定制"
+            ],
+            ans: 0,
+            exp: "✅ 正確！達悟族（雅美族）隨生命階段與子女誕生改變稱呼，稱為【親從子名制】！"
+          },
+          {
+            q: "臺灣原住民族傳統姓名常蘊含什麼深厚的文化意義？",
+            icon: "🦅",
+            opts: [
+              "(A) 記載祖先歷史、家族血脈與對大自然的崇敬",
+              "(B) 只是為了好玩隨便取的",
+              "(C) 跟漢人完全一模一樣沒有特色",
+              "(D) 為了讓別人念不出來"
+            ],
+            ans: 0,
+            exp: "✅ 正確！原住民族姓名深刻連結祖靈、土地、自然美德與部落歷史！"
+          },
+          {
+            q: "看到原住民族同學使用羅馬拼音或傳統族名時，我們應該抱持什麼態度？",
+            icon: "🤝",
+            opts: [
+              "(A) 覺得奇怪並亂取難聽綽號",
+              "(B) 欣賞並尊重原住民優美的命名文化與身分認同",
+              "(C) 強迫同學改成漢人姓名",
+              "(D) 假裝沒看見"
+            ],
+            ans: 1,
+            exp: "✅ 滿分！臺灣是多元族群社會，我們要以欣賞包容的心尊重每種命名文化！"
+          }
+        ]
+      },
+      {
+        id: 3,
+        title: "標題四：尊重大家的姓名",
+        icon: "🤝",
+        desc: "落實姓名禮貌、正確發音稱呼他人、不取侮辱性綽號、建立尊重友善班級。",
+        questions: [
+          {
+            q: "當班上有同學的名字發音比較特別或少見時，我們最正確的態度是？",
+            icon: "👂",
+            opts: [
+              "(A) 故意唸錯引全班大笑",
+              "(B) 認真向同學請教正確讀音並用心記住",
+              "(C) 直接幫他取難聽的綽號",
+              "(D) 拒絕叫他的名字"
+            ],
+            ans: 1,
+            exp: "✅ 正確！認真請教正確讀音並正確稱呼，是對他人最基本的禮貌與尊重。"
+          },
+          {
+            q: "如果拿同學的姓名諧音取笑（例如把「黃國棟」叫成「果凍笨蛋」），會造成什麼影響？",
+            icon: "🚫",
+            opts: [
+              "(A) 傷害同學的尊嚴，屬於不禮貌且不尊重的行為",
+              "(B) 讓班級氣氛變得更和諧",
+              "(C) 大家都很喜歡",
+              "(D) 展現自己的幽默感"
+            ],
+            ans: 0,
+            exp: "✅ 正確！拿名字諧音取笑會造成言語傷害與霸凌，是絕對不可做的事！"
+          },
+          {
+            q: "面對來自不同族群（如新住民、原住民）同學的姓名時，我們應該？",
+            icon: "🌏",
+            opts: [
+              "(A) 保持開放與尊重，樂於了解其背後的文化故事",
+              "(B) 嘲笑對方的名字很長很奇怪",
+              "(C) 排擠不跟他同組",
+              "(D) 到處張貼他的名字取笑"
+            ],
+            ans: 0,
+            exp: "✅ 正確！多認識不同族群的名字由來，能開闊我們的視野並增進同學情誼！"
+          },
+          {
+            q: "當別人叫錯自己的名字時，最好的處理方式是？",
+            icon: "💬",
+            opts: [
+              "(A) 當場破口大罵並動手打人",
+              "(B) 和氣友善地提醒對方正確的讀音與寫法",
+              "(C) 默默回家哭泣不理人",
+              "(D) 故意去破壞對方的桌椅"
+            ],
+            ans: 1,
+            exp: "✅ 正確！溫和清楚地說明正確讀音，既有風度又能建立良好的溝通！"
+          },
+          {
+            q: "「尊重每個人的姓名」是班級人際相處的重要守則，因為？",
+            icon: "❤️",
+            opts: [
+              "(A) 姓名代表一個人的人格、尊嚴與家庭背景",
+              "(B) 只是因為校規有規定",
+              "(C) 怕被老師處罰罰站",
+              "(D) 為了獲得模範生獎狀"
+            ],
+            ans: 0,
+            exp: "✅ 滿分！每個人都是獨一無二的，尊重對方的姓名，就是尊重對方的人格尊嚴！"
+          }
+        ]
+      }
+    ];
+
+    let currentTopicIdx = 0;
+    let currentQIdx = 0;
+    let topicScore = 0;
+    let answered = false;
+
+    function selectTopic(idx) {
+      currentTopicIdx = idx;
+      currentQIdx = 0;
+      topicScore = 0;
+      answered = false;
+
+      // Update Tab CSS
+      document.querySelectorAll('.topic-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === idx);
+      });
+
+      document.getElementById('quiz-container').style.display = 'block';
+      document.getElementById('result-container').style.display = 'none';
+
+      const topic = topicsData[currentTopicIdx];
+      document.getElementById('topic-icon').textContent = topic.icon;
+      document.getElementById('topic-title').textContent = topic.title;
+      document.getElementById('topic-desc').textContent = topic.desc;
+
+      updateScoreBadge();
+      renderQuestion();
+    }
+
+    function updateScoreBadge() {
+      document.getElementById('live-score').textContent = `🏆 本章得分：${topicScore} 分`;
+    }
+
+    function renderQuestion() {
+      answered = false;
+      const topic = topicsData[currentTopicIdx];
+      const q = topic.questions[currentQIdx];
+
+      document.getElementById('q-number').textContent = `📌 第 ${currentQIdx + 1} / ${topic.questions.length} 題`;
+      document.getElementById('progress-fill').style.width = `${((currentQIdx + 1) / topic.questions.length) * 100}%`;
+      document.getElementById('question-text').innerHTML = `<span style="margin-right:0.5rem;">${q.icon}</span> ${q.q}`;
+
+      const optsBox = document.getElementById('options-box');
+      optsBox.innerHTML = '';
+
+      q.opts.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt-btn';
+        btn.innerHTML = `<span style="color:var(--primary); font-weight:900;">${['A','B','C','D'][idx]}</span> ${optText}`;
+        btn.onclick = () => handleSelectOption(idx, btn);
+        optsBox.appendChild(btn);
+      });
+
+      const expBox = document.getElementById('explain-box');
+      expBox.style.display = 'none';
+      expBox.className = 'explain-card';
+      document.getElementById('btn-next').style.display = 'none';
+    }
+
+    function handleSelectOption(selectedIdx, btnEl) {
+      if (answered) return;
+      answered = true;
+
+      const topic = topicsData[currentTopicIdx];
+      const q = topic.questions[currentQIdx];
+      const allBtns = document.querySelectorAll('.opt-btn');
+      allBtns.forEach(b => b.disabled = true);
+
+      const expBox = document.getElementById('explain-box');
+
+      if (selectedIdx === q.ans) {
+        playAudio(true);
+        btnEl.classList.add('correct');
+        topicScore += 20;
+        updateScoreBadge();
+        expBox.innerHTML = `🌟 <strong>答對了！太棒了！</strong><br>${q.exp}`;
+        expBox.classList.remove('wrong-hint');
+      } else {
+        playAudio(false);
+        btnEl.classList.add('wrong');
+        allBtns[q.ans].classList.add('correct');
+        expBox.innerHTML = `💡 <strong>再想想看喔！</strong> 正確答案是【${['A','B','C','D'][q.ans]}】。<br>${q.exp}`;
+        expBox.classList.add('wrong-hint');
+      }
+
+      expBox.style.display = 'block';
+      document.getElementById('btn-next').style.display = 'inline-flex';
+    }
+
+    function nextQuestion() {
+      const topic = topicsData[currentTopicIdx];
+      currentQIdx++;
+      if (currentQIdx < topic.questions.length) {
+        renderQuestion();
+      } else {
+        showTopicResult();
+      }
+    }
+
+    function showTopicResult() {
+      document.getElementById('quiz-container').style.display = 'none';
+      document.getElementById('result-container').style.display = 'block';
+
+      document.getElementById('res-score').textContent = `${topicScore} 分`;
+      if (topicScore === 100) {
+        document.getElementById('res-title').innerHTML = `🎉 恭喜！【${topicsData[currentTopicIdx].title}】滿分通關！`;
+        document.getElementById('res-desc').innerHTML = `太優秀了！你拿到了 100 分滿分！獲得「${topicsData[currentTopicIdx].icon} 專屬榮譽小博士勳章」！`;
+      } else {
+        document.getElementById('res-title').innerHTML = `👏 表現很棒！【${topicsData[currentTopicIdx].title}】挑戰完成！`;
+        document.getElementById('res-desc').innerHTML = `獲得了 ${topicScore} 分的好成績！複習一下剛剛答錯的小提示，隨時可以重新挑戰拿滿分喔！`;
+      }
+
+      const nextTopicBtn = document.getElementById('btn-next-topic');
+      if (currentTopicIdx < topicsData.length - 1) {
+        nextTopicBtn.style.display = 'inline-flex';
+        nextTopicBtn.textContent = `🚀 前往【${topicsData[currentTopicIdx + 1].title}】挑戰`;
+      } else {
+        nextTopicBtn.style.display = 'none';
+      }
+    }
+
+    function restartTopic() {
+      selectTopic(currentTopicIdx);
+    }
+
+    function goNextTopic() {
+      if (currentTopicIdx < topicsData.length - 1) {
+        selectTopic(currentTopicIdx + 1);
+      }
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    // Initialize with Topic 0
+    selectTopic(0);
+  </script>
+</body>
+</html>

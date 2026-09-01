@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>國小三上社會 1-1「我和我的家人」家庭型態互動小測驗</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;800;900&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0b1120;
+      --bg-card: rgba(30, 41, 59, 0.88);
+      --border-card: rgba(255, 255, 255, 0.12);
+      --primary: #38bdf8;
+      --primary-glow: rgba(56, 189, 248, 0.4);
+      --accent-gold: #fbbf24;
+      --accent-coral: #f43f5e;
+      --accent-emerald: #10b981;
+      --accent-purple: #c084fc;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-family: 'Noto Sans TC', 'Outfit', system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.18) 0%, transparent 40%),
+        radial-gradient(circle at 90% 90%, rgba(251, 191, 36, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(192, 132, 252, 0.08) 0%, transparent 55%);
+    }
+
+    /* Top Navigation Header */
+    header {
+      padding: 0.85rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-card);
+      z-index: 100;
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .badge-unit {
+      background: rgba(56, 189, 248, 0.18);
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.3rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-card);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #000;
+      font-weight: 800;
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .score-badge {
+      background: rgba(251, 191, 36, 0.15);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
+      padding: 0.35rem 0.9rem;
+      border-radius: 9999px;
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .view-section {
+      width: 100%;
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .view-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Card Box */
+    .card-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 24px;
+      padding: 2.2rem;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+      position: relative;
+    }
+
+    /* Mode 1: Quiz Styles */
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .question-tag {
+      color: var(--primary);
+      font-size: 1.1rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .progress-bar-wrap {
+      flex: 1;
+      max-width: 320px;
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin: 0 1.5rem;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 12.5%;
+      background: linear-gradient(90deg, var(--primary), var(--accent-emerald));
+      transition: width 0.3s ease;
+    }
+
+    .question-body {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-card);
+      border-radius: 18px;
+      padding: 1.5rem 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .scenario-text {
+      font-size: 1.35rem;
+      font-weight: 800;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+
+    .scenario-badge {
+      display: inline-block;
+      background: rgba(251, 191, 36, 0.2);
+      color: var(--accent-gold);
+      padding: 0.25rem 0.7rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .opt-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 2px solid var(--border-card);
+      color: var(--text-main);
+      padding: 1.1rem 1.4rem;
+      border-radius: 16px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .opt-btn:hover:not(:disabled) {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px var(--primary-glow);
+    }
+
+    .opt-btn.correct {
+      background: rgba(16, 185, 129, 0.25) !important;
+      border-color: var(--accent-emerald) !important;
+      color: #fff !important;
+    }
+
+    .opt-btn.wrong {
+      background: rgba(244, 63, 94, 0.25) !important;
+      border-color: var(--accent-coral) !important;
+      color: #fff !important;
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+
+    .explain-box {
+      display: none;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid var(--accent-emerald);
+      border-radius: 14px;
+      padding: 1.1rem 1.4rem;
+      margin-bottom: 1.2rem;
+      font-size: 1.05rem;
+      line-height: 1.55;
+      color: #e2e8f0;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .explain-box.wrong-hint {
+      background: rgba(244, 63, 94, 0.12);
+      border-color: var(--accent-coral);
+    }
+
+    .action-row {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-action {
+      background: linear-gradient(135deg, var(--primary), #0284c7);
+      color: #000;
+      border: none;
+      padding: 0.75rem 1.8rem;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    /* Mode 2: Category Match Game */
+    .sorter-intro {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .sorter-intro h2 {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--text-main);
+      margin-bottom: 0.4rem;
+    }
+
+    .cards-pool {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 1.8rem;
+      min-height: 80px;
+      background: rgba(15, 23, 42, 0.5);
+      border: 2px dashed var(--border-card);
+      border-radius: 16px;
+      padding: 1rem;
+      align-items: center;
+    }
+
+    .item-chip {
+      background: linear-gradient(135deg, #1e293b, #334155);
+      border: 2px solid var(--primary);
+      color: var(--text-main);
+      padding: 0.65rem 1.2rem;
+      border-radius: 9999px;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .item-chip.selected {
+      background: var(--accent-gold);
+      color: #000;
+      border-color: #fff;
+      transform: scale(1.1);
+      box-shadow: 0 0 16px rgba(251, 191, 36, 0.6);
+    }
+
+    .item-chip.matched {
+      display: none;
+    }
+
+    .drop-bins-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .drop-bin {
+      background: rgba(30, 41, 59, 0.75);
+      border: 2px solid var(--border-card);
+      border-radius: 18px;
+      padding: 1.2rem 1rem;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .drop-bin:hover {
+      border-color: var(--primary);
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .drop-bin.highlight {
+      border-color: var(--accent-emerald);
+      background: rgba(16, 185, 129, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .bin-icon {
+      font-size: 2.2rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .bin-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--accent-gold);
+      margin-bottom: 0.3rem;
+      text-align: center;
+    }
+
+    .bin-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .bin-slots {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .placed-tag {
+      background: rgba(16, 185, 129, 0.25);
+      border: 1px solid var(--accent-emerald);
+      color: #fff;
+      padding: 0.35rem 0.6rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    /* Result View */
+    .result-box {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .medal-icon {
+      font-size: 4.5rem;
+      margin-bottom: 1rem;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .result-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .result-score {
+      font-size: 3.2rem;
+      font-weight: 900;
+      color: var(--accent-gold);
+      margin-bottom: 1rem;
+    }
+
+    .result-desc {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 2rem auto;
+      line-height: 1.6;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .options-grid, .drop-bins-grid { grid-template-columns: 1fr; }
+      .scenario-text { font-size: 1.15rem; }
+      header { padding: 0.6rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header>
+    <div class="brand-box">
+      <span class="badge-unit">🏫 三上社會 1-1</span>
+      <strong style="font-size: 1.05rem;">我和我的家人 · 互動小測驗</strong>
+    </div>
+
+    <div class="nav-tabs">
+      <button class="tab-btn active" id="tab-quiz" onclick="switchMode('quiz')">🕵️ 情境偵探測驗</button>
+      <button class="tab-btn" id="tab-sorter" onclick="switchMode('sorter')">📦 分類速配快手</button>
+    </div>
+
+    <div class="header-actions">
+      <div class="score-badge" id="live-score">🏆 得分：0 分</div>
+      <button class="tab-btn" onclick="toggleFullScreen()" style="border: 1px solid var(--border-card);">⛶ 全螢幕</button>
+    </div>
+  </header>
+
+  <!-- Main Canvas -->
+  <main>
+
+    <!-- Mode 1: Quiz Section -->
+    <div class="view-section active" id="section-quiz">
+      <div class="card-box">
+        
+        <div class="quiz-header">
+          <div class="question-tag" id="q-number">📌 第 1 / 8 題</div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="quiz-progress"></div>
+          </div>
+          <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-muted);" id="q-score-rate">答對率：100%</div>
+        </div>
+
+        <div class="question-body">
+          <span class="scenario-badge" id="q-category">🏡 家庭生活情境題</span>
+          <div class="scenario-text" id="q-scenario">載入題目中...</div>
+        </div>
+
+        <div class="options-grid" id="q-options"></div>
+
+        <div class="explain-box" id="q-explain"></div>
+
+        <div class="action-row">
+          <button class="btn-action" id="btn-next-q" onclick="nextQuestion()" style="display: none;">下一題 ➔</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mode 2: Sorter Section -->
+    <div class="view-section" id="section-sorter">
+      <div class="card-box">
+        <div class="sorter-intro">
+          <h2>📦 家庭分類速配快手</h2>
+          <p style="color: var(--text-muted); font-size: 1.05rem;">請點選上方【情境卡片】，再點選下方對應的【家庭分類箱】進行歸類！</p>
+        </div>
+
+        <div class="cards-pool" id="sorter-pool"></div>
+
+        <div class="drop-bins-grid">
+          <div class="drop-bin" onclick="handleBinClick('nuclear')">
+            <div class="bin-icon">🏡</div>
+            <div class="bin-title">小家庭 (核心家庭)</div>
+            <div class="bin-desc">父母二人 ＋ 未婚子女</div>
+            <div class="bin-slots" id="bin-nuclear"></div>
+          </div>
+
+          <div class="drop-bin" onclick="handleBinClick('extended')">
+            <div class="bin-icon">🏰</div>
+            <div class="bin-title">大家庭 (三代同堂)</div>
+            <div class="bin-desc">祖父母 ＋ 父母 ＋ 子女</div>
+            <div class="bin-slots" id="bin-extended"></div>
+          </div>
+
+          <div class="drop-bin" onclick="handleBinClick('single')">
+            <div class="bin-icon">❤️</div>
+            <div class="bin-title">單親家庭</div>
+            <div class="bin-desc">父親或母親單方撫養</div>
+            <div class="bin-slots" id="bin-single"></div>
+          </div>
+
+          <div class="drop-bin" onclick="handleBinClick('skipped')">
+            <div class="bin-icon">👵</div>
+            <div class="bin-title">隔代教養家庭</div>
+            <div class="bin-desc">祖父母撫養孫子女</div>
+            <div class="bin-slots" id="bin-skipped"></div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 1.5rem;">
+          <button class="btn-action" onclick="resetSorter()" style="background: rgba(255,255,255,0.1); color: #fff;">🔄 重置分類遊戲</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Result View -->
+    <div class="view-section" id="section-result">
+      <div class="card-box result-box">
+        <div class="medal-icon">🎖️</div>
+        <h2 class="result-title">太棒了！挑戰完成！</h2>
+        <div class="result-score" id="final-score">100 分</div>
+        <p class="result-desc" id="final-desc">恭喜你榮獲「家庭型態辨識大師」勳章！你已經能夠清楚辨別小家庭、大家庭、單親家庭與隔代教養家庭囉！</p>
+        <div style="display: flex; justify-content: center; gap: 1rem;">
+          <button class="btn-action" onclick="restartQuiz()">🔄 再玩一次測驗</button>
+          <button class="btn-action" onclick="switchMode('sorter')" style="background: var(--accent-gold);">📦 挑戰分類快手</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Web Audio API Sound Effects (No external assets required)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (type === 'correct') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+        osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2); // G5
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+      } else if (type === 'wrong') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(180, audioCtx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      }
+    }
+
+    // Quiz Questions Data (8 Comprehensive Questions)
+    const quizQuestions = [
+      {
+        scenario: "小明家裡住著爸爸、媽媽和小明三個人，平日由父母共同照顧小明的起居與上學。請問小明的家庭屬於哪一種家庭型態？",
+        category: "🏡 核心概念情境題",
+        options: ["(A) 大家庭（三代同堂）", "(B) 小家庭（核心家庭）", "(C) 單親家庭", "(D) 隔代教養家庭"],
+        answer: 1,
+        explain: "✅ 正確！【小家庭（核心家庭）】是由父母（夫妻）與未婚子女共同組成的家庭，是現代社會常見的型態。"
+      },
+      {
+        scenario: "小華的家裡非常熱鬧，住著爺爺、奶奶、爸爸、媽媽、叔叔和小華，共有三代人同住在一個大屋子裡。請問這屬於什麼家庭型態？",
+        category: "🏰 家族同住情境題",
+        options: ["(A) 小家庭", "(B) 大家庭（擴展家庭）", "(C) 單親家庭", "(D) 頂客家庭"],
+        answer: 1,
+        explain: "✅ 正確！【大家庭（三代同堂/擴展家庭）】包含祖父母、父母與子女等三代或以上的親屬共同生活。"
+      },
+      {
+        scenario: "小美因為父母離異，平時由媽媽一個人細心工作賺錢撫養她長大，母女倆感情非常親密。請問小美的家庭型態屬於？",
+        category: "❤️ 單方撫養情境題",
+        options: ["(A) 單親家庭", "(B) 隔代教養家庭", "(C) 大家庭", "(D) 核心家庭"],
+        answer: 0,
+        explain: "✅ 正確！【單親家庭】是由父親或母親其中一方，單獨承擔扶養與照顧孩子的責任。"
+      },
+      {
+        scenario: "阿豪的父母長年在國外工作，阿豪在鄉下由阿公和阿嬤照顧生活起居、煮飯與督導功課。請問阿豪的家庭型態屬於？",
+        category: "👵 長輩撫育情境題",
+        options: ["(A) 小家庭", "(B) 新住民家庭", "(C) 隔代教養家庭", "(D) 大家庭"],
+        answer: 2,
+        explain: "✅ 正確！【隔代教養家庭】是指父母因工作等原因不在身邊，主要由祖父母（或外祖父母）照顧孫子女。"
+      },
+      {
+        scenario: "小敏的爸爸是臺灣人，媽媽來自越南，家裡常能吃到美味的越南春捲並學習兩國的問候語。請問這屬於什麼家庭？",
+        category: "🌏 多元文化情境題",
+        options: ["(A) 隔代教養家庭", "(B) 新住民家庭", "(C) 單親家庭", "(D) 折衷家庭"],
+        answer: 1,
+        explain: "✅ 正確！【新住民家庭】是指家庭成員中，父母之一方來自其他國家或不同文化背景，為生活帶來豐富多元的色彩。"
+      },
+      {
+        scenario: "志強的媽媽因病過世，平時由爸爸一個人照顧志強和讀國小的弟弟，爸爸常教他們兄弟要互相幫忙。請問志強家屬於？",
+        category: "👨‍👦 關懷實踐情境題",
+        options: ["(A) 大家庭", "(B) 隔代教養家庭", "(C) 單親家庭", "(D) 新住民家庭"],
+        answer: 2,
+        explain: "✅ 正確！志強由父親單獨照顧撫養，屬於【單親家庭】。單親家庭的家人間同樣充滿滿滿的愛！"
+      },
+      {
+        scenario: "樂樂平時和外公、外婆住在一起，外公每天牽著樂樂的手散步上學，外婆教樂樂生活常規。請問樂樂家屬於？",
+        category: "👵 祖孫相處情境題",
+        options: ["(A) 小家庭", "(B) 隔代教養家庭", "(C) 單親家庭", "(D) 大家庭"],
+        answer: 1,
+        explain: "✅ 正確！由外祖父母負責照顧撫養孫子女，同樣屬於【隔代教養家庭】。"
+      },
+      {
+        scenario: "關於社會課學到的各種家庭型態，下列哪一個觀念是「最正確」的？",
+        category: "💡 素養核心價值題",
+        options: [
+          "(A) 大家庭的人數多，所以一定比小家庭更幸福",
+          "(B) 只有父母都在身邊的家庭才叫完整幸福",
+          "(C) 不管哪一種家庭型態，只要家人互相關愛包容，都是溫暖的家",
+          "(D) 單親家庭或隔代教養家庭是不正常的家庭"
+        ],
+        answer: 2,
+        explain: "✅ 滿分觀念！家庭型態沒有優劣好壞之分。只要家庭成員之間彼此關心、尊重、扶持，每一個家都是最溫暖的港灣！"
+      }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+    let answered = false;
+
+    function renderQuestion() {
+      answered = false;
+      const q = quizQuestions[currentQ];
+
+      document.getElementById('q-number').textContent = `📌 第 ${currentQ + 1} / ${quizQuestions.length} 題`;
+      document.getElementById('quiz-progress').style.width = `${((currentQ + 1) / quizQuestions.length) * 100}%`;
+      document.getElementById('q-category').textContent = q.category;
+      document.getElementById('q-scenario').textContent = q.scenario;
+
+      const optsBox = document.getElementById('q-options');
+      optsBox.innerHTML = '';
+
+      q.options.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt-btn';
+        btn.innerHTML = `<span style="color:var(--primary); font-weight:900;">${['A','B','C','D'][idx]}</span> ${optText}`;
+        btn.onclick = () => selectOption(idx, btn);
+        optsBox.appendChild(btn);
+      });
+
+      const expBox = document.getElementById('q-explain');
+      expBox.style.display = 'none';
+      expBox.className = 'explain-box';
+      document.getElementById('btn-next-q').style.display = 'none';
+    }
+
+    function selectOption(selectedIdx, btnEl) {
+      if (answered) return;
+      answered = true;
+
+      const q = quizQuestions[currentQ];
+      const allBtns = document.querySelectorAll('.opt-btn');
+      allBtns.forEach(b => b.disabled = true);
+
+      const expBox = document.getElementById('q-explain');
+
+      if (selectedIdx === q.answer) {
+        playSound('correct');
+        btnEl.classList.add('correct');
+        score += 12.5;
+        document.getElementById('live-score').textContent = `🏆 得分：${Math.round(score)} 分`;
+        expBox.innerHTML = `🌟 <strong>太棒了，答對了！</strong><br>${q.explain}`;
+        expBox.classList.remove('wrong-hint');
+      } else {
+        playSound('wrong');
+        btnEl.classList.add('wrong');
+        allBtns[q.answer].classList.add('correct');
+        expBox.innerHTML = `💡 <strong>再想想看喔！</strong> 正確答案是【${['A','B','C','D'][q.answer]}】。<br>${q.explain}`;
+        expBox.classList.add('wrong-hint');
+      }
+
+      expBox.style.display = 'block';
+      document.getElementById('btn-next-q').style.display = 'inline-flex';
+    }
+
+    function nextQuestion() {
+      currentQ++;
+      if (currentQ < quizQuestions.length) {
+        renderQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      document.getElementById('section-quiz').classList.remove('active');
+      document.getElementById('section-sorter').classList.remove('active');
+      document.getElementById('section-result').classList.add('active');
+
+      const finalScore = Math.round(score);
+      document.getElementById('final-score').textContent = `${finalScore} 分`;
+
+      if (finalScore >= 85) {
+        document.getElementById('final-desc').innerHTML = "🌟 <strong>太傑出了！</strong> 你榮獲【家庭型態辨識特級大師】榮譽！你已經能精準辨別小家庭、大家庭、單親與隔代教養家庭，並懂得珍惜家人的愛！";
+      } else {
+        document.getElementById('final-desc').innerHTML = "👍 <strong>表現很棒！</strong> 只要多複習一下隔代教養與大家庭的特徵，下次一定能拿 100 分喔！";
+      }
+    }
+
+    function restartQuiz() {
+      currentQ = 0;
+      score = 0;
+      document.getElementById('live-score').textContent = `🏆 得分：0 分`;
+      document.getElementById('section-result').classList.remove('active');
+      document.getElementById('section-quiz').classList.add('active');
+      renderQuestion();
+    }
+
+    // --- Mode 2: Sorter Game Logic ---
+    const sorterItems = [
+      { id: 's1', text: "👨‍👩‍👧 爸爸媽媽和我", type: 'nuclear' },
+      { id: 's2', text: "🏰 爺爺奶奶、爸媽和我", type: 'extended' },
+      { id: 's3', text: "👩‍👧 只有媽媽照顧我", type: 'single' },
+      { id: 's4', text: "👵 阿公阿嬤在鄉下養育我", type: 'skipped' },
+      { id: 's5', text: "👨‍👩‍👦‍👦 父母二人撫育兩個孩子", type: 'nuclear' },
+      { id: 's6', text: "🏡 三代同住在透天厝", type: 'extended' },
+      { id: 's7', text: "👨‍👦 爸爸單獨照顧我和弟弟", type: 'single' },
+      { id: 's8', text: "👴 外公外婆教導我長大", type: 'skipped' }
+    ];
+
+    let selectedItem = null;
+
+    function initSorter() {
+      const pool = document.getElementById('sorter-pool');
+      pool.innerHTML = '';
+      
+      document.querySelectorAll('.bin-slots').forEach(bs => bs.innerHTML = '');
+
+      sorterItems.forEach(item => {
+        const chip = document.createElement('div');
+        chip.className = 'item-chip';
+        chip.id = item.id;
+        chip.textContent = item.text;
+        chip.onclick = () => selectSorterChip(item, chip);
+        pool.appendChild(chip);
+      });
+      selectedItem = null;
+    }
+
+    function selectSorterChip(item, el) {
+      document.querySelectorAll('.item-chip').forEach(c => c.classList.remove('selected'));
+      selectedItem = item;
+      el.classList.add('selected');
+    }
+
+    function handleBinClick(binType) {
+      if (!selectedItem) {
+        alert("請先點選上方的【情境卡片】，再點擊對應的分類箱！");
+        return;
+      }
+
+      if (selectedItem.type === binType) {
+        playSound('correct');
+        const binSlot = document.getElementById(`bin-${binType}`);
+        const tag = document.createElement('div');
+        tag.className = 'placed-tag';
+        tag.textContent = `✓ ${selectedItem.text}`;
+        binSlot.appendChild(tag);
+
+        const chipEl = document.getElementById(selectedItem.id);
+        chipEl.classList.add('matched');
+        selectedItem = null;
+
+        // Check if all matched
+        if (document.querySelectorAll('.item-chip:not(.matched)').length === 0) {
+          setTimeout(() => {
+            alert("🎉 太強了！你把所有家庭型態都完美分類正確！給自己一個大大的掌聲！👏");
+          }, 300);
+        }
+      } else {
+        playSound('wrong');
+        alert("❌ 分類箱不對喔！請再看一次這張卡片住著哪些成員？");
+      }
+    }
+
+    function resetSorter() {
+      initSorter();
+    }
+
+    // Switch between modes
+    function switchMode(mode) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+
+      if (mode === 'quiz') {
+        document.getElementById('tab-quiz').classList.add('active');
+        document.getElementById('section-quiz').classList.add('active');
+      } else if (mode === 'sorter') {
+        document.getElementById('tab-sorter').classList.add('active');
+        document.getElementById('section-sorter').classList.add('active');
+        initSorter();
+      }
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    // Initialize
+    renderQuestion();
+  </script>
+</body>
+</html>

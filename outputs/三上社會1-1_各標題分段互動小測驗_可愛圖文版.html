@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>三上社會 1-1「我和我的家人」各標題分段互動小測驗（可愛圖文版）</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;800;900&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #090e1a;
+      --bg-card: rgba(30, 41, 59, 0.88);
+      --border-card: rgba(255, 255, 255, 0.12);
+      --primary: #38bdf8;
+      --primary-glow: rgba(56, 189, 248, 0.4);
+      --accent-gold: #fbbf24;
+      --accent-coral: #fb7185;
+      --accent-emerald: #34d399;
+      --accent-purple: #c084fc;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-family: 'Noto Sans TC', 'Outfit', system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 15%, rgba(56, 189, 248, 0.18) 0%, transparent 40%),
+        radial-gradient(circle at 90% 85%, rgba(251, 191, 36, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(192, 132, 252, 0.08) 0%, transparent 55%);
+    }
+
+    /* Top Navigation Header */
+    header {
+      padding: 0.85rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-card);
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .badge-unit {
+      background: rgba(56, 189, 248, 0.18);
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+
+    .topic-selector {
+      display: flex;
+      gap: 0.4rem;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 0.3rem;
+      border-radius: 14px;
+      border: 1px solid var(--border-card);
+    }
+
+    .topic-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.45rem 0.9rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .topic-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .topic-btn.active {
+      background: var(--primary);
+      color: #000;
+      font-weight: 800;
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .score-badge {
+      background: rgba(251, 191, 36, 0.15);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
+      padding: 0.35rem 0.9rem;
+      border-radius: 9999px;
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-box {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 24px;
+      padding: 2.2rem;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cute Header Banner */
+    .banner-cute {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-card);
+      border-radius: 18px;
+      padding: 1.2rem 1.6rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .banner-icon {
+      font-size: 3.2rem;
+      width: 72px;
+      height: 72px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    .banner-info h2 {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .banner-info p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Quiz Bar & Questions */
+    .quiz-status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+    }
+
+    .q-badge {
+      color: var(--accent-gold);
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .progress-track {
+      flex: 1;
+      max-width: 320px;
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin: 0 1.2rem;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 20%;
+      background: linear-gradient(90deg, var(--primary), var(--accent-emerald));
+      transition: width 0.3s ease;
+    }
+
+    .question-box {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid var(--border-card);
+      border-radius: 18px;
+      padding: 1.4rem 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .question-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .opt-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 2px solid var(--border-card);
+      color: var(--text-main);
+      padding: 1.1rem 1.4rem;
+      border-radius: 16px;
+      font-size: 1.12rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .opt-btn:hover:not(:disabled) {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px var(--primary-glow);
+    }
+
+    .opt-btn.correct {
+      background: rgba(52, 211, 153, 0.25) !important;
+      border-color: var(--accent-emerald) !important;
+      color: #fff !important;
+    }
+
+    .opt-btn.wrong {
+      background: rgba(251, 113, 133, 0.25) !important;
+      border-color: var(--accent-coral) !important;
+      color: #fff !important;
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+
+    .explain-card {
+      display: none;
+      background: rgba(52, 211, 153, 0.15);
+      border: 1px solid var(--accent-emerald);
+      border-radius: 14px;
+      padding: 1.1rem 1.5rem;
+      margin-bottom: 1.2rem;
+      font-size: 1.05rem;
+      line-height: 1.55;
+      color: #e2e8f0;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .explain-card.wrong-hint {
+      background: rgba(251, 113, 133, 0.15);
+      border-color: var(--accent-coral);
+    }
+
+    .action-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-next {
+      background: linear-gradient(135deg, var(--primary), #0284c7);
+      color: #000;
+      border: none;
+      padding: 0.75rem 1.8rem;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-next:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    /* Result View */
+    .result-view {
+      display: none;
+      text-align: center;
+      padding: 1.5rem;
+    }
+
+    .medal-icon {
+      font-size: 4.5rem;
+      margin-bottom: 0.75rem;
+      animation: bounce 2s infinite ease-in-out;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .result-title {
+      font-size: 2.3rem;
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-score {
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--accent-gold);
+      margin-bottom: 0.8rem;
+    }
+
+    @media (max-width: 768px) {
+      .options-grid { grid-template-columns: 1fr; }
+      .topic-selector { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header>
+    <div class="brand">
+      <span class="badge-unit">🏫 三上社會 1-1</span>
+      <strong style="font-size: 1.05rem;">我和我的家人 · 各標題分段互動測驗</strong>
+    </div>
+
+    <div class="topic-selector">
+      <button class="topic-btn active" onclick="selectTopic(0)">🏡 1.家庭型態</button>
+      <button class="topic-btn" onclick="selectTopic(1)">🧹 2.成員分工</button>
+      <button class="topic-btn" onclick="selectTopic(2)">📷 3.成長記憶</button>
+      <button class="topic-btn" onclick="selectTopic(3)">❤️ 4.相處之道</button>
+    </div>
+
+    <div class="header-right">
+      <div class="score-badge" id="live-score">🏆 本章得分：0 分</div>
+      <button class="topic-btn" onclick="toggleFullScreen()" style="border: 1px solid var(--border-card);">⛶ 全螢幕</button>
+    </div>
+  </header>
+
+  <!-- Main Slide -->
+  <main>
+
+    <!-- Quiz View -->
+    <div class="card-box" id="quiz-container">
+      
+      <!-- Cute Banner -->
+      <div class="banner-cute">
+        <div class="banner-icon" id="topic-icon">🏡</div>
+        <div class="banner-info">
+          <h2 id="topic-title">標題一：家庭型態大搜查</h2>
+          <p id="topic-desc">認識小家庭、大家庭、單親家庭、隔代教養與新住民家庭，體會多元家庭的美好。</p>
+        </div>
+      </div>
+
+      <!-- Status Bar -->
+      <div class="quiz-status-row">
+        <div class="q-badge" id="q-number">📌 第 1 / 5 題</div>
+        <div class="progress-track">
+          <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+        <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-muted);" id="q-status-tag">✨ 可愛闖關中</div>
+      </div>
+
+      <!-- Question Title Box -->
+      <div class="question-box">
+        <div class="question-title" id="question-text">載入題目中...</div>
+      </div>
+
+      <!-- Options -->
+      <div class="options-grid" id="options-box"></div>
+
+      <!-- Explanation Card -->
+      <div class="explain-card" id="explain-box"></div>
+
+      <!-- Actions -->
+      <div class="action-row">
+        <div style="font-size: 0.9rem; color: var(--text-muted);">💡 點選最適合的答案，即時看解析！</div>
+        <button class="btn-next" id="btn-next" onclick="nextQuestion()" style="display: none;">下一題 ➔</button>
+      </div>
+
+    </div>
+
+    <!-- Result View -->
+    <div class="card-box result-view" id="result-container">
+      <div class="medal-icon">🎖️</div>
+      <h2 class="result-title" id="res-title">本標題通關成功！</h2>
+      <div class="result-score" id="res-score">100 分</div>
+      <p style="font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2rem auto;" id="res-desc">
+        太棒了！你已經完整掌握了本標題的核心重點，給自己一個大大的讚！
+      </p>
+      <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+        <button class="btn-next" onclick="restartTopic()">🔄 重新測驗本標題</button>
+        <button class="btn-next" id="btn-next-topic" onclick="goNextTopic()" style="background: var(--accent-gold);">🚀 前往下一標題挑戰</button>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Web Audio Sound Synth
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playAudio(isCorrect) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (isCorrect) {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+        osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2); // G5
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+      } else {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(240, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(180, audioCtx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      }
+    }
+
+    // Comprehensive 4 Subsections Data with Cute Icons & Explanations
+    const topicsData = [
+      {
+        id: 0,
+        title: "標題一：家庭型態大搜查",
+        icon: "🏡",
+        desc: "精準辨別小家庭、大家庭、單親家庭、隔代教養與新住民家庭，體會多元家庭之美。",
+        questions: [
+          {
+            q: "爸爸、媽媽和小玉三個人住在一起，由父母共同照顧小玉生活起居，屬於哪一種家庭型態？",
+            icon: "👨‍👩‍👧",
+            opts: ["(A) 大家庭", "(B) 小家庭（核心家庭）", "(C) 單親家庭", "(D) 隔代教養"],
+            ans: 1,
+            exp: "✅ 正確！【小家庭（核心家庭）】由父母與未婚子女共同組成，是現代很普遍的型態。"
+          },
+          {
+            q: "爺爺、奶奶、爸爸、媽媽、小明與叔叔三代人同住一間大房子，屬於什麼家庭？",
+            icon: "🏰",
+            opts: ["(A) 小家庭", "(B) 大家庭（三代同堂）", "(C) 單親家庭", "(D) 頂客家庭"],
+            ans: 1,
+            exp: "✅ 正確！【大家庭（三代同堂）】由祖父母、父母與子女等三代或以上的親人共同生活。"
+          },
+          {
+            q: "小宇由媽媽一人細心撫養長大，母子倆感情深厚互相扶持，這屬於什麼家庭型態？",
+            icon: "👩‍👦",
+            opts: ["(A) 單親家庭", "(B) 隔代教養家庭", "(C) 大家庭", "(D) 新住民家庭"],
+            ans: 0,
+            exp: "✅ 正確！【單親家庭】由父親或母親其中一方，單獨承擔撫育照顧孩子的責任。"
+          },
+          {
+            q: "小晴的父母在外地工作，平時在鄉下由外公、外婆照顧生活與上學，這屬於？",
+            icon: "👵",
+            opts: ["(A) 小家庭", "(B) 隔代教養家庭", "(C) 單親家庭", "(D) 大家庭"],
+            ans: 1,
+            exp: "✅ 正確！【隔代教養家庭】是指由祖父母（或外祖父母）主要負責撫育孫子女成長。"
+          },
+          {
+            q: "關於社會課學到的家庭型態，哪一個觀念是「最正確」的？",
+            icon: "💖",
+            opts: [
+              "(A) 只有大家庭才幸福",
+              "(B) 每種家庭只要彼此相愛關懷，都是溫暖的家",
+              "(C) 單親家庭是不正常的",
+              "(D) 人數越少越好"
+            ],
+            ans: 1,
+            exp: "✅ 滿分！家庭型態沒有好壞之分，最重要的是家人之間充滿愛、包容與互相支持！"
+          }
+        ]
+      },
+      {
+        id: 1,
+        title: "標題二：成員分工小超人",
+        icon: "🧹",
+        desc: "理解男女平權分工、三年級學生能主動做的事，以及家人各司其職的意義。",
+        questions: [
+          {
+            q: "關於家裡的家務分工，下列哪一種觀念是「最公平且適當」的？",
+            icon: "⚖️",
+            opts: [
+              "(A) 家事全部是媽媽一個人的責任",
+              "(B) 全家人依能力共同分擔家事",
+              "(C) 小孩只要讀書，完全不用做家事",
+              "(D) 男生絕對不能進廚房"
+            ],
+            ans: 1,
+            exp: "✅ 正確！家事是全家人的事，大家依照自己的能力共同分擔，家庭生活更輕鬆和樂。"
+          },
+          {
+            q: "身為國小三年級的學生，下列哪一件家事是我們可以「主動做好」的？",
+            icon: "🎒",
+            opts: [
+              "(A) 爬到屋頂修水塔",
+              "(B) 整理自己的書包與打掃房間",
+              "(C) 使用瓦斯爐大火熱油炒菜",
+              "(D) 操作危險電動鋸木機"
+            ],
+            ans: 1,
+            exp: "✅ 正確！三年級的我們可以主動整理書包、摺衣服、擦桌子與收拾玩具，做好自我管理！"
+          },
+          {
+            q: "爸爸下班回來很疲累，媽媽正在廚房煮飯，身為孩子的我最好怎麼做？",
+            icon: "🍵",
+            opts: [
+              "(A) 躺在沙發上大叫要吃點心",
+              "(B) 主動幫忙擺碗筷、端菜或倒杯水給爸爸",
+              "(C) 假裝沒看見繼續大聲玩電動",
+              "(D) 抱怨晚餐煮太慢"
+            ],
+            ans: 1,
+            exp: "✅ 太貼心了！主動幫忙擺碗筷或問候長輩，能讓辛苦一天的家人感受到滿滿溫暖。"
+          },
+          {
+            q: "家人之間如果有人生病或特別忙碌時，其他成員應該如何應對？",
+            icon: "🤝",
+            opts: [
+              "(A) 互相推卸責任不理會",
+              "(B) 互相體諒並主動補位幫忙分擔",
+              "(C) 大發脾氣責怪他生病",
+              "(D) 只顧自己吃飯"
+            ],
+            ans: 1,
+            exp: "✅ 正確！互相關心、主動補位幫忙，是家庭發揮愛與凝聚力的最美時刻。"
+          },
+          {
+            q: "全家人一起分擔家事，最棒的收穫是什麼？",
+            icon: "✨",
+            opts: [
+              "(A) 可以讓一個人做完全部的事",
+              "(B) 能讓家裡乾淨舒適，增進家人的團結與責任感",
+              "(C) 可以向父母要求高額零用錢",
+              "(D) 只是為了應付學校作業"
+            ],
+            ans: 1,
+            exp: "✅ 正確！共同參與家務能培養責任感，也讓家庭氣氛更加融洽溫馨！"
+          }
+        ]
+      },
+      {
+        id: 2,
+        title: "標題三：家庭記憶時光機",
+        icon: "📷",
+        desc: "探索家庭的成長演變、珍惜老照片與生活故事，體會長輩撫育的辛勞。",
+        questions: [
+          {
+            q: "我們可以透過下列哪一種最好的方式，探索自己家庭過去的成長故事？",
+            icon: "📖",
+            opts: [
+              "(A) 翻閱老家庭相簿或請教長輩回憶",
+              "(B) 亂丟家裡的舊照片",
+              "(C) 上網搜尋不相關的八卦新聞",
+              "(D) 假裝自己沒有過去"
+            ],
+            ans: 0,
+            exp: "✅ 正確！家庭相簿與長輩的口述分享，是了解我們從哪裡來、如何長大的最棒寶藏！"
+          },
+          {
+            q: "看到自己嬰兒時期的照片，知道家人天天抱著我餵奶哄睡，我們應該體會到？",
+            icon: "🍼",
+            opts: [
+              "(A) 自己小時候很麻煩",
+              "(B) 家人撫育我們長大的辛勞與無私的愛",
+              "(C) 浪費很多相片紙",
+              "(D) 沒什麼特別感覺"
+            ],
+            ans: 1,
+            exp: "✅ 正確！每一張成長照片都記錄著家人悉心照顧我們的心血，我們要懂得感恩！"
+          },
+          {
+            q: "爺爺分享他小時候上學的生活、童玩與生活習慣，代表了什麼意義？",
+            icon: "📜",
+            opts: [
+              "(A) 爺爺在炫耀過去",
+              "(B) 世代生活經驗與歷史文化的珍貴傳承",
+              "(C) 現代人完全不需要聽",
+              "(D) 過去的生活很無聊"
+            ],
+            ans: 1,
+            exp: "✅ 正確！長輩的生活智慧與童年回憶，是珍貴的家庭記憶與文化傳承。"
+          },
+          {
+            q: "當家裡迎來新成員（如弟弟妹妹出生或養了小寵物），家庭生活常有什麼轉變？",
+            icon: "👶",
+            opts: [
+              "(A) 充滿新的歡樂，我們也學習分享與照顧他人",
+              "(B) 討厭新成員搶走玩具",
+              "(C) 大家都不能說話",
+              "(D) 丟掉所有舊東西"
+            ],
+            ans: 0,
+            exp: "✅ 正確！家庭成員的增加帶來新的責任與歡笑，讓我們學會包容與照顧他人。"
+          },
+          {
+            q: "珍惜家庭記憶最好的做法是什麼？",
+            icon: "🖼️",
+            opts: [
+              "(A) 將全家出遊或節慶照片整理記錄並感謝家人",
+              "(B) 撕毀泛黃的老照片",
+              "(C) 抱怨家裡房子不夠大",
+              "(D) 拒絕跟家人拍照合影"
+            ],
+            ans: 0,
+            exp: "✅ 正確！記錄生活中的溫馨時刻，能讓珍貴的家庭回憶長久保存下去！"
+          }
+        ]
+      },
+      {
+        id: 3,
+        title: "標題四：家人相處魔法心",
+        icon: "❤️",
+        desc: "掌握同理心溝通、孝順感恩長輩、以冷靜協商化解意見衝突。",
+        questions: [
+          {
+            q: "當我想看卡通，而哥哥想看體育轉播發生爭執時，最好的解決方法是？",
+            icon: "📺",
+            opts: [
+              "(A) 搶奪遙控器大哭大鬧",
+              "(B) 猜拳決定或協商輪流觀看的時段",
+              "(C) 把電視機電源線剪斷",
+              "(D) 動手打哥哥"
+            ],
+            ans: 1,
+            exp: "✅ 正確！理性溝通、輪流協商是解決爭執最成熟有效的好方法！"
+          },
+          {
+            q: "當長輩說話提醒我們走路要看路、注意安全時，我們應有的禮貌態度是？",
+            icon: "👂",
+            opts: [
+              "(A) 翻白眼大聲頂撞長輩",
+              "(B) 專心傾聽並溫和回答「謝謝長輩提醒」",
+              "(C) 假裝耳朵聽不見轉頭走開",
+              "(D) 甩門回房間"
+            ],
+            ans: 1,
+            exp: "✅ 正確！長輩的提醒出自關心與愛護，我們要以尊重與感謝的心情回應。"
+          },
+          {
+            q: "下列哪一句話是家人溝通時最棒的「魔法降溫金句」？",
+            icon: "🌈",
+            opts: [
+              "(A) 「都是你的錯啦！」",
+              "(B) 「我先聽你說，我們一起想辦法解決。」",
+              "(C) 「我再也不要理你了！」",
+              "(D) 「隨便你，反正我不管！」"
+            ],
+            ans: 1,
+            exp: "✅ 滿分金句！先傾聽、不急著指責，能立刻化解火爆氣氛，讓問題順利解決。"
+          },
+          {
+            q: "家人之間表達愛與感謝，最好的日常行動是什麼？",
+            icon: "🤗",
+            opts: [
+              "(A) 每天給長輩一個擁抱、主動說聲謝謝與早安",
+              "(B) 只在生日時開口要昂貴禮物",
+              "(C) 只要考試考好就不用有禮貌",
+              "(D) 默默放在心裡永遠不表達"
+            ],
+            ans: 0,
+            exp: "✅ 正確！愛要及時用語言與溫暖的行動表達出來，讓家天天充滿陽光！"
+          },
+          {
+            q: "當自己不小心做錯事惹家人難過時，應該採取什麼態度？",
+            icon: "🌱",
+            opts: [
+              "(A) 說謊推卸給弟弟妹妹",
+              "(B) 勇敢承認錯誤，誠懇道歉並主動改善",
+              "(C) 逃跑離家出走",
+              "(D) 假裝什麼事都沒發生"
+            ],
+            ans: 1,
+            exp: "✅ 正確！勇於認錯並誠懇道歉是負責任的表現，也能重獲家人的信任與擁抱！"
+          }
+        ]
+      }
+    ];
+
+    let currentTopicIdx = 0;
+    let currentQIdx = 0;
+    let topicScore = 0;
+    let answered = false;
+
+    function selectTopic(idx) {
+      currentTopicIdx = idx;
+      currentQIdx = 0;
+      topicScore = 0;
+      answered = false;
+
+      // Update Tab CSS
+      document.querySelectorAll('.topic-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === idx);
+      });
+
+      document.getElementById('quiz-container').style.display = 'block';
+      document.getElementById('result-container').style.display = 'none';
+
+      const topic = topicsData[currentTopicIdx];
+      document.getElementById('topic-icon').textContent = topic.icon;
+      document.getElementById('topic-title').textContent = topic.title;
+      document.getElementById('topic-desc').textContent = topic.desc;
+
+      updateScoreBadge();
+      renderQuestion();
+    }
+
+    function updateScoreBadge() {
+      document.getElementById('live-score').textContent = `🏆 本章得分：${topicScore} 分`;
+    }
+
+    function renderQuestion() {
+      answered = false;
+      const topic = topicsData[currentTopicIdx];
+      const q = topic.questions[currentQIdx];
+
+      document.getElementById('q-number').textContent = `📌 第 ${currentQIdx + 1} / ${topic.questions.length} 題`;
+      document.getElementById('progress-fill').style.width = `${((currentQIdx + 1) / topic.questions.length) * 100}%`;
+      document.getElementById('question-text').innerHTML = `<span style="margin-right:0.5rem;">${q.icon}</span> ${q.q}`;
+
+      const optsBox = document.getElementById('options-box');
+      optsBox.innerHTML = '';
+
+      q.opts.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt-btn';
+        btn.innerHTML = `<span style="color:var(--primary); font-weight:900;">${['A','B','C','D'][idx]}</span> ${optText}`;
+        btn.onclick = () => handleSelectOption(idx, btn);
+        optsBox.appendChild(btn);
+      });
+
+      const expBox = document.getElementById('explain-box');
+      expBox.style.display = 'none';
+      expBox.className = 'explain-card';
+      document.getElementById('btn-next').style.display = 'none';
+    }
+
+    function handleSelectOption(selectedIdx, btnEl) {
+      if (answered) return;
+      answered = true;
+
+      const topic = topicsData[currentTopicIdx];
+      const q = topic.questions[currentQIdx];
+      const allBtns = document.querySelectorAll('.opt-btn');
+      allBtns.forEach(b => b.disabled = true);
+
+      const expBox = document.getElementById('explain-box');
+
+      if (selectedIdx === q.ans) {
+        playAudio(true);
+        btnEl.classList.add('correct');
+        topicScore += 20;
+        updateScoreBadge();
+        expBox.innerHTML = `🌟 <strong>答對了！太棒了！</strong><br>${q.exp}`;
+        expBox.classList.remove('wrong-hint');
+      } else {
+        playAudio(false);
+        btnEl.classList.add('wrong');
+        allBtns[q.ans].classList.add('correct');
+        expBox.innerHTML = `💡 <strong>再想想看喔！</strong> 正確答案是【${['A','B','C','D'][q.ans]}】。<br>${q.exp}`;
+        expBox.classList.add('wrong-hint');
+      }
+
+      expBox.style.display = 'block';
+      document.getElementById('btn-next').style.display = 'inline-flex';
+    }
+
+    function nextQuestion() {
+      const topic = topicsData[currentTopicIdx];
+      currentQIdx++;
+      if (currentQIdx < topic.questions.length) {
+        renderQuestion();
+      } else {
+        showTopicResult();
+      }
+    }
+
+    function showTopicResult() {
+      document.getElementById('quiz-container').style.display = 'none';
+      document.getElementById('result-container').style.display = 'block';
+
+      document.getElementById('res-score').textContent = `${topicScore} 分`;
+      if (topicScore === 100) {
+        document.getElementById('res-title').innerHTML = `🎉 恭喜！【${topicsData[currentTopicIdx].title}】滿分通關！`;
+        document.getElementById('res-desc').innerHTML = `太優秀了！你拿到了 100 分滿分！獲得「${topicsData[currentTopicIdx].icon} 標題榮譽小博士勳章」！`;
+      } else {
+        document.getElementById('res-title').innerHTML = `👏 表現很棒！【${topicsData[currentTopicIdx].title}】挑戰完成！`;
+        document.getElementById('res-desc').innerHTML = `獲得了 ${topicScore} 分的好成績！複習一下剛剛答錯的小提示，隨時可以重新挑戰拿滿分喔！`;
+      }
+
+      const nextTopicBtn = document.getElementById('btn-next-topic');
+      if (currentTopicIdx < topicsData.length - 1) {
+        nextTopicBtn.style.display = 'inline-flex';
+        nextTopicBtn.textContent = `🚀 前往【${topicsData[currentTopicIdx + 1].title}】挑戰`;
+      } else {
+        nextTopicBtn.style.display = 'none';
+      }
+    }
+
+    function restartTopic() {
+      selectTopic(currentTopicIdx);
+    }
+
+    function goNextTopic() {
+      if (currentTopicIdx < topicsData.length - 1) {
+        selectTopic(currentTopicIdx + 1);
+      }
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    // Initialize with Topic 0
+    selectTopic(0);
+  </script>
+</body>
+</html>

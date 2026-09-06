@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>第一課〈你好，新朋友〉直行本四格段落繪圖示範簡報</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;900&family=Fredoka:wght@600;700&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b132b;
+      --bg-card: #1c2541;
+      --border-color: rgba(255, 255, 255, 0.15);
+      --ink-title: #ffffff;
+      --ink-body: #e2e8f0;
+      --ink-muted: #94a3b8;
+      
+      --primary: #38bdf8;
+      --secondary: #fbbf24;
+      --accent: #f43f5e;
+      --success: #34d399;
+      --purple: #c084fc;
+      
+      --font-main: 'Noto Sans TC', sans-serif;
+      --font-kai: "DFKai-SB", "BiauKai", "Noto Serif TC", serif;
+      --font-num: 'Fredoka', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink-body);
+      font-family: var(--font-main);
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.12) 0%, transparent 35%),
+        radial-gradient(circle at 85% 85%, rgba(251, 191, 36, 0.12) 0%, transparent 35%),
+        radial-gradient(circle at 50% 50%, rgba(192, 132, 252, 0.08) 0%, transparent 40%);
+    }
+
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent), var(--success));
+      width: 0%;
+      z-index: 1000;
+      transition: width 0.3s ease;
+    }
+
+    /* Top Control Bar */
+    #top-bar {
+      position: fixed;
+      top: 14px;
+      left: 24px;
+      right: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 900;
+      pointer-events: none;
+    }
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      pointer-events: auto;
+    }
+    #section-tag {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--secondary);
+      background: rgba(251, 191, 36, 0.18);
+      border: 1.5px solid rgba(251, 191, 36, 0.5);
+      padding: 6px 16px;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+    }
+    .icon-btn {
+      background: rgba(28, 37, 65, 0.85);
+      border: 1.5px solid var(--border-color);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 18px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s;
+      pointer-events: auto;
+    }
+    .icon-btn:hover {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+    }
+
+    #page-info {
+      position: fixed;
+      bottom: 15px;
+      right: 25px;
+      font-family: var(--font-num);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      background: rgba(15, 23, 42, 0.85);
+      border: 1.5px solid var(--border-color);
+      padding: 6px 16px;
+      border-radius: 20px;
+      z-index: 900;
+      backdrop-filter: blur(10px);
+    }
+
+    /* Nav Buttons */
+    .nav-btn {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 54px;
+      height: 54px;
+      background: rgba(28, 37, 65, 0.85);
+      border: 2px solid var(--border-color);
+      border-radius: 50%;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 950;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .nav-btn:hover {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+      transform: translateY(-50%) scale(1.1);
+    }
+    #prev-btn { left: 16px; }
+    #next-btn { right: 16px; }
+
+    /* Slide container */
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 65px 80px 55px 80px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      overflow-y: auto;
+      z-index: 10;
+    }
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .slide-inner {
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .kicker {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .slide-title {
+      font-size: clamp(26px, 3.4vw, 42px);
+      font-weight: 900;
+      line-height: 1.25;
+      color: #fff;
+    }
+
+    .highlight-gold { color: var(--secondary); }
+    .highlight-cyan { color: var(--primary); }
+    .highlight-pink { color: var(--accent); }
+    .highlight-green { color: var(--success); }
+    .highlight-purple { color: var(--purple); }
+
+    /* Demo Slide Layout: Left Image, Right Notes */
+    .demo-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .demo-img-box {
+      border: 3px solid var(--border-color);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      background: #000;
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .demo-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .demo-info-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+
+    .quote-box {
+      background: rgba(15, 23, 42, 0.8);
+      border-left: 4px solid var(--secondary);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-family: var(--font-kai);
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.6;
+      color: var(--secondary);
+    }
+
+    .tips-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #f1f5f9;
+    }
+
+    .tip-step {
+      display: flex;
+      gap: 8px;
+    }
+    .step-num {
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--primary);
+      font-weight: 800;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 13px;
+    }
+
+    /* Guide Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(12px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      padding: 20px;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-box {
+      background: #1c2541;
+      border: 3px solid var(--secondary);
+      border-radius: 24px;
+      padding: 30px;
+      max-width: 800px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.8);
+    }
+
+    .big-btn {
+      padding: 12px 28px;
+      font-size: 18px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--secondary), #f59e0b);
+      color: #000;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .big-btn:hover { transform: scale(1.05); }
+  </style>
+</head>
+<body>
+
+  <canvas id="confetti-canvas"></canvas>
+  <div id="progress-bar"></div>
+
+  <!-- Top Bar -->
+  <div id="top-bar">
+    <div class="top-left">
+      <div id="section-tag">第 1 頁 • 封面引導</div>
+      <button class="icon-btn" onclick="openTeacherGuide()">
+        <span>🎙️</span> 教學引導語（逐字稿）
+      </button>
+      <button class="icon-btn" onclick="toggleFullscreen()">
+        <span>📺</span> <span id="fs-txt">全螢幕</span>
+      </button>
+    </div>
+  </div>
+
+  <button class="nav-btn" id="prev-btn" onclick="prevSlide()">❮</button>
+  <button class="nav-btn" id="next-btn" onclick="nextSlide()">❯</button>
+
+  <div id="page-info"><span id="curr-slide">1</span> / <span id="total-slides">7</span></div>
+
+  <!-- SLIDE 1: 封面 -->
+  <section class="slide active" data-slide="1" data-section="第 1 頁 • 封面引導">
+    <div class="slide-inner" style="text-align: center; align-items: center; justify-content: center; min-height: 70vh;">
+      <div class="kicker">— 南一國語三上 第一課〈你好，新朋友〉 —</div>
+      <h1 class="slide-title" style="font-size: clamp(34px, 4.8vw, 56px); margin-top: 6px;">
+        🎨 國語直行本：<span class="highlight-gold">段落四格圖文創作</span>
+      </h1>
+      <p style="font-size: 20px; color: var(--ink-muted); max-width: 800px; margin: 12px 0 24px;">
+        一本直行本 ➔ 折出四個大格子 ➔ 一段一圖畫重點 ➔ 寫下自我介紹金句！
+      </p>
+      <div style="display: flex; gap: 14px;">
+        <button class="big-btn" onclick="nextSlide()">
+          🚀 開始折紙與畫畫教學
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 2: 直行本折法與版面 -->
+  <section class="slide" data-slide="2" data-section="第 2 頁 • 直行本四格佈局">
+    <div class="slide-inner">
+      <div class="kicker">— 事前準備 —</div>
+      <h2 class="slide-title">📐 步驟一：直行本<span class="highlight-purple">「四格折紙與版面規劃」</span></h2>
+      <div class="demo-layout">
+        <div class="demo-info-card" style="border-color: var(--purple);">
+          <div style="font-size: 20px; font-weight: 800; color: var(--secondary);">📖 折紙三步驟：</div>
+          <div class="tips-list">
+            <div class="tip-step"><div class="step-num">1</div><div>打開直行本跨頁，左右對齊向中間折一半，壓出<b>垂直中線</b>。</div></div>
+            <div class="tip-step"><div class="step-num">2</div><div>上下對齊再對折一半，壓出<b>水平中線</b>。</div></div>
+            <div class="tip-step"><div class="step-num">3</div><div>攤開本子，用黑筆沿折痕畫十字，完美分成<b>四大方框</b>！</div></div>
+            <div class="tip-step"><div class="step-num">4</div><div>每格上方 <b>3/4 畫圖</b>，下方預留 <b>2~3 行</b>寫課文金句。</div></div>
+          </div>
+        </div>
+        <div class="demo-info-card" style="border-color: var(--primary);">
+          <div style="font-size: 20px; font-weight: 800; color: var(--primary);">🖼️ 四格主題分配：</div>
+          <div class="tips-list">
+            <div>☀️ <b>【第 1 格】</b>：熱情的太陽（拍拍泥土小草）</div>
+            <div>🐦 <b>【第 2 格】</b>：唱歌的小雲雀（飛向青山半空）</div>
+            <div>🌬️ <b>【第 3 格】</b>：旅行的風（長髮接住落葉看綿羊）</div>
+            <div>👦 <b>【第 4 格】</b>：開朗的小豆子（開心踢足球自我介紹）</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: 第一段 太陽 -->
+  <section class="slide" data-slide="3" data-section="第 3 頁 • 第 1 格：太陽">
+    <div class="slide-inner">
+      <div class="kicker">— 第一段示範 —</div>
+      <h2 class="slide-title">☀️ 第 1 格：<span class="highlight-gold">熱情的太陽與泥土小草</span></h2>
+      <div class="demo-layout">
+        <div class="demo-img-box" style="border-color: var(--secondary);">
+          <img src="images/lesson1_p1_sun.jpg" alt="第一段示範圖">
+        </div>
+        <div class="demo-info-card" style="border-color: var(--secondary);">
+          <div class="quote-box">
+            「我是太陽，有一顆熱情的心。<br>我讓水滴化成彩虹，大海也會閃閃發亮。」
+          </div>
+          <div class="tips-list">
+            <div style="font-weight: 800; color: var(--primary);">🎨 畫畫小秘訣（幾何拆解）：</div>
+            <div class="tip-step"><div class="step-num">1</div><div><b>畫太陽</b>：在上方畫大圓形，加上微笑與光芒。</div></div>
+            <div class="tip-step"><div class="step-num">2</div><div><b>畫暖手</b>：從太陽伸出兩隻長長的波浪大手向下探。</div></div>
+            <div class="tip-step"><div class="step-num">3</div><div><b>畫小草</b>：下方畫泥土，長出兩片微笑嫩綠小葉。</div></div>
+            <div class="tip-step"><div class="step-num">4</div><div><b>加色彩</b>：遠處畫彩虹與藍色閃亮大海。</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: 第二段 小雲雀 -->
+  <section class="slide" data-slide="4" data-section="第 4 頁 • 第 2 格：小雲雀">
+    <div class="slide-inner">
+      <div class="kicker">— 第二段示範 —</div>
+      <h2 class="slide-title">🐦 第 2 格：<span class="highlight-cyan">唱歌的小雲雀與青山</span></h2>
+      <div class="demo-layout">
+        <div class="demo-img-box" style="border-color: var(--primary);">
+          <img src="images/lesson1_p2_skylark.jpg" alt="第二段示範圖">
+        </div>
+        <div class="demo-info-card" style="border-color: var(--primary);">
+          <div class="quote-box">
+            「我是小雲雀，沒有多彩的羽衣，卻有清脆的歌聲。<br>我喜歡一邊唱歌，一邊停留半空中。」
+          </div>
+          <div class="tips-list">
+            <div style="font-weight: 800; color: var(--primary);">🎨 畫畫小秘訣（幾何拆解）：</div>
+            <div class="tip-step"><div class="step-num">1</div><div><b>畫雲雀</b>：中間畫橢圓身軀，張開雙翅與小尖嘴。</div></div>
+            <div class="tip-step"><div class="step-num">2</div><div><b>畫音符</b>：小嘴巴前畫上 🎵 🎶 跳動的彩色音符。</div></div>
+            <div class="tip-step"><div class="step-num">3</div><div><b>畫青山</b>：背景用起伏波浪線畫出青翠群山。</div></div>
+            <div class="tip-step"><div class="step-num">4</div><div><b>上色</b>：塗上樸素咖啡色羽毛，停在藍天半空中。</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: 第三段 風 -->
+  <section class="slide" data-slide="5" data-section="第 5 頁 • 第 3 格：微風">
+    <div class="slide-inner">
+      <div class="kicker">— 第三段示範 —</div>
+      <h2 class="slide-title">🌬️ 第 3 格：<span class="highlight-pink">旅行的風與金黃落葉</span></h2>
+      <div class="demo-layout">
+        <div class="demo-img-box" style="border-color: var(--accent);">
+          <img src="images/lesson1_p3_wind.jpg" alt="第三段示範圖">
+        </div>
+        <div class="demo-info-card" style="border-color: var(--accent);">
+          <div class="quote-box">
+            「我是風，最喜歡四處旅行。<br>帶你去聞百合的花香，帶你去看成群的綿羊，再送你平安回地面的家。」
+          </div>
+          <div class="tips-list">
+            <div style="font-weight: 800; color: var(--accent);">🎨 畫畫小秘訣（幾何拆解）：</div>
+            <div class="tip-step"><div class="step-num">1</div><div><b>畫風仙子</b>：畫微笑臉龐，長髮像雲朵波浪飄逸。</div></div>
+            <div class="tip-step"><div class="step-num">2</div><div><b>接落葉</b>：雙手溫柔捧住一片金色旋轉的落葉。</div></div>
+            <div class="tip-step"><div class="step-num">3</div><div><b>花與羊</b>：下方畫白百合花，遠處畫棉花糖綿羊。</div></div>
+            <div class="tip-step"><div class="step-num">4</div><div><b>微風感</b>：用淺藍、嫩綠、金黃營造夢幻旅行感。</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6: 第四段 小豆子 -->
+  <section class="slide" data-slide="6" data-section="第 6 頁 • 第 4 格：小豆子">
+    <div class="slide-inner">
+      <div class="kicker">— 第四段示範 —</div>
+      <h2 class="slide-title">👦 第 4 格：<span class="highlight-green">開朗的小豆子與足球</span></h2>
+      <div class="demo-layout">
+        <div class="demo-img-box" style="border-color: var(--success);">
+          <img src="images/lesson1_p4_boy.jpg" alt="第四段示範圖">
+        </div>
+        <div class="demo-info-card" style="border-color: var(--success);">
+          <div class="quote-box">
+            「我是開朗的小豆子，最會踢足球。<br>人和球一起飛奔，是最快樂的時光。」
+          </div>
+          <div class="tips-list">
+            <div style="font-weight: 800; color: var(--success);">🎨 畫畫小秘訣（幾何拆解）：</div>
+            <div class="tip-step"><div class="step-num">1</div><div><b>畫主角</b>：畫大笑奔跑的小男孩（或畫你自己！）。</div></div>
+            <div class="tip-step"><div class="step-num">2</div><div><b>畫足球</b>：腳邊畫圓形黑白格子足球與動態速度線。</div></div>
+            <div class="tip-step"><div class="step-num">3</div><div><b>畫操場</b>：背景畫學校校舍與揮手歡呼的新同學。</div></div>
+            <div class="tip-step"><div class="step-num">4</div><div><b>寫句子</b>：在下方直行格子工整寫下自我介紹！</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 7: 成果展示與分享 -->
+  <section class="slide" data-slide="7" data-section="第 7 頁 • 成果大展演">
+    <div class="slide-inner" style="text-align: center;">
+      <div class="kicker">— 課堂發表與朗讀 —</div>
+      <h2 class="slide-title">🌟 四格成果大展演：<span class="highlight-gold">看圖朗讀與新朋友分享</span></h2>
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 16px 0;">
+        <div class="demo-info-card" style="padding: 16px; border-color: var(--secondary);">
+          <div style="font-size: 16px; font-weight: 800; color: var(--secondary);">☀️ 第 1 格</div>
+          <div style="font-size: 13px; color: var(--ink-muted);">我是太陽...</div>
+        </div>
+        <div class="demo-info-card" style="padding: 16px; border-color: var(--primary);">
+          <div style="font-size: 16px; font-weight: 800; color: var(--primary);">🐦 第 2 格</div>
+          <div style="font-size: 13px; color: var(--ink-muted);">我是小雲雀...</div>
+        </div>
+        <div class="demo-info-card" style="padding: 16px; border-color: var(--accent);">
+          <div style="font-size: 16px; font-weight: 800; color: var(--accent);">🌬️ 第 3 格</div>
+          <div style="font-size: 13px; color: var(--ink-muted);">我是風...</div>
+        </div>
+        <div class="demo-info-card" style="padding: 16px; border-color: var(--success);">
+          <div style="font-size: 16px; font-weight: 800; color: var(--success);">👦 第 4 格</div>
+          <div style="font-size: 13px; color: var(--ink-muted);">我是小豆子...</div>
+        </div>
+      </div>
+      <div style="margin-top: 10px;">
+        <button class="big-btn" onclick="triggerConfetti(); soundEffect('reveal');">
+          🎉 全班看圖合讀！完成大師級四格筆記！
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teacher Guide Modal -->
+  <div class="modal-overlay" id="guide-modal" onclick="closeTeacherGuide()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div style="font-size: 22px; font-weight: 900; color: var(--secondary); margin-bottom: 14px;">
+        🎙️ 國語第一課「直行本四格繪圖」課堂逐字教學引導語
+      </div>
+      <div style="text-align: left; font-size: 15px; line-height: 1.8; color: #e2e8f0; display: flex; flex-direction: column; gap: 14px;">
+        <div>
+          <b style="color: var(--primary);">【1. 引起動機與折紙引導】：</b><br>
+          「各位三年級的小作家、小畫家們！今天我們要用手中的國語直行本，施展神奇的魔法，把第一課的四個新朋友變成專屬的四格連環圖！請大家把本子打開，跟著老師折一折：左右對折壓出中線，上下再對折壓出十字線。拿黑筆畫出四個大房間，準備迎接四位新朋友進住囉！」
+        </div>
+        <div>
+          <b style="color: var(--secondary);">【2. 第 1 格：太陽引導語】：</b><br>
+          「首先，第一位新朋友是誰呀？沒錯，是溫暖又熱情的太陽公公！請在第一格畫一個大大的圓形，給他溫暖的笑臉。記得喔，太陽伸出了『暖暖的手』，輕輕拍著從泥土剛冒出來的小草。下方格子請工整寫下：『我是太陽，有一顆熱情的心。』」
+        </div>
+        <div>
+          <b style="color: var(--primary);">【3. 第 2 格：小雲雀引導語】：</b><br>
+          「第二位朋友飛來囉！是一隻在半空中唱歌的小雲雀。小雲雀雖然沒有五顏六色的華麗羽衣，但他有什麼呢？對！清脆動人的歌聲！我們在嘴巴前畫上幾個跳舞的音符，背景加上綠綠的青山，就像他在山谷裡開個人演唱會一樣！」
+        </div>
+        <div>
+          <b style="color: var(--accent);">【4. 第 3 格：旅行的風引導語】：</b><br>
+          「呼～呼～第三位朋友來了，他是最喜歡四處旅行的風！風的頭髮好長好美，像天空中的雲朵一樣飄呀飄。他用長長的頭髮，接住了一片即將落下的金黃葉子，還帶他去看成群像棉花糖一樣的綿羊，最後平安送他回家。」
+        </div>
+        <div>
+          <b style="color: var(--success);">【5. 第 4 格：小豆子與自我介紹引導語】：</b><br>
+          「最後一位朋友，就在我們的教室裡！開朗的小豆子最喜歡踢足球。小朋友，第四格你可以畫小豆子，也可以畫你自己喔！畫下你最喜歡的運動或專長，並在下方寫出自我介紹，大聲跟全班說：『你好，新朋友！』」
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 20px;">
+        <button class="big-btn" style="font-size: 16px; padding: 8px 24px;" onclick="closeTeacherGuide()">關閉引導語</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 7;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateSlideDisplay();
+      setupKeyboardNav();
+    });
+
+    function updateSlideDisplay() {
+      document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+      const activeSlide = document.querySelector(`.slide[data-slide="${currentSlide}"]`);
+      if (activeSlide) {
+        activeSlide.classList.add('active');
+        document.getElementById('section-tag').innerText = activeSlide.getAttribute('data-section') || '國語教學';
+      }
+      document.getElementById('curr-slide').innerText = currentSlide;
+      document.getElementById('total-slides').innerText = totalSlides;
+      document.getElementById('progress-bar').style.width = `${(currentSlide / totalSlides) * 100}%`;
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlideDisplay();
+        soundEffect('nav');
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlideDisplay();
+        soundEffect('nav');
+      }
+    }
+
+    function setupKeyboardNav() {
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
+        if (e.key === 'ArrowLeft') prevSlide();
+        if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+      });
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+        document.getElementById('fs-txt').innerText = '退出全螢幕';
+      } else {
+        document.exitFullscreen().catch(() => {});
+        document.getElementById('fs-txt').innerText = '全螢幕';
+      }
+    }
+
+    function openTeacherGuide() {
+      document.getElementById('guide-modal').classList.add('active');
+      soundEffect('nav');
+    }
+    function closeTeacherGuide() {
+      document.getElementById('guide-modal').classList.remove('active');
+    }
+
+    function soundEffect(type) {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (type === 'reveal') {
+          osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+          osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
+          osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2);
+          gain.gain.setValueAtTime(0.3, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.5);
+        } else if (type === 'nav') {
+          osc.frequency.setValueAtTime(440, ctx.currentTime);
+          gain.gain.setValueAtTime(0.12, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.08);
+        }
+      } catch (e) {}
+    }
+
+    function triggerConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const particles = [];
+      const colors = ['#fbbf24', '#38bdf8', '#f43f5e', '#34d399', '#c084fc', '#f59e0b'];
+
+      for (let i = 0; i < 80; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          vx: (Math.random() - 0.5) * 16,
+          vy: (Math.random() - 0.7) * 16,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          size: Math.random() * 8 + 5,
+          life: 1
+        });
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let active = false;
+        particles.forEach(p => {
+          if (p.life > 0) {
+            active = true;
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.35;
+            p.life -= 0.02;
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = Math.max(0, p.life);
+            ctx.fillRect(p.x, p.y, p.size, p.size);
+          }
+        });
+        if (active) requestAnimationFrame(render);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      render();
+    }
+  </script>
+</body>
+</html>

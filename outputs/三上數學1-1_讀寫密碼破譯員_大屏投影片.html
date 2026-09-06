@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🕵️‍♂️ 三上數學 1-1「讀寫密碼破譯員」大屏互動投影片</title>
+<style>
+  :root {
+    --primary: #0284c7;
+    --primary-dark: #0369a1;
+    --accent: #f59e0b;
+    --danger: #ef4444;
+    --success: #10b981;
+    --bg-dark: #0f172a;
+    --card-bg: #ffffff;
+  }
+
+  * { box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+
+  body {
+    margin: 0; padding: 0;
+    font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    background: var(--bg-dark);
+    height: 100vh;
+    overflow: hidden;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header Bar */
+  header {
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(12px);
+    padding: 10px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+    z-index: 100;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .app-logo {
+    font-size: 22px;
+    font-weight: 900;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  }
+
+  .status-badge {
+    background: linear-gradient(45deg, #0284c7, #38bdf8);
+    color: white;
+    padding: 5px 16px;
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: bold;
+  }
+
+  .status-badge.answer {
+    background: linear-gradient(45deg, #f59e0b, #d97706);
+  }
+
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-btn {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    padding: 8px 16px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .nav-btn:hover {
+    background: #ffffff;
+    color: #0f172a;
+    transform: translateY(-2px);
+  }
+
+  .nav-btn.active {
+    background: #0284c7;
+    border-color: #38bdf8;
+    color: #ffffff;
+  }
+
+  /* Main Stage */
+  main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .slide-card {
+    width: 96%;
+    max-width: 1250px;
+    height: 94%;
+    background: var(--card-bg);
+    border-radius: 32px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 35px 35px;
+    position: relative;
+    border: 6px solid #0284c7;
+    transition: all 0.3s ease;
+  }
+
+  .slide-card.answer-mode {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border-color: #f59e0b;
+    box-shadow: 0 0 50px rgba(245, 158, 11, 0.35);
+  }
+
+  /* Card Header */
+  .card-top {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .slide-tag {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0284c7;
+    background: #e0f2fe;
+    padding: 8px 22px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .slide-tag.answer-mode {
+    color: #b45309;
+    background: #fde68a;
+  }
+
+  /* 45s Timer Widget */
+  .timer-widget {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f1f5f9;
+    border: 3px solid #cbd5e1;
+    padding: 6px 20px;
+    border-radius: 25px;
+  }
+
+  .timer-widget.warning {
+    background: #fee2e2;
+    border-color: #ef4444;
+    animation: pulseTimer 0.6s infinite alternate;
+  }
+
+  @keyframes pulseTimer {
+    from { transform: scale(1); }
+    to { transform: scale(1.06); }
+  }
+
+  .timer-num {
+    font-family: 'Arial Black', Impact, sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: #0f172a;
+    min-width: 45px;
+    text-align: center;
+  }
+
+  .timer-widget.warning .timer-num {
+    color: #dc2626;
+  }
+
+  .timer-btn {
+    background: #0284c7;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  /* Question Content Body */
+  .content-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  .cipher-prompt {
+    font-size: 26px;
+    font-weight: bold;
+    color: #64748b;
+    margin-bottom: 15px;
+  }
+
+  .cipher-text {
+    font-size: 64px;
+    font-weight: 900;
+    color: #0f172a;
+    background: #f8fafc;
+    padding: 25px 60px;
+    border-radius: 24px;
+    border: 4px dashed #0284c7;
+    margin: 10px 0;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    letter-spacing: 2px;
+  }
+
+  /* Answer Content Body */
+  .giant-answer {
+    font-family: 'Arial Black', Impact, sans-serif;
+    font-size: 140px;
+    font-weight: 900;
+    color: #dc2626;
+    line-height: 1.1;
+    letter-spacing: 3px;
+    text-shadow: 0 4px 15px rgba(220, 38, 38, 0.25);
+    margin: 5px 0;
+  }
+
+  .breakdown-box {
+    background: #ffffff;
+    border: 2.5px solid #f59e0b;
+    border-radius: 20px;
+    padding: 15px 40px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+  }
+
+  .breakdown-reading {
+    font-size: 32px;
+    font-weight: 900;
+    color: #b45309;
+  }
+
+  .breakdown-detail {
+    font-size: 24px;
+    font-weight: bold;
+    color: #334155;
+  }
+
+  /* Card Footer Info */
+  .card-footer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 2px dashed #cbd5e1;
+    padding-top: 15px;
+  }
+
+  .tip-box {
+    font-size: 20px;
+    font-weight: bold;
+    color: #0284c7;
+    background: #f0f9ff;
+    padding: 8px 20px;
+    border-radius: 12px;
+  }
+
+  .tip-box.answer-mode {
+    color: #b45309;
+    background: #fef3c7;
+  }
+
+  /* Bottom Navigation */
+  footer {
+    background: rgba(15, 23, 42, 0.85);
+    padding: 12px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .progress-info {
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .progress-bar-container {
+    width: 250px;
+    height: 10px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #38bdf8, #f59e0b);
+    transition: width 0.2s ease;
+  }
+
+  .control-group {
+    display: flex;
+    gap: 15px;
+  }
+
+  .arrow-btn {
+    background: #0284c7;
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    font-size: 20px;
+    font-weight: 900;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .arrow-btn.ans-btn {
+    background: #f59e0b;
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+  }
+
+  .arrow-btn:hover { transform: translateY(-2px); }
+  .arrow-btn:active { transform: scale(0.95); }
+  .arrow-btn:disabled { background: #64748b; opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* Jump Drawer */
+  .jump-drawer {
+    position: fixed;
+    bottom: -100%;
+    left: 0; right: 0;
+    background: #ffffff;
+    border-radius: 30px 30px 0 0;
+    padding: 30px;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+    transition: bottom 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 200;
+    max-height: 75vh;
+    overflow-y: auto;
+  }
+
+  .jump-drawer.active { bottom: 0; }
+
+  .jump-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .jump-item {
+    background: #f8fafc;
+    border: 2px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 12px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
+    color: #1e293b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .jump-item:hover {
+    background: #0284c7;
+    color: white;
+    border-color: #0284c7;
+    transform: scale(1.03);
+  }
+
+  .jump-item.current {
+    background: #f59e0b;
+    color: white;
+    border-color: #d97706;
+  }
+
+  .drawer-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    z-index: 150;
+  }
+
+  .drawer-overlay.active { display: flex; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="app-logo">🕵️‍♂️「讀寫密碼破譯員」大屏互動投影片</div>
+    <div class="status-badge" id="slide-stage-badge">第 1 題：題目發布中</div>
+  </div>
+
+  <div class="header-controls">
+    <button class="nav-btn active" onclick="toggleTimerSound()" id="btn-sound">
+      🔊 倒數音效：開
+    </button>
+    <button class="nav-btn" onclick="openJumpDrawer()">
+      🔢 快速選題 (共15題)
+    </button>
+    <button class="nav-btn" onclick="toggleFullscreen()">
+      ⛶ 全螢幕
+    </button>
+  </div>
+</header>
+
+<!-- Main Slide Clickable Canvas -->
+<main onclick="handleCanvasClick(event)">
+  <div class="slide-card" id="slide-card">
+    
+    <!-- Top Row -->
+    <div class="card-top">
+      <div class="slide-tag" id="slide-tag">🕵️‍♂️ 密碼破譯任務 ➔ 第 1 題 / 共 15 題</div>
+      <div class="timer-widget" id="timer-widget">
+        <span style="font-size:16px; font-weight:bold; color:#64748b;">⏱️ 搶答倒數：</span>
+        <span class="timer-num" id="timer-num">45</span>
+        <button class="timer-btn" onclick="toggleTimer(event)" id="btn-timer-action">暫停</button>
+        <button class="timer-btn" style="background:#64748b;" onclick="resetTimer(event)">重設</button>
+      </div>
+    </div>
+
+    <!-- Content Middle Area -->
+    <div class="content-body" id="content-body">
+      <!-- Dynamically filled -->
+    </div>
+
+    <!-- Bottom Footer Tip -->
+    <div class="card-footer">
+      <div class="tip-box" id="tip-box">💡 破譯線索：四個位值皆有數字 ➔ 45 秒內小白板寫好立刻亮板！</div>
+      <div style="font-size: 16px; color: #64748b; font-weight: bold;">
+        提示：點擊螢幕或按【空白鍵 ➔】揭曉答案 / 進入下一題
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Bottom Footer Navigation -->
+<footer>
+  <div class="progress-info">
+    <span id="page-counter">進度：第 1 題 (題目)</span>
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" id="progress-fill"></div>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <button class="arrow-btn" id="btn-prev" onclick="prevSlide(event)">❮ 上一步</button>
+    <button class="arrow-btn" id="btn-next" onclick="nextSlide(event)">揭曉答案 ❯</button>
+  </div>
+</footer>
+
+<!-- Jump Drawer Modal -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeJumpDrawer()"></div>
+<div class="jump-drawer" id="jump-drawer">
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <h2 style="margin:0; font-size:24px; color:#0f172a;">🔢 選擇破譯題號</h2>
+    <button class="nav-btn" style="background:#ef4444; border:none;" onclick="closeJumpDrawer()">✕ 關閉</button>
+  </div>
+  <div class="jump-grid" id="jump-grid"></div>
+</div>
+
+<script>
+  // --- 15 QUESTIONS DATASET ---
+  const questions = [
+    { id: 1, type: "基礎四位數", cipher: "三千五百二十八", tip: "四個位值皆有數字", ans: "3528", read: "三千五百二十八", breakdown: "3個千、5個百、2個十、8個一", keynote: "依千位、百位、十位、個位順序寫下數字。" },
+    { id: 2, type: "經典陷阱（百位為零）", cipher: "六千零七十五", tip: "注意「零」出現在哪個位值？", ans: "6075", read: "六千零七十五", breakdown: "6個千、0個百、7個十、5個一", keynote: "「零」在百位，百位記得一定要補 0！不可漏寫成 675。" },
+    { id: 3, type: "經典陷阱（十位為零）", cipher: "四千八百零二", tip: "注意十位沒有十！", ans: "4802", read: "四千八百零二", breakdown: "4個千、8個百、0個十、2個一", keynote: "十位讀作「零」，十位補 0，個位是 2。" },
+    { id: 4, type: "尾數為零（個位為零）", cipher: "七千三百六十", tip: "「六十」後面沒有個位數！", ans: "7360", read: "七千三百六十", breakdown: "7個千、3個百、6個十、0個一", keynote: "「六十」代表 6 個十，個位沒有要補 0。" },
+    { id: 5, type: "雙重零陷阱（連續零）", cipher: "八千零九", tip: "中間沒有百也沒有十！", ans: "8009", read: "八千零九", breakdown: "8個千、0個百、0個十、9個一", keynote: "讀法中只唸一個「零」，但百位和十位都要補 0！" },
+    { id: 6, type: "間隔零陷阱", cipher: "五千零五十", tip: "百位和個位都沒有！", ans: "5050", read: "五千零五十", breakdown: "5個千、0個百、5個十、0個一", keynote: "千位 5、百位 0、十位 5、個位 0，注意兩個 0 的位置。" },
+    { id: 7, type: "連續零極致挑戰", cipher: "二千零一", tip: "百位和十位都是零！", ans: "2001", read: "二千零一", breakdown: "2個千、0個百、0個十、1個一", keynote: "連續空位只唸一個「零」，但要補兩個 0。" },
+    { id: 8, type: "整千數破譯", cipher: "七千", tip: "百、十、個位全部是零！", ans: "7000", read: "七千", breakdown: "7個千、0個百、0個十、0個一", keynote: "尾數三個零，合起來就是 7000。" },
+    { id: 9, type: "十位與個位為零", cipher: "六千六百", tip: "十位與個位都空著！", ans: "6600", read: "六千六百", breakdown: "6個千、6個百、0個十、0個一", keynote: "「六百」後面沒有數字，十位與個位皆補 0。" },
+    { id: 10, type: "一十開頭陷阱", cipher: "一千零一十", tip: "注意中間有零，十位是一十！", ans: "1010", read: "一千零一十", breakdown: "1個千、0個百、1個十、0個一", keynote: "千位 1、百位 0、十位 1、個位 0。" },
+    { id: 11, type: "最大四位數", cipher: "九千九百九十九", tip: "只差 1 就是一萬！", ans: "9999", read: "九千九百九十九", breakdown: "9個千、9個百、9個十、9個一", keynote: "最大的四位數，四個位值全為 9。" },
+    { id: 12, type: "終極大魔王（五位數）", cipher: "一萬", tip: "十個一千是一萬！", ans: "10000", read: "一萬", breakdown: "1個萬、0個千、0個百、0個十、0個一", keynote: "五位數！1 後面總共有 4 個 0。" },
+    { id: 13, type: "概念拆解破譯", cipher: "8 個千和 6 個一組成的數", tip: "百位和十位在哪裡？", ans: "8006", read: "八千零六", breakdown: "8個千、0個百、0個十、6個一", keynote: "沒有提到的位值（百位、十位）一定要補 0！" },
+    { id: 14, type: "概念拆解破譯", cipher: "4 個千、3 個百和 5 個十組成的數", tip: "個位在哪裡？", ans: "4350", read: "四千三百五十", breakdown: "4個千、3個百、5個十、0個一", keynote: "個位沒有提到，個位要補 0。" },
+    { id: 15, type: "概念拆解破譯", cipher: "9 個千和 9 個十組成的數", tip: "百位和個位都空著！", ans: "9090", read: "九千零九十", breakdown: "9個千、0個百、9個十、0個一", keynote: "百位與個位皆補 0，讀作九千零九十。" }
+  ];
+
+  let currentQIndex = 0;
+  let isAnswerMode = false; // false = question, true = answer
+  let timeLeft = 45;
+  let timerInterval = null;
+  let soundEnabled = true;
+
+  // Web Audio for Sound FX
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  function playTick(isFast) {
+    if (!soundEnabled) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(isFast ? 800 : 480, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+    osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+  }
+
+  function playAlarm() {
+    if (!soundEnabled) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+    osc.frequency.setValueAtTime(440, audioCtx.currentTime + 0.2);
+    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+    osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+  }
+
+  function playUnlockFanfare() {
+    if (!soundEnabled) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+    osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+    osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2); // G5
+    osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + 0.3); // C6
+    gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+    osc.start(); osc.stop(audioCtx.currentTime + 0.6);
+  }
+
+  // Render Slide
+  function renderSlide() {
+    const q = questions[currentQIndex];
+    const card = document.getElementById('slide-card');
+    const stageBadge = document.getElementById('slide-stage-badge');
+    const tag = document.getElementById('slide-tag');
+    const body = document.getElementById('content-body');
+    const tip = document.getElementById('tip-box');
+    const timerWidget = document.getElementById('timer-widget');
+    const btnNext = document.getElementById('btn-next');
+
+    if (!isAnswerMode) {
+      // --- QUESTION MODE ---
+      card.classList.remove('answer-mode');
+      tag.classList.remove('answer-mode');
+      tip.classList.remove('answer-mode');
+      stageBadge.classList.remove('answer');
+      timerWidget.style.display = 'flex';
+
+      stageBadge.innerText = `第 ${q.id} 題：題目發布中`;
+      tag.innerHTML = `🕵️‍♂️ 密碼破譯任務 ➔ 第 ${q.id} 題【${q.type}】`;
+      
+      body.innerHTML = `
+        <div class="cipher-prompt">🎯 請在小白板寫出對應的阿拉伯數字密碼：（限時 45 秒）</div>
+        <div class="cipher-text">「 ${q.cipher} 」</div>
+      `;
+
+      tip.innerHTML = `💡 破譯線索：${q.tip} ➔ 45 秒內小白板寫好立刻亮板！`;
+      btnNext.innerText = '揭曉答案 ❯';
+      btnNext.classList.remove('ans-btn');
+
+      // Start 45s timer
+      startTimer();
+    } else {
+      // --- ANSWER MODE ---
+      stopTimer();
+      card.classList.add('answer-mode');
+      tag.classList.add('answer-mode');
+      tip.classList.add('answer-mode');
+      stageBadge.classList.add('answer');
+      timerWidget.style.display = 'none';
+
+      stageBadge.innerText = `第 ${q.id} 題：答案公布`;
+      tag.innerHTML = `🔓 密碼破譯成功！ ➔ 第 ${q.id} 題【${q.type}】`;
+
+      body.innerHTML = `
+        <div style="font-size:24px; font-weight:bold; color:#b45309; margin-bottom:5px;">✅ 正確阿拉伯數字密碼：</div>
+        <div class="giant-answer">${q.ans}</div>
+        <div class="breakdown-box">
+          <div class="breakdown-reading">【 讀作：${q.read} 】</div>
+          <div class="breakdown-detail">位值結構：${q.breakdown}</div>
+        </div>
+      `;
+
+      tip.innerHTML = `⚠️ 破譯要訣：${q.keynote}`;
+      btnNext.innerText = (currentQIndex < questions.length - 1) ? '進入下一題 ➔' : '完成全部破譯！🎉';
+      btnNext.classList.add('ans-btn');
+
+      playUnlockFanfare();
+    }
+
+    // Progress footer
+    document.getElementById('page-counter').innerText = `第 ${q.id} / 15 題 （${isAnswerMode ? '答案' : '題目'}）`;
+    const stepTotal = questions.length * 2;
+    const currentStep = currentQIndex * 2 + (isAnswerMode ? 2 : 1);
+    document.getElementById('progress-fill').style.width = `${(currentStep / stepTotal) * 100}%`;
+
+    document.getElementById('btn-prev').disabled = (currentQIndex === 0 && !isAnswerMode);
+  }
+
+  // --- TIMER LOGIC ---
+  function startTimer() {
+    stopTimer();
+    timeLeft = 45;
+    updateTimerUI();
+    timerInterval = setInterval(() => {
+      if (timeLeft > 0) {
+        timeLeft--;
+        updateTimerUI();
+        if (timeLeft <= 5 && timeLeft > 0) {
+          playTick(true);
+        } else if (timeLeft > 5) {
+          playTick(false);
+        }
+        if (timeLeft === 0) {
+          stopTimer();
+          playAlarm();
+          document.getElementById('timer-num').innerText = '00';
+          alert("⏰ 時間到！請各組立刻停筆並高舉小白板亮板！");
+        }
+      }
+    }, 1000);
+  }
+
+  function stopTimer() {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+    const btn = document.getElementById('btn-timer-action');
+    if (btn) btn.innerText = '開始';
+  }
+
+  function toggleTimer(e) {
+    if (e) e.stopPropagation();
+    const btn = document.getElementById('btn-timer-action');
+    if (timerInterval) {
+      stopTimer();
+      btn.innerText = '繼續';
+    } else {
+      if (timeLeft === 0) timeLeft = 45;
+      timerInterval = setInterval(() => {
+        if (timeLeft > 0) {
+          timeLeft--;
+          updateTimerUI();
+          if (timeLeft <= 5 && timeLeft > 0) playTick(true);
+          else if (timeLeft > 5) playTick(false);
+          if (timeLeft === 0) {
+            stopTimer();
+            playAlarm();
+            alert("⏰ 時間到！請各組立刻停筆並高舉小白板亮板！");
+          }
+        }
+      }, 1000);
+      btn.innerText = '暫停';
+    }
+  }
+
+  function resetTimer(e) {
+    if (e) e.stopPropagation();
+    stopTimer();
+    timeLeft = 45;
+    updateTimerUI();
+    document.getElementById('btn-timer-action').innerText = '開始';
+  }
+
+  function updateTimerUI() {
+    const el = document.getElementById('timer-num');
+    const widget = document.getElementById('timer-widget');
+    el.innerText = timeLeft < 10 ? `0${timeLeft}` : timeLeft;
+    widget.classList.toggle('warning', timeLeft <= 10);
+  }
+
+  // --- NAVIGATION ---
+  function nextSlide(e) {
+    if (e) e.stopPropagation();
+    if (!isAnswerMode) {
+      isAnswerMode = true;
+      renderSlide();
+    } else {
+      if (currentQIndex < questions.length - 1) {
+        currentQIndex++;
+        isAnswerMode = false;
+        renderSlide();
+      } else {
+        alert("🎉 恭喜全班完成 15 題【讀寫密碼破譯員】全部挑戰！");
+      }
+    }
+  }
+
+  function prevSlide(e) {
+    if (e) e.stopPropagation();
+    if (isAnswerMode) {
+      isAnswerMode = false;
+      renderSlide();
+    } else {
+      if (currentQIndex > 0) {
+        currentQIndex--;
+        isAnswerMode = true;
+        renderSlide();
+      }
+    }
+  }
+
+  function handleCanvasClick(e) {
+    nextSlide(e);
+  }
+
+  function toggleTimerSound() {
+    soundEnabled = !soundEnabled;
+    const btn = document.getElementById('btn-sound');
+    btn.classList.toggle('active', soundEnabled);
+    btn.innerText = soundEnabled ? '🔊 倒數音效：開' : '🔇 倒數音效：關';
+  }
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen().catch(() => {});
+    }
+  }
+
+  // --- JUMP DRAWER ---
+  function openJumpDrawer() {
+    const grid = document.getElementById('jump-grid');
+    grid.innerHTML = '';
+    questions.forEach((q, idx) => {
+      const item = document.createElement('div');
+      item.className = `jump-item ${idx === currentQIndex ? 'current' : ''}`;
+      item.innerText = `第 ${q.id} 題：${q.ans}`;
+      item.onclick = () => {
+        currentQIndex = idx;
+        isAnswerMode = false;
+        renderSlide();
+        closeJumpDrawer();
+      };
+      grid.appendChild(item);
+    });
+    document.getElementById('drawer-overlay').classList.add('active');
+    document.getElementById('jump-drawer').classList.add('active');
+  }
+
+  function closeJumpDrawer() {
+    document.getElementById('drawer-overlay').classList.remove('active');
+    document.getElementById('jump-drawer').classList.remove('active');
+  }
+
+  // --- KEYBOARD CONTROLS ---
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' || e.code === 'ArrowRight' || e.code === 'Enter') {
+      e.preventDefault();
+      nextSlide();
+    } else if (e.code === 'ArrowLeft' || e.code === 'Backspace') {
+      e.preventDefault();
+      prevSlide();
+    } else if (e.code === 'KeyT') {
+      toggleTimer();
+    } else if (e.code === 'KeyF') {
+      toggleFullscreen();
+    } else if (e.code === 'Escape') {
+      closeJumpDrawer();
+    }
+  });
+
+  // Init
+  renderSlide();
+</script>
+</body>
+</html>

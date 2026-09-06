@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍎 三上數學 1-1「一顆蘋果」節奏數數大屏投影片 (1萬以內)</title>
+<style>
+  :root {
+    --primary: #0284c7;
+    --primary-dark: #0369a1;
+    --accent: #f59e0b;
+    --danger: #ef4444;
+    --success: #10b981;
+    --bg-dark: #0f172a;
+    --card-bg: #ffffff;
+  }
+
+  * { box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+
+  body {
+    margin: 0; padding: 0;
+    font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    background: var(--bg-dark);
+    height: 100vh;
+    overflow: hidden;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header Controls Bar */
+  header {
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(12px);
+    padding: 10px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+    z-index: 100;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .app-logo {
+    font-size: 22px;
+    font-weight: 900;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  }
+
+  .mode-badge {
+    background: linear-gradient(45deg, #10b981, #0284c7);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: bold;
+  }
+
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-btn {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    padding: 8px 16px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .nav-btn:hover {
+    background: #ffffff;
+    color: #0f172a;
+    transform: translateY(-2px);
+  }
+
+  .nav-btn.active {
+    background: #0284c7;
+    border-color: #38bdf8;
+    color: #ffffff;
+  }
+
+  /* Mode Switch Tabs */
+  .mode-nav {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    flex-wrap: wrap;
+  }
+
+  .tab-item {
+    background: rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    border: 2px solid transparent;
+    padding: 7px 18px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .tab-item:hover, .tab-item.active {
+    background: #ffffff;
+    color: #0f172a;
+    border-color: #38bdf8;
+    box-shadow: 0 4px 12px rgba(255,255,255,0.2);
+  }
+
+  /* Stage / Slide View */
+  main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .slide-card {
+    width: 96%;
+    max-width: 1250px;
+    height: 94%;
+    background: var(--card-bg);
+    border-radius: 32px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px 30px;
+    position: relative;
+    border: 6px solid #e2e8f0;
+    transition: all 0.3s ease;
+  }
+
+  .slide-card.milestone {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border-color: #f59e0b;
+    box-shadow: 0 0 40px rgba(245, 158, 11, 0.4);
+  }
+
+  .slide-tag {
+    font-size: 24px;
+    font-weight: 800;
+    color: #0284c7;
+    background: #e0f2fe;
+    padding: 8px 24px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .slide-tag.milestone {
+    color: #b45309;
+    background: #fde68a;
+    animation: bounceTag 1s infinite alternate;
+  }
+
+  @keyframes bounceTag {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+  }
+
+  /* Giant Number Box */
+  .number-display-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .giant-number {
+    font-family: 'Arial Black', Impact, sans-serif;
+    font-size: 170px;
+    font-weight: 900;
+    color: #0f172a;
+    line-height: 1.1;
+    letter-spacing: 2px;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .giant-number.milestone {
+    color: #dc2626;
+    text-shadow: 0 6px 20px rgba(220, 38, 38, 0.3);
+  }
+
+  .chinese-reading {
+    font-size: 52px;
+    font-weight: 900;
+    color: #0369a1;
+    margin-top: 15px;
+    background: rgba(2, 132, 199, 0.08);
+    padding: 10px 35px;
+    border-radius: 20px;
+    border: 2px dashed #0284c7;
+    transition: all 0.2s ease;
+  }
+
+  .chinese-reading.milestone {
+    color: #b91c1c;
+    background: rgba(220, 38, 38, 0.1);
+    border-color: #ef4444;
+  }
+
+  /* Footer Controls & Progress */
+  footer {
+    background: rgba(15, 23, 42, 0.85);
+    padding: 12px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .progress-info {
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .progress-bar-container {
+    width: 250px;
+    height: 10px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #38bdf8, #10b981);
+    transition: width 0.2s ease;
+  }
+
+  .control-group {
+    display: flex;
+    gap: 15px;
+  }
+
+  .arrow-btn {
+    background: #0284c7;
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    font-size: 20px;
+    font-weight: 900;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .arrow-btn:hover { background: #0369a1; transform: translateY(-2px); }
+  .arrow-btn:active { transform: scale(0.95); }
+  .arrow-btn:disabled { background: #64748b; opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* Jump Drawer Modal */
+  .jump-drawer {
+    position: fixed;
+    bottom: -100%;
+    left: 0; right: 0;
+    background: #ffffff;
+    border-radius: 30px 30px 0 0;
+    padding: 30px;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+    transition: bottom 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 200;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  .jump-drawer.active { bottom: 0; }
+
+  .jump-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .jump-item {
+    background: #f8fafc;
+    border: 2px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 12px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 900;
+    color: #1e293b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .jump-item:hover {
+    background: #0284c7;
+    color: white;
+    border-color: #0284c7;
+    transform: scale(1.05);
+  }
+
+  .jump-item.current {
+    background: #f59e0b;
+    color: white;
+    border-color: #d97706;
+  }
+
+  .drawer-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    z-index: 150;
+  }
+
+  .drawer-overlay.active { display: flex; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="app-logo">🍎「一顆蘋果」節奏數數投影片</div>
+    <div class="mode-badge" id="current-mode-label">十位區 (10 ➔ 200)</div>
+  </div>
+
+  <div class="header-controls">
+    <button class="nav-btn" onclick="toggleDisplayMode()" id="btn-display-mode">
+      👁️ 顯示：數字 ＋ 中文
+    </button>
+    <button class="nav-btn active" onclick="toggleSound()" id="btn-sound">
+      🔊 節奏鼓聲：開
+    </button>
+    <button class="nav-btn" onclick="toggleAutoPlay()" id="btn-auto-play">
+      ⏱️ 自動播放：關
+    </button>
+    <button class="nav-btn" onclick="openJumpDrawer()">
+      🔢 快速跳題
+    </button>
+    <button class="nav-btn" onclick="toggleFullscreen()">
+      ⛶ 全螢幕
+    </button>
+  </div>
+</header>
+
+<!-- Mode Select Navigation Tabs -->
+<nav class="mode-nav">
+  <div class="tab-item active" onclick="switchSection('tens')">🟢 一、十位節奏區 (10 ➔ 200)</div>
+  <div class="tab-item" onclick="switchSection('hundreds')">🟡 二、百位節奏區 (100 ➔ 2000)</div>
+  <div class="tab-item" onclick="switchSection('thousands')">🔴 三、千位節奏區 (1000 ➔ 10000)</div>
+  <div class="tab-item" onclick="switchSection('tens-down')">⏪ 十位倒數 (200 ➔ 10)</div>
+  <div class="tab-item" onclick="switchSection('hundreds-down')">⏪ 百位倒數 (2000 ➔ 100)</div>
+  <div class="tab-item" onclick="switchSection('thousands-down')">⏪ 千位倒數 (10000 ➔ 1000)</div>
+</nav>
+
+<!-- Main Slide Clickable Canvas -->
+<main onclick="handleCanvasClick(event)">
+  <div class="slide-card" id="slide-card">
+    <div class="slide-tag" id="slide-tag">🍎 一顆蘋果節奏數數</div>
+    <div class="number-display-box">
+      <div class="giant-number" id="giant-number">10</div>
+      <div class="chinese-reading" id="chinese-reading">【 唸作：十 】</div>
+    </div>
+    <div style="font-size: 18px; color: #64748b; font-weight: bold;">
+      💡 提示：點擊螢幕任意處、按【空白鍵】或【右方向鍵 ➔】進入下一個數字
+    </div>
+  </div>
+</main>
+
+<!-- Bottom Footer Navigation -->
+<footer>
+  <div class="progress-info">
+    <span id="page-counter">進度：1 / 20</span>
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" id="progress-fill"></div>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <button class="arrow-btn" id="btn-prev" onclick="prevSlide(event)">❮ 上一個數字</button>
+    <button class="arrow-btn" id="btn-next" onclick="nextSlide(event)">下一個數字 ❯</button>
+  </div>
+</footer>
+
+<!-- Jump Drawer -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeJumpDrawer()"></div>
+<div class="jump-drawer" id="jump-drawer">
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <h2 style="margin:0; font-size:26px; color:#0f172a;" id="drawer-title">🔢 快速跳至指定數字</h2>
+    <button class="nav-btn" style="background:#ef4444; border:none;" onclick="closeJumpDrawer()">✕ 關閉</button>
+  </div>
+  <div class="jump-grid" id="jump-grid"></div>
+</div>
+
+<script>
+  // --- DATA SETS (Limited strictly to 10000) ---
+  const dataset = {
+    'tens': [
+      { num: "10", zh: "十", milestone: false },
+      { num: "20", zh: "二十", milestone: false },
+      { num: "30", zh: "三十", milestone: false },
+      { num: "40", zh: "四十", milestone: false },
+      { num: "50", zh: "五十", milestone: false },
+      { num: "60", zh: "六十", milestone: false },
+      { num: "70", zh: "七十", milestone: false },
+      { num: "80", zh: "八十", milestone: false },
+      { num: "90", zh: "九十", milestone: false },
+      { num: "100", zh: "一百（滿十個十是一百！）", milestone: true },
+      { num: "110", zh: "一百一十", milestone: false },
+      { num: "120", zh: "一百二十", milestone: false },
+      { num: "130", zh: "一百三十", milestone: false },
+      { num: "140", zh: "一百四十", milestone: false },
+      { num: "150", zh: "一百五十", milestone: false },
+      { num: "160", zh: "一百六十", milestone: false },
+      { num: "170", zh: "一百七十", milestone: false },
+      { num: "180", zh: "一百八十", milestone: false },
+      { num: "190", zh: "一百九十", milestone: false },
+      { num: "200", zh: "二百（滿二十個十是二百！）", milestone: true }
+    ],
+    'hundreds': [
+      { num: "100", zh: "一百", milestone: false },
+      { num: "200", zh: "二百", milestone: false },
+      { num: "300", zh: "三百", milestone: false },
+      { num: "400", zh: "四百", milestone: false },
+      { num: "500", zh: "五百", milestone: false },
+      { num: "600", zh: "六百", milestone: false },
+      { num: "700", zh: "七百", milestone: false },
+      { num: "800", zh: "八百", milestone: false },
+      { num: "900", zh: "九百", milestone: false },
+      { num: "1000", zh: "一千（滿十個一百是一千！）", milestone: true },
+      { num: "1100", zh: "一千一百", milestone: false },
+      { num: "1200", zh: "一千二百", milestone: false },
+      { num: "1300", zh: "一千三百", milestone: false },
+      { num: "1400", zh: "一千四百", milestone: false },
+      { num: "1500", zh: "一千五百", milestone: false },
+      { num: "1600", zh: "一千六百", milestone: false },
+      { num: "1700", zh: "一千七百", milestone: false },
+      { num: "1800", zh: "一千八百", milestone: false },
+      { num: "1900", zh: "一千九百", milestone: false },
+      { num: "2000", zh: "二千（滿二十個一百是二千！）", milestone: true }
+    ],
+    'thousands': [
+      { num: "1000", zh: "一千", milestone: false },
+      { num: "2000", zh: "二千", milestone: false },
+      { num: "3000", zh: "三千", milestone: false },
+      { num: "4000", zh: "四千", milestone: false },
+      { num: "5000", zh: "五千", milestone: false },
+      { num: "6000", zh: "六千", milestone: false },
+      { num: "7000", zh: "七千", milestone: false },
+      { num: "8000", zh: "八千", milestone: false },
+      { num: "9000", zh: "九千", milestone: false },
+      { num: "10000", zh: "一萬（滿十個一千是一萬！）", milestone: true }
+    ]
+  };
+
+  dataset['tens-down'] = [...dataset['tens']].reverse();
+  dataset['hundreds-down'] = [...dataset['hundreds']].reverse();
+  dataset['thousands-down'] = [...dataset['thousands']].reverse();
+
+  let currentSection = 'tens';
+  let currentIndex = 0;
+  let displayMode = 'both'; // 'both', 'num-only', 'zh-only'
+  let soundEnabled = true;
+  let autoPlayTimer = null;
+  let autoPlaySpeed = 1500; // ms
+
+  // Audio Context for Rhythm Beat
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  function playBeat(isMilestone) {
+    if (!soundEnabled) return;
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    if (isMilestone) {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+      osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+      osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2); // G5
+      osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + 0.3); // C6
+      gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.6);
+    } else {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.08);
+    }
+  }
+
+  function renderSlide() {
+    const list = dataset[currentSection];
+    const item = list[currentIndex];
+
+    const card = document.getElementById('slide-card');
+    const tag = document.getElementById('slide-tag');
+    const numEl = document.getElementById('giant-number');
+    const zhEl = document.getElementById('chinese-reading');
+
+    card.classList.toggle('milestone', item.milestone);
+    tag.classList.toggle('milestone', item.milestone);
+    numEl.classList.toggle('milestone', item.milestone);
+    zhEl.classList.toggle('milestone', item.milestone);
+
+    const sectionNames = {
+      'tens': '🟢 十位順數（10 ➔ 200）',
+      'hundreds': '🟡 百位順數（100 ➔ 2000）',
+      'thousands': '🔴 千位順數（1000 ➔ 10000）',
+      'tens-down': '⏪ 十位倒數挑戰（200 ➔ 10）',
+      'hundreds-down': '⏪ 百位倒數挑戰（2000 ➔ 100）',
+      'thousands-down': '⏪ 千位倒數挑戰（10000 ➔ 1000）'
+    };
+    tag.innerText = item.milestone ? `👑 關鍵跨位！${sectionNames[currentSection]}` : sectionNames[currentSection];
+
+    if (displayMode === 'both') {
+      numEl.style.display = 'block';
+      zhEl.style.display = 'block';
+      numEl.innerText = item.num;
+      zhEl.innerText = `【 唸作：${item.zh} 】`;
+      numEl.style.fontSize = item.num.length >= 5 ? '145px' : '175px';
+    } else if (displayMode === 'num-only') {
+      numEl.style.display = 'block';
+      zhEl.style.display = 'none';
+      numEl.innerText = item.num;
+      numEl.style.fontSize = item.num.length >= 5 ? '165px' : '195px';
+    } else if (displayMode === 'zh-only') {
+      numEl.style.display = 'none';
+      zhEl.style.display = 'block';
+      zhEl.innerText = item.zh;
+      zhEl.style.fontSize = '80px';
+    }
+
+    numEl.style.transform = 'scale(1.08)';
+    setTimeout(() => { numEl.style.transform = 'scale(1)'; }, 150);
+
+    document.getElementById('page-counter').innerText = `進度：${currentIndex + 1} / ${list.length}`;
+    const pct = ((currentIndex + 1) / list.length) * 100;
+    document.getElementById('progress-fill').style.width = `${pct}%`;
+
+    document.getElementById('btn-prev').disabled = currentIndex === 0;
+    document.getElementById('btn-next').disabled = currentIndex === list.length - 1;
+
+    playBeat(item.milestone);
+  }
+
+  function nextSlide(e) {
+    if (e) e.stopPropagation();
+    const list = dataset[currentSection];
+    if (currentIndex < list.length - 1) {
+      currentIndex++;
+      renderSlide();
+    } else {
+      if (autoPlayTimer) toggleAutoPlay();
+      alert("🎉 本區數數完成！太棒了！");
+    }
+  }
+
+  function prevSlide(e) {
+    if (e) e.stopPropagation();
+    if (currentIndex > 0) {
+      currentIndex--;
+      renderSlide();
+    }
+  }
+
+  function handleCanvasClick(e) {
+    nextSlide(e);
+  }
+
+  function switchSection(secKey) {
+    currentSection = secKey;
+    currentIndex = 0;
+    if (autoPlayTimer) toggleAutoPlay();
+
+    document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+
+    const labels = {
+      'tens': '十位區 (10 ➔ 200)',
+      'hundreds': '百位區 (100 ➔ 2000)',
+      'thousands': '千位區 (1000 ➔ 10000)',
+      'tens-down': '十位倒數挑戰',
+      'hundreds-down': '百位倒數挑戰',
+      'thousands-down': '千位倒數挑戰'
+    };
+    document.getElementById('current-mode-label').innerText = labels[secKey];
+    renderSlide();
+  }
+
+  function toggleDisplayMode() {
+    if (displayMode === 'both') {
+      displayMode = 'num-only';
+      document.getElementById('btn-display-mode').innerText = '👁️ 顯示：只看數字';
+    } else if (displayMode === 'num-only') {
+      displayMode = 'zh-only';
+      document.getElementById('btn-display-mode').innerText = '👁️ 顯示：只看中文';
+    } else {
+      displayMode = 'both';
+      document.getElementById('btn-display-mode').innerText = '👁️ 顯示：數字 ＋ 中文';
+    }
+    renderSlide();
+  }
+
+  function toggleSound() {
+    soundEnabled = !soundEnabled;
+    const btn = document.getElementById('btn-sound');
+    btn.classList.toggle('active', soundEnabled);
+    btn.innerText = soundEnabled ? '🔊 節奏鼓聲：開' : '🔇 節奏鼓聲：關';
+  }
+
+  function toggleAutoPlay() {
+    const btn = document.getElementById('btn-auto-play');
+    if (autoPlayTimer) {
+      clearInterval(autoPlayTimer);
+      autoPlayTimer = null;
+      btn.innerText = '⏱️ 自動播放：關';
+      btn.classList.remove('active');
+    } else {
+      btn.innerText = '⏱️ 自動播放中...';
+      btn.classList.add('active');
+      autoPlayTimer = setInterval(() => {
+        const list = dataset[currentSection];
+        if (currentIndex < list.length - 1) {
+          currentIndex++;
+          renderSlide();
+        } else {
+          toggleAutoPlay();
+          alert("🎉 自動節奏播放結束！全班給自己熱烈鼓掌！");
+        }
+      }, autoPlaySpeed);
+    }
+  }
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen().catch(() => {});
+    }
+  }
+
+  // JUMP DRAWER
+  function openJumpDrawer() {
+    const list = dataset[currentSection];
+    const grid = document.getElementById('jump-grid');
+    grid.innerHTML = '';
+
+    list.forEach((item, idx) => {
+      const btn = document.createElement('div');
+      btn.className = `jump-item ${idx === currentIndex ? 'current' : ''}`;
+      btn.innerText = item.num;
+      btn.onclick = () => {
+        currentIndex = idx;
+        renderSlide();
+        closeJumpDrawer();
+      };
+      grid.appendChild(btn);
+    });
+
+    document.getElementById('drawer-overlay').classList.add('active');
+    document.getElementById('jump-drawer').classList.add('active');
+  }
+
+  function closeJumpDrawer() {
+    document.getElementById('drawer-overlay').classList.remove('active');
+    document.getElementById('jump-drawer').classList.remove('active');
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' || e.code === 'ArrowRight' || e.code === 'Enter') {
+      e.preventDefault();
+      nextSlide();
+    } else if (e.code === 'ArrowLeft' || e.code === 'Backspace') {
+      e.preventDefault();
+      prevSlide();
+    } else if (e.code === 'KeyF') {
+      toggleFullscreen();
+    } else if (e.code === 'Escape') {
+      closeJumpDrawer();
+    }
+  });
+
+  // Init
+  renderSlide();
+</script>
+</body>
+</html>

@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>情緒四象限：比手畫腳肢體猜猜樂（大屏互動遊戲）</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;800;900&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --bg-card: rgba(26, 34, 52, 0.9);
+      --border-card: rgba(255, 255, 255, 0.12);
+      --primary: #c084fc;
+      --primary-glow: rgba(192, 132, 252, 0.4);
+      --c-red: #f43f5e;
+      --c-yellow: #fbbf24;
+      --c-blue: #38bdf8;
+      --c-green: #34d399;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-family: 'Noto Sans TC', 'Outfit', system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 15%, rgba(244, 63, 94, 0.16) 0%, transparent 45%),
+        radial-gradient(circle at 90% 15%, rgba(251, 191, 36, 0.16) 0%, transparent 45%),
+        radial-gradient(circle at 50% 85%, rgba(192, 132, 252, 0.12) 0%, transparent 50%);
+    }
+
+    header {
+      padding: 0.8rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-card);
+      z-index: 100;
+    }
+
+    .badge-header {
+      background: rgba(192, 132, 252, 0.2);
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      padding: 0.35rem 0.9rem;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.3rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-card);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #000;
+      font-weight: 800;
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .view-box {
+      width: 100%;
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .view-box.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 24px;
+      padding: 2rem;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+    }
+
+    /* Game Stage Styles */
+    .stage-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1.8rem;
+    }
+
+    .actor-box {
+      background: rgba(15, 23, 42, 0.85);
+      border: 2px dashed var(--primary);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      min-height: 380px;
+    }
+
+    .secret-tag {
+      position: absolute;
+      top: 1rem;
+      left: 1.2rem;
+      font-size: 0.85rem;
+      background: rgba(244, 63, 94, 0.2);
+      border: 1px solid var(--c-red);
+      color: var(--c-red);
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-weight: 800;
+    }
+
+    .card-secret-content {
+      font-size: 3.2rem;
+      font-weight: 900;
+      color: var(--c-yellow);
+      margin: 1.2rem 0;
+      filter: blur(20px);
+      transition: filter 0.3s ease;
+      cursor: pointer;
+    }
+
+    .card-secret-content.revealed {
+      filter: blur(0);
+    }
+
+    .btn-peek {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-card);
+      color: var(--text-main);
+      padding: 0.6rem 1.4rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-peek:hover {
+      background: var(--primary);
+      color: #000;
+    }
+
+    /* Timer & Controls */
+    .timer-ring {
+      font-size: 4rem;
+      font-weight: 900;
+      color: var(--c-yellow);
+      font-family: 'Outfit', sans-serif;
+      margin-bottom: 0.5rem;
+    }
+
+    .timer-ring.warning {
+      color: var(--c-red);
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* Guessing Quadrant Buttons */
+    .quad-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .btn-quad {
+      padding: 1.1rem;
+      border-radius: 16px;
+      font-size: 1.2rem;
+      font-weight: 900;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-quad.red { background: rgba(244, 63, 94, 0.2); border-color: var(--c-red); color: #fecdd3; }
+    .btn-quad.red:hover { background: var(--c-red); color: #fff; transform: translateY(-3px); }
+
+    .btn-quad.yellow { background: rgba(251, 191, 36, 0.2); border-color: var(--c-yellow); color: #fef08a; }
+    .btn-quad.yellow:hover { background: var(--c-yellow); color: #000; transform: translateY(-3px); }
+
+    .btn-quad.blue { background: rgba(56, 189, 248, 0.2); border-color: var(--c-blue); color: #bae6fd; }
+    .btn-quad.blue:hover { background: var(--c-blue); color: #000; transform: translateY(-3px); }
+
+    .btn-quad.green { background: rgba(52, 211, 153, 0.2); border-color: var(--c-green); color: #a7f3d0; }
+    .btn-quad.green:hover { background: var(--c-green); color: #000; transform: translateY(-3px); }
+
+    /* Scoreboard */
+    .team-scores {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.8rem;
+      margin-top: 1.2rem;
+    }
+
+    .team-box {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-card);
+      border-radius: 14px;
+      padding: 0.75rem;
+      text-align: center;
+    }
+
+    .team-box h4 {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 0.3rem;
+    }
+
+    .team-score {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--c-yellow);
+    }
+
+    .btn-score-add {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 0.3rem;
+    }
+
+    .btn-score-add:hover {
+      background: var(--primary);
+      color: #000;
+    }
+
+    /* Action buttons */
+    .btn-action {
+      background: linear-gradient(135deg, var(--primary), #9333ea);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.6rem;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <span class="badge-header">🎭 課堂引導動機活動</span>
+      <strong style="font-size: 1.05rem;">情緒默劇大偵探：比手畫腳肢體猜猜樂</strong>
+    </div>
+
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchView('rules')">📜 遊戲規則</button>
+      <button class="tab-btn" onclick="switchView('game')">🎮 遊戲擂台</button>
+      <button class="tab-btn" onclick="switchView('reflection')">💡 破案反思</button>
+    </div>
+
+    <button class="tab-btn" onclick="toggleFullScreen()" style="border: 1px solid var(--border-card);">⛶ 全螢幕</button>
+  </header>
+
+  <main>
+
+    <!-- View 1: Rules & Warmup -->
+    <div class="view-box active" id="view-rules">
+      <div class="card">
+        <h2 style="font-size: 2.2rem; font-weight: 900; margin-bottom: 0.8rem; color: var(--c-yellow);">
+          🎭 歡迎來到「情緒默劇大偵探」！
+        </h2>
+        <p style="font-size: 1.15rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.5rem;">
+          在今天的社會課開始前，我們先來一場「無聲的對決」！只用眼神、表情和身體動作，你能讓同學猜出你是哪一張情緒翻翻卡嗎？
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; margin-bottom: 2rem;">
+          <div style="background: rgba(244,63,94,0.15); border: 2px solid var(--c-red); border-radius: 16px; padding: 1.4rem;">
+            <h3 style="color: var(--c-red); font-size: 1.3rem; margin-bottom: 0.5rem;">🤐 絕對不能出聲！</h3>
+            <p style="color: #fecdd3; font-size: 0.95rem; line-height: 1.5;">不能說話、不能發出笑聲、不能發出怪聲音，全靠純演技！</p>
+          </div>
+          <div style="background: rgba(251,191,36,0.15); border: 2px solid var(--c-yellow); border-radius: 16px; padding: 1.4rem;">
+            <h3 style="color: var(--c-yellow); font-size: 1.3rem; margin-bottom: 0.5rem;">🚫 不能比字或注音</h3>
+            <p style="color: #fef08a; font-size: 0.95rem; line-height: 1.5;">不能在空中寫字，也不能比劃數字代碼，只比身體語言！</p>
+          </div>
+          <div style="background: rgba(56,189,248,0.15); border: 2px solid var(--c-blue); border-radius: 16px; padding: 1.4rem;">
+            <h3 style="color: var(--c-blue); font-size: 1.3rem; margin-bottom: 0.5rem;">⏳ 限時 30 秒搶答</h3>
+            <p style="color: #bae6fd; font-size: 0.95rem; line-height: 1.5;">台下先猜【象限顏色】得 1 分，再猜中【卡片名稱】再得 2 分！</p>
+          </div>
+        </div>
+
+        <div style="text-align: center;">
+          <button class="btn-action" onclick="switchView('game')" style="font-size: 1.2rem; padding: 0.8rem 2.5rem;">
+            🚀 準備好了！立刻開戰！
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- View 2: Game Stage -->
+    <div class="view-box" id="view-game">
+      <div class="card">
+        <div class="stage-grid">
+          
+          <!-- Left: Actor Mystery Box -->
+          <div class="actor-box">
+            <div class="secret-tag">🕵️ 表演者秘密卡片</div>
+            
+            <div style="font-size: 1rem; color: var(--text-muted); margin-bottom: 0.5rem;" id="actor-hint">
+              點擊「隨機抽卡」後，小隊長點「偷看題目」記住動作！
+            </div>
+
+            <div class="card-secret-content" id="card-display" onclick="toggleReveal()">
+              ❓ 尚未抽卡
+            </div>
+
+            <div style="font-size: 0.95rem; color: var(--c-yellow); margin-bottom: 1.2rem;" id="card-quadrant-hint">
+              【點擊上方字體或按鈕偷看】
+            </div>
+
+            <div style="display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap;">
+              <button class="btn-action" onclick="drawCard()">🎲 隨機抽取下一題</button>
+              <button class="btn-peek" onclick="toggleReveal()">👁️ 偷看題目 / 遮蓋</button>
+            </div>
+          </div>
+
+          <!-- Right: Timer & Guessing Dashboard -->
+          <div style="display: flex; flex-direction: column; justify-content: space-between;">
+            
+            <div style="background: rgba(15,23,42,0.8); border: 1px solid var(--border-card); border-radius: 18px; padding: 1.4rem; text-align: center;">
+              <div style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.3rem;">⏱️ 30 秒倒數計時</div>
+              <div class="timer-ring" id="timer-display">30</div>
+              <div style="display: flex; gap: 0.5rem; justify-content: center;">
+                <button class="btn-peek" onclick="startTimer()">▶ 開始計時</button>
+                <button class="btn-peek" onclick="resetTimer()">🔄 重置</button>
+              </div>
+            </div>
+
+            <div>
+              <div style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.5rem;">🎯 台下搶答象限（點擊判定）：</div>
+              <div class="quad-grid">
+                <button class="btn-quad red" onclick="judgeGuess('red')">🔴 紅色象限</button>
+                <button class="btn-quad yellow" onclick="judgeGuess('yellow')">🟡 黃色象限</button>
+                <button class="btn-quad blue" onclick="judgeGuess('blue')">🔵 藍色象限</button>
+                <button class="btn-quad green" onclick="judgeGuess('green')">🟢 綠色象限</button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Team Scoreboard -->
+        <div class="team-scores">
+          <div class="team-box">
+            <h4>第 1 組</h4>
+            <div class="team-score" id="score-1">0</div>
+            <button class="btn-score-add" onclick="addScore(1, 1)">+1分 (顏色)</button>
+            <button class="btn-score-add" onclick="addScore(1, 2)">+2分 (卡片)</button>
+          </div>
+          <div class="team-box">
+            <h4>第 2 組</h4>
+            <div class="team-score" id="score-2">0</div>
+            <button class="btn-score-add" onclick="addScore(2, 1)">+1分 (顏色)</button>
+            <button class="btn-score-add" onclick="addScore(2, 2)">+2分 (卡片)</button>
+          </div>
+          <div class="team-box">
+            <h4>第 3 組</h4>
+            <div class="team-score" id="score-3">0</div>
+            <button class="btn-score-add" onclick="addScore(3, 1)">+1分 (顏色)</button>
+            <button class="btn-score-add" onclick="addScore(3, 2)">+2分 (卡片)</button>
+          </div>
+          <div class="team-box">
+            <h4>第 4 組</h4>
+            <div class="team-score" id="score-4">0</div>
+            <button class="btn-score-add" onclick="addScore(4, 1)">+1分 (顏色)</button>
+            <button class="btn-score-add" onclick="addScore(4, 2)">+2分 (卡片)</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- View 3: Reflection & Connection -->
+    <div class="view-box" id="view-reflection">
+      <div class="card">
+        <h2 style="font-size: 2.2rem; font-weight: 900; margin-bottom: 1rem; color: var(--c-yellow);">
+          💡 破案大反思：身體是情緒的「最佳告密者」！
+        </h2>
+        
+        <div style="background: rgba(15,23,42,0.85); border: 2px solid var(--primary); border-radius: 18px; padding: 1.6rem; margin-bottom: 1.5rem; line-height: 1.8; font-size: 1.25rem;">
+          <p>🔍 <strong>想一想，剛才在猜謎時，同學沒有講半句話，你們是怎麼猜到的？</strong></p>
+          <ul style="margin: 1rem 0 1rem 1.8rem; color: #e2e8f0; font-size: 1.15rem;">
+            <li><strong style="color:var(--c-yellow);">看能量（活力度）：</strong>他跳躍揮拳、大動作跺腳 ➔ 活力度高（紅/黃區）！他肩膀下垂、癱坐著 ➔ 活力度低（藍/綠區）！</li>
+            <li><strong style="color:var(--c-green);">看表情（愉悅度）：</strong>他嘴角上揚、眼睛瞇成笑線 ➔ 心情舒服（黃/綠區）！他咬牙皺眉、垂頭嘆氣 ➔ 心情不舒服（紅/藍區）！</li>
+          </ul>
+          <p style="color: var(--c-yellow);">
+            ✨ <strong>結語：</strong> 原來就算不說話，我們的身體和表情都在大聲說出我們的心情！現在，讓我們打開【情緒四象限翻翻卡】，用文字和語言好好認識它們吧！
+          </p>
+        </div>
+
+        <div style="text-align: center;">
+          <button class="btn-action" onclick="window.location.href='情緒四象限翻翻卡_心情表達引導教學簡報.html'">
+            🚀 正式進入：情緒四象限探索簡報 ➔
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Web Audio Sound Synthesizer
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSfx(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (type === 'tick') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.05);
+      } else if (type === 'correct') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
+        osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+      } else if (type === 'buzz') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(160, audioCtx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      }
+    }
+
+    // Emotion Pool for Charades
+    const pool = [
+      { name: "暴怒", quad: "red", quadName: "🔴 紅色象限", action: "雙手揮拳、用力跺腳、面目猙獰！" },
+      { name: "生氣", quad: "red", quadName: "🔴 紅色象限", action: "插腰鼓起臉頰、狂甩頭！" },
+      { name: "緊張", quad: "red", quadName: "🔴 紅色象限", action: "抓緊衣角發抖、猛咬下唇、眼神慌張！" },
+      { name: "害怕", quad: "red", quadName: "🔴 紅色象限", action: "雙手抱頭縮成一團、步步後退！" },
+      { name: "不耐煩", quad: "red", quadName: "🔴 紅色象限", action: "雙手抱胸用力抖腳、猛看手錶翻白眼！" },
+
+      { name: "狂喜", quad: "yellow", quadName: "🟡 黃色象限", action: "跳起來雙手比 V、原地無聲轉圈歡呼！" },
+      { name: "興奮", quad: "yellow", quadName: "🟡 黃色象限", action: "雙手握拳猛搖晃、眼睛瞪得超亮！" },
+      { name: "得意", quad: "yellow", quadName: "🟡 黃色象限", action: "帥氣撥頭髮、挺胸大步走、比大拇指！" },
+      { name: "期待", quad: "yellow", quadName: "🟡 黃色象限", action: "雙手合十放胸口、踮腳尖往前張望搓手！" },
+      { name: "驚喜", quad: "yellow", quadName: "🟡 黃色象限", action: "雙手摀住嘴巴不敢相信、倒退一步！" },
+
+      { name: "疲累", quad: "blue", quadName: "🔵 藍色象限", action: "雙手垂下、整個人駝背無力連打大哈欠！" },
+      { name: "難過", quad: "blue", quadName: "🔵 藍色象限", action: "低頭用雙手擦眼淚、肩膀顫抖抽咽！" },
+      { name: "孤單", quad: "blue", quadName: "🔵 藍色象限", action: "抱住膝蓋蹲在地上、默默低著頭嘆氣！" },
+      { name: "失望", quad: "blue", quadName: "🔵 藍色象限", action: "打開空盒子、雙手無奈一攤深深垂下頭！" },
+
+      { name: "放鬆", quad: "green", quadName: "🟢 綠色象限", action: "整個人癱在椅子上、大大伸懶腰露出微笑！" },
+      { name: "安心", quad: "green", quadName: "🟢 綠色象限", action: "右手輕撫胸口、長長呼出一口氣、眉頭舒展！" },
+      { name: "感謝", quad: "green", quadName: "🟢 綠色象限", action: "雙手合十深深鞠躬、做出遞愛心的手勢！" },
+      { name: "滿足", quad: "green", quadName: "🟢 綠色象限", action: "雙手摸摸肚子、歪頭閉眼心滿意足點頭！" }
+    ];
+
+    let currentCard = null;
+    let isRevealed = false;
+
+    function drawCard() {
+      const idx = Math.floor(Math.random() * pool.length);
+      currentCard = pool[idx];
+      isRevealed = false;
+
+      const cardEl = document.getElementById('card-display');
+      cardEl.textContent = `${currentCard.name} 卡`;
+      cardEl.classList.remove('revealed');
+
+      document.getElementById('actor-hint').textContent = `表演動作秘笈：${currentCard.action}`;
+      document.getElementById('card-quadrant-hint').textContent = `【象限提示：${currentCard.quadName}】（點擊卡片或按鈕偷看）`;
+      
+      resetTimer();
+    }
+
+    function toggleReveal() {
+      if (!currentCard) return;
+      isRevealed = !isRevealed;
+      const cardEl = document.getElementById('card-display');
+      cardEl.classList.toggle('revealed', isRevealed);
+    }
+
+    // Timer Logic
+    let timeLeft = 30;
+    let timerId = null;
+
+    function startTimer() {
+      if (timerId) clearInterval(timerId);
+      timerId = setInterval(() => {
+        if (timeLeft > 0) {
+          timeLeft--;
+          document.getElementById('timer-display').textContent = timeLeft;
+          playSfx('tick');
+          if (timeLeft <= 5) {
+            document.getElementById('timer-display').classList.add('warning');
+          }
+        } else {
+          clearInterval(timerId);
+          timerId = null;
+          playSfx('buzz');
+          alert('⏰ 時間到！公布答案囉！');
+          toggleReveal();
+        }
+      }, 1000);
+    }
+
+    function resetTimer() {
+      if (timerId) clearInterval(timerId);
+      timerId = null;
+      timeLeft = 30;
+      document.getElementById('timer-display').textContent = '30';
+      document.getElementById('timer-display').classList.remove('warning');
+    }
+
+    // Quadrant Guess Check
+    function judgeGuess(guessedQuad) {
+      if (!currentCard) {
+        alert('請先抽一張卡片！');
+        return;
+      }
+      if (currentCard.quad === guessedQuad) {
+        playSfx('correct');
+        alert(`🎉 答對了！就是【${currentCard.quadName}】！請繼續猜是哪張情緒卡！`);
+      } else {
+        playSfx('buzz');
+        alert(`❌ 哎呀，不對喔！再看看表演者的肢體能量是高還是低？表情舒服還是緊繃？`);
+      }
+    }
+
+    // Scores
+    let scores = { 1: 0, 2: 0, 3: 0, 4: 0 };
+    function addScore(team, pts) {
+      scores[team] += pts;
+      document.getElementById(`score-${team}`).textContent = scores[team];
+      playSfx('correct');
+    }
+
+    // Switch View
+    function switchView(viewName) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view-box').forEach(v => v.classList.remove('active'));
+
+      if (viewName === 'rules') {
+        document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+        document.getElementById('view-rules').classList.add('active');
+      } else if (viewName === 'game') {
+        document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+        document.getElementById('view-game').classList.add('active');
+      } else if (viewName === 'reflection') {
+        document.querySelector('.tab-btn:nth-child(3)').classList.add('active');
+        document.getElementById('view-reflection').classList.add('active');
+      }
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    // Init
+    drawCard();
+  </script>
+</body>
+</html>

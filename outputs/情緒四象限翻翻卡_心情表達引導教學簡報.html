@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>情緒四象限翻翻卡：心情表達引導教學簡報</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;800;900&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --bg-card: rgba(26, 34, 52, 0.88);
+      --border-card: rgba(255, 255, 255, 0.12);
+      --primary: #38bdf8;
+      --primary-glow: rgba(56, 189, 248, 0.4);
+      --c-red: #f43f5e;
+      --c-red-bg: rgba(244, 63, 94, 0.18);
+      --c-yellow: #fbbf24;
+      --c-yellow-bg: rgba(251, 191, 36, 0.18);
+      --c-blue: #38bdf8;
+      --c-blue-bg: rgba(56, 189, 248, 0.18);
+      --c-green: #34d399;
+      --c-green-bg: rgba(52, 211, 153, 0.18);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-family: 'Noto Sans TC', 'Outfit', system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-image: 
+        radial-gradient(circle at 10% 15%, rgba(244, 63, 94, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 15%, rgba(251, 191, 36, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 10% 85%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 85%, rgba(52, 211, 153, 0.15) 0%, transparent 40%);
+    }
+
+    /* Top Navigation Header */
+    header {
+      padding: 0.75rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-card);
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .badge-unit {
+      background: rgba(251, 191, 36, 0.18);
+      border: 1px solid var(--c-yellow);
+      color: var(--c-yellow);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+
+    .quick-jump {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .btn-chip {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-card);
+      color: var(--text-muted);
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-chip:hover, .btn-chip.active {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+      font-weight: 800;
+    }
+
+    /* Slide Stage */
+    main {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 125px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 2rem;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      max-width: 1280px;
+      height: 100%;
+      max-height: 700px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(24px) scale(0.97);
+      pointer-events: none;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    /* Common Card Styles */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 20px;
+      padding: 1.5rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.35);
+    }
+
+    .slide-header {
+      margin-bottom: 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .slide-header h2 {
+      font-size: 2.1rem;
+      font-weight: 900;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .slide-header p {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 1.5rem;
+      width: 100%;
+      align-items: stretch;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.2rem;
+      width: 100%;
+    }
+
+    /* Flip Card Styles */
+    .cards-cloud {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+
+    .flip-btn {
+      background: rgba(15, 23, 42, 0.75);
+      border: 2px solid var(--border-card);
+      color: var(--text-main);
+      padding: 0.9rem 0.6rem;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 1.15rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .flip-btn:hover {
+      transform: translateY(-4px) scale(1.03);
+    }
+
+    .flip-btn.red { border-color: var(--c-red); color: #fecdd3; }
+    .flip-btn.red:hover { background: var(--c-red); color: #fff; box-shadow: 0 0 15px rgba(244, 63, 94, 0.5); }
+
+    .flip-btn.yellow { border-color: var(--c-yellow); color: #fef08a; }
+    .flip-btn.yellow:hover { background: var(--c-yellow); color: #000; box-shadow: 0 0 15px rgba(251, 191, 36, 0.5); }
+
+    .flip-btn.blue { border-color: var(--c-blue); color: #bae6fd; }
+    .flip-btn.blue:hover { background: var(--c-blue); color: #000; box-shadow: 0 0 15px rgba(56, 189, 248, 0.5); }
+
+    .flip-btn.green { border-color: var(--c-green); color: #a7f3d0; }
+    .flip-btn.green:hover { background: var(--c-green); color: #000; box-shadow: 0 0 15px rgba(52, 211, 153, 0.5); }
+
+    /* Interactive Sentence Builder (Slide 7) */
+    .sentence-display {
+      background: rgba(15, 23, 42, 0.9);
+      border: 2px dashed var(--primary);
+      border-radius: 18px;
+      padding: 1.5rem;
+      font-size: 1.35rem;
+      font-weight: 800;
+      line-height: 1.7;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      min-height: 130px;
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .tag-choice {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-card);
+      color: var(--text-main);
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tag-choice:hover, .tag-choice.selected {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+      transform: scale(1.05);
+    }
+
+    /* Footer Controls */
+    footer {
+      padding: 0.8rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border-card);
+      z-index: 100;
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-nav {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      color: var(--text-main);
+      padding: 0.55rem 1.3rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav:hover:not(:disabled) {
+      background: var(--primary);
+      color: #000;
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    .btn-nav:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .progress-track {
+      flex: 1;
+      max-width: 420px;
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin: 0 1.5rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 10%;
+      background: linear-gradient(90deg, var(--c-red), var(--c-yellow), var(--c-blue), var(--c-green));
+      transition: width 0.3s ease;
+    }
+
+    .counter-display {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      min-width: 60px;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header>
+    <div class="brand">
+      <div class="badge-unit">🌈 情緒四象限翻翻卡</div>
+      <div class="quick-jump">
+        <button class="btn-chip" onclick="goToSlide(1)">首頁</button>
+        <button class="btn-chip" onclick="goToSlide(2)">四象限地圖</button>
+        <button class="btn-chip" onclick="goToSlide(3)">🔴紅區火山</button>
+        <button class="btn-chip" onclick="goToSlide(4)">🟡黃區陽光</button>
+        <button class="btn-chip" onclick="goToSlide(5)">🔵藍區雨林</button>
+        <button class="btn-chip" onclick="goToSlide(6)">🟢綠區草原</button>
+        <button class="btn-chip" onclick="goToSlide(7)">🔑魔法句型</button>
+        <button class="btn-chip" onclick="goToSlide(8)">🎭情境實戰</button>
+        <button class="btn-chip" onclick="goToSlide(9)">🧰心情急救包</button>
+        <button class="btn-chip" onclick="goToSlide(10)">🌟情緒打卡</button>
+      </div>
+    </div>
+    <button class="btn-chip" onclick="toggleFullScreen()" style="background: rgba(56,189,248,0.15); color: var(--primary);">⛶ 全螢幕展示</button>
+  </header>
+
+  <!-- Main Slide Canvas -->
+  <main>
+
+    <!-- Slide 1: Cover -->
+    <div class="slide active" id="slide-1" style="text-align: center; align-items: center;">
+      <div class="badge-unit" style="margin-bottom: 1.2rem;">🌟 國小情意教育 · SEL 情緒素養</div>
+      <h1 style="font-size: 3.4rem; font-weight: 900; line-height: 1.2; margin-bottom: 1rem; background: linear-gradient(135deg, #f43f5e, #fbbf24, #38bdf8, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        心情天氣預報：<br>情緒四象限翻翻卡
+      </h1>
+      <p style="font-size: 1.3rem; color: var(--text-muted); max-width: 800px; line-height: 1.6; margin-bottom: 2rem;">
+        找到我的心情座標，學會指認 36 張情緒卡，溫柔而清楚地說出心裡話！
+      </p>
+      <div style="display: flex; gap: 1.2rem;">
+        <button class="btn-nav" onclick="goToSlide(2)" style="background: var(--primary); color: #000; font-size: 1.15rem; padding: 0.8rem 2rem;">🚀 開啟情緒探索之旅</button>
+        <button class="btn-nav" onclick="goToSlide(7)" style="font-size: 1.15rem; padding: 0.8rem 2rem;">🔑 直接練習魔法句型</button>
+      </div>
+    </div>
+
+    <!-- Slide 2: Four Quadrants Map -->
+    <div class="slide" id="slide-2">
+      <div class="slide-header">
+        <h2>🗺️ 認識情緒四象限地圖</h2>
+        <p>縱軸【活力度】（身體電量） ✕ 橫軸【愉悅度】（心裡開不開心）</p>
+      </div>
+      <div class="grid-4">
+        <div class="card" style="border-top: 5px solid var(--c-red);" onclick="goToSlide(3)">
+          <h3 style="color: var(--c-red); font-size: 1.3rem; margin-bottom: 0.6rem;">🔴 紅色象限</h3>
+          <p style="color: var(--c-yellow); font-size: 0.9rem; font-weight: 700; margin-bottom: 0.5rem;">高活力 ✕ 低愉悅</p>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5;">暴怒、生氣、害怕、緊張、不耐煩…<br><br>👉 像體內的火山爆發，需要停下來深呼吸！</p>
+        </div>
+        <div class="card" style="border-top: 5px solid var(--c-yellow);" onclick="goToSlide(4)">
+          <h3 style="color: var(--c-yellow); font-size: 1.3rem; margin-bottom: 0.6rem;">🟡 黃色象限</h3>
+          <p style="color: var(--c-yellow); font-size: 0.9rem; font-weight: 700; margin-bottom: 0.5rem;">高活力 ✕ 高愉悅</p>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5;">狂喜、興奮、快樂、期待、得意…<br><br>👉 像陽光嘉年華，充滿活力與創造力！</p>
+        </div>
+        <div class="card" style="border-top: 5px solid var(--c-blue);" onclick="goToSlide(5)">
+          <h3 style="color: var(--c-blue); font-size: 1.3rem; margin-bottom: 0.6rem;">🔵 藍色象限</h3>
+          <p style="color: var(--c-yellow); font-size: 0.9rem; font-weight: 700; margin-bottom: 0.5rem;">低活力 ✕ 低愉悅</p>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5;">難過、失望、孤單、疲累、自卑…<br><br>👉 像下著細雨的森林，需要被溫柔陪伴。</p>
+        </div>
+        <div class="card" style="border-top: 5px solid var(--c-green);" onclick="goToSlide(6)">
+          <h3 style="color: var(--c-green); font-size: 1.3rem; margin-bottom: 0.6rem;">🟢 綠色象限</h3>
+          <p style="color: var(--c-yellow); font-size: 0.9rem; font-weight: 700; margin-bottom: 0.5rem;">低活力 ✕ 高愉悅</p>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5;">平靜、放鬆、安心、滿足、感謝…<br><br>👉 像微風徐徐的綠草原，專注學習的黃金期！</p>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 1.5rem; color: var(--text-muted); font-size: 1rem;">
+        💡 點擊上方任一象限卡片，即可深入查看該星球的 9 大心情翻翻卡與引導提問！
+      </div>
+    </div>
+
+    <!-- Slide 3: Red Quadrant -->
+    <div class="slide" id="slide-3">
+      <div class="slide-header">
+        <h2 style="color: var(--c-red);">🔴 紅色象限：暴風雨之島（高活力 ✕ 低愉悅）</h2>
+        <p>點擊卡片查看身體訊號與照顧方法</p>
+      </div>
+      <div class="grid-2">
+        <div class="card" style="border-color: var(--c-red);">
+          <h3 style="color: var(--c-red); font-size: 1.25rem; margin-bottom: 1rem;">🔥 點選你的紅區卡片：</h3>
+          <div class="cards-cloud">
+            <button class="flip-btn red" onclick="showTip('暴怒', '🔥 火冒三丈！心跳超快，想大吼。➔ 先停 3 秒閉上眼睛，喝杯水降溫！')">暴怒</button>
+            <button class="flip-btn red" onclick="showTip('生氣', '😡 臉紅氣喘，眉頭深鎖。➔ 說出「我現在很生氣，因為…」代替摔東西。')">生氣</button>
+            <button class="flip-btn red" onclick="showTip('驚訝', '😲 眼睛瞪大，完全沒料到。➔ 拍拍胸口，給自己時間消化事情。')">驚訝</button>
+            <button class="flip-btn red" onclick="showTip('害怕', '😨 身體發抖，想找人躲起來。➔ 握住神隊友或老師的手，勇敢說出來。')">害怕</button>
+            <button class="flip-btn red" onclick="showTip('緊張', '💓 心跳像打鼓，手心冒汗。➔ 做 3 次 478 慢呼吸，告訴自己「我可以」。')">緊張</button>
+            <button class="flip-btn red" onclick="showTip('煩悶', '😫 心裡像打結的毛線。➔ 離開座位去走廊看大樹，伸個大懶腰。')">煩悶</button>
+            <button class="flip-btn red" onclick="showTip('討厭', '🤢 皺起鼻子，不想靠近。➔ 冷靜表達界線「請你不要這樣做」。')">討厭</button>
+            <button class="flip-btn red" onclick="showTip('歉意', '🥺 覺得對不起別人，心裡不安。➔ 真誠地說一句「對不起，我下次會注意」。')">歉意</button>
+            <button class="flip-btn red" onclick="showTip('不耐煩', '😤 跺腳看手錶，等不下去。➔ 心裡默數 1 到 10，練習等待的魔法。')">不耐煩</button>
+          </div>
+        </div>
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <h3 style="color: var(--c-yellow); font-size: 1.3rem; margin-bottom: 0.8rem;">🗣️ 學生心情引導提問：</h3>
+            <div id="tip-display-red" style="background: rgba(15,23,42,0.8); border: 1px solid var(--c-red); border-radius: 14px; padding: 1.2rem; font-size: 1.15rem; line-height: 1.6; min-height: 140px; color: #fff;">
+              👉 請在左側點選一張最符合你心境的卡片，看看引導提示！
+            </div>
+          </div>
+          <div style="background: var(--c-red-bg); border-radius: 12px; padding: 1rem; font-size: 0.95rem; line-height: 1.5;">
+            <strong>💡 老師溫馨提醒：</strong> 生氣和緊張不是壞事，它們是大腦在發送警報！只要不傷害自己與他人，每種情緒都可以被接納。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Yellow Quadrant -->
+    <div class="slide" id="slide-4">
+      <div class="slide-header">
+        <h2 style="color: var(--c-yellow);">🟡 黃色象限：陽光嘉年華（高活力 ✕ 高愉悅）</h2>
+        <p>充滿金色能量與笑容的小太陽</p>
+      </div>
+      <div class="grid-2">
+        <div class="card" style="border-color: var(--c-yellow);">
+          <h3 style="color: var(--c-yellow); font-size: 1.25rem; margin-bottom: 1rem;">✨ 點選你的黃區卡片：</h3>
+          <div class="cards-cloud">
+            <button class="flip-btn yellow" onclick="showTip('驚喜', '🎁 意想不到的大好事！眼睛發亮。➔ 大聲說謝謝，記住這份美好！', 'yellow')">驚喜</button>
+            <button class="flip-btn yellow" onclick="showTip('興奮', '⚡ 熱血沸騰，想跳起來。➔ 把熱情化為行動，去完成下一個挑戰！', 'yellow')">興奮</button>
+            <button class="flip-btn yellow" onclick="showTip('狂喜', '🥳 開心得不得了！滿臉燦爛。➔ 跟好朋友擊掌，慶祝努力有成果！', 'yellow')">狂喜</button>
+            <button class="flip-btn yellow" onclick="showTip('新奇', '🔍 發現新事物，好好奇！➔ 多問一個問題，探索神奇的知識！', 'yellow')">新奇</button>
+            <button class="flip-btn yellow" onclick="showTip('快樂', '😄 嘴角上揚，心裡好溫暖。➔ 寫在日記上，把快樂儲存起來！', 'yellow')">快樂</button>
+            <button class="flip-btn yellow" onclick="showTip('得意', '🏆 為自己感到驕傲！➔ 稱讚自己的努力，同時謙虛欣賞別人。', 'yellow')">得意</button>
+            <button class="flip-btn yellow" onclick="showTip('充滿希望', '🌈 相信明天一定會更好！➔ 勇敢邁出第一步，給同學加油！', 'yellow')">充滿希望</button>
+            <button class="flip-btn yellow" onclick="showTip('期待', '⏳ 盼望好事快點發生。➔ 做好準備，倒數迎接幸福時刻！', 'yellow')">期待</button>
+            <button class="flip-btn yellow" onclick="showTip('幸福', '🥰 被濃濃的愛包圍。➔ 給身邊愛你的人一個大大的擁抱！', 'yellow')">幸福</button>
+          </div>
+        </div>
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <h3 style="color: var(--c-yellow); font-size: 1.3rem; margin-bottom: 0.8rem;">🗣️ 學生心情引導提問：</h3>
+            <div id="tip-display-yellow" style="background: rgba(15,23,42,0.8); border: 1px solid var(--c-yellow); border-radius: 14px; padding: 1.2rem; font-size: 1.15rem; line-height: 1.6; min-height: 140px; color: #fff;">
+              👉 請在左側點選一張黃色卡片，看看引導提示！
+            </div>
+          </div>
+          <div style="background: var(--c-yellow-bg); border-radius: 12px; padding: 1rem; font-size: 0.95rem; line-height: 1.5; color: #fef08a;">
+            <strong>💡 老師溫馨提醒：</strong> 快樂是可以傳染的！得意而不炫耀，把你的熱情分享給今天需要微笑的同學。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5: Blue Quadrant -->
+    <div class="slide" id="slide-5">
+      <div class="slide-header">
+        <h2 style="color: var(--c-blue);">🔵 藍色象限：綿綿雨小徑（低活力 ✕ 低愉悅）</h2>
+        <p>走進陰雨綿綿的森林，需要溫柔與休息</p>
+      </div>
+      <div class="grid-2">
+        <div class="card" style="border-color: var(--c-blue);">
+          <h3 style="color: var(--c-blue); font-size: 1.25rem; margin-bottom: 1rem;">🌧️ 點選你的藍區卡片：</h3>
+          <div class="cards-cloud">
+            <button class="flip-btn blue" onclick="showTip('自卑', '🥀 覺得自己不如別人。➔ 每個人都有獨特天賦，看見自己的微小進步！', 'blue')">自卑</button>
+            <button class="flip-btn blue" onclick="showTip('失望', '🍂 結果跟想像不一樣。➔ 允許自己嘆口氣，拍拍自己說「盡力就很棒」。', 'blue')">失望</button>
+            <button class="flip-btn blue" onclick="showTip('無聊', '🥱 提不起勁做任何事。➔ 換個環境散散步，或隨手畫畫線條。', 'blue')">無聊</button>
+            <button class="flip-btn blue" onclick="showTip('悲傷', '🌧️ 心裡像壓了塊大石頭。➔ 哭出來沒關係，眼淚能幫心靈排毒。', 'blue')">悲傷</button>
+            <button class="flip-btn blue" onclick="showTip('難過', '😢 眼眶泛淚，喉嚨酸酸的。➔ 找老師或家長說說話，得到一個安慰抱抱。', 'blue')">難過</button>
+            <button class="flip-btn blue" onclick="showTip('空虛', '🌫️ 心裡空蕩蕩的。➔ 找一件喜歡的小事做，慢慢把電量充回來。', 'blue')">空虛</button>
+            <button class="flip-btn blue" onclick="showTip('絕望', '🌑 好想放棄一切。➔ 你不是孤單一人！伸出手讓身邊愛你的人拉你一把。', 'blue')">絕望</button>
+            <button class="flip-btn blue" onclick="showTip('孤單', '👤 身邊好像沒有伴。➔ 試著主動向同學說一句「早安」，跨出友誼一步。', 'blue')">孤單</button>
+            <button class="flip-btn blue" onclick="showTip('疲累', '🔋 身體電量見底了。➔ 趴在桌上閉目養神 10 分鐘，好好休息。', 'blue')">疲累</button>
+          </div>
+        </div>
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <h3 style="color: var(--c-yellow); font-size: 1.3rem; margin-bottom: 0.8rem;">🗣️ 學生心情引導提問：</h3>
+            <div id="tip-display-blue" style="background: rgba(15,23,42,0.8); border: 1px solid var(--c-blue); border-radius: 14px; padding: 1.2rem; font-size: 1.15rem; line-height: 1.6; min-height: 140px; color: #fff;">
+              👉 請在左側點選一張藍色卡片，看看引導提示！
+            </div>
+          </div>
+          <div style="background: var(--c-blue-bg); border-radius: 12px; padding: 1rem; font-size: 0.95rem; line-height: 1.5; color: #bae6fd;">
+            <strong>💡 老師溫馨提醒：</strong> 悲傷是在提醒我們「有些重要的事情需要被在乎」。給自己充飽電的時間，太陽總會升起。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 6: Green Quadrant -->
+    <div class="slide" id="slide-6">
+      <div class="slide-header">
+        <h2 style="color: var(--c-green);">🟢 綠色象限：微風綠草原（低活力 ✕ 高愉悅）</h2>
+        <p>平靜放鬆、安心滿足，專注學習的黃金狀態</p>
+      </div>
+      <div class="grid-2">
+        <div class="card" style="border-color: var(--c-green);">
+          <h3 style="color: var(--c-green); font-size: 1.25rem; margin-bottom: 1rem;">🍃 點選你的綠區卡片：</h3>
+          <div class="cards-cloud">
+            <button class="flip-btn green" onclick="showTip('自在', '🕊️ 像鳥兒飛翔一樣無拘無束。➔ 做最真實的自己，享受當下！', 'green')">自在</button>
+            <button class="flip-btn green" onclick="showTip('滿足', '🍯 心裡甜甜的、很充實。➔ 珍惜現在擁有的一切，心存感激。', 'green')">滿足</button>
+            <button class="flip-btn green" onclick="showTip('感動', '🥺 暖意湧上心頭。➔ 把這份美好記在心裡，傳遞善意給他人。', 'green')">感動</button>
+            <button class="flip-btn green" onclick="showTip('安心', '🛡️ 不用擔心受怕，好有安全感。➔ 在這個溫暖的班級裡好好學習。', 'green')">安心</button>
+            <button class="flip-btn green" onclick="showTip('感謝', '🙏 謝謝身邊所有幫助我的人。➔ 當面說聲謝謝，送出暖心微笑。', 'green')">感謝</button>
+            <button class="flip-btn green" onclick="showTip('信任', '🤝 相信同伴，願意互相依靠。➔ 互相合作，做值得託付的好隊友。', 'green')">信任</button>
+            <button class="flip-btn green" onclick="showTip('放鬆', '🛋️ 卸下壓力，身心輕盈。➔ 慢慢深呼吸，享受這片刻的安寧。', 'green')">放鬆</button>
+            <button class="flip-btn green" onclick="showTip('平靜', '🌊 像清澈見底的湖水一樣靜。➔ 此時頭腦最清楚，讀書思考效率高！', 'green')">平靜</button>
+            <button class="flip-btn green" onclick="showTip('舒服', '🌤️ 像躺在軟綿綿的白雲上。➔ 伸個舒服的懶腰，迎接美好時光。', 'green')">舒服</button>
+          </div>
+        </div>
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <h3 style="color: var(--c-yellow); font-size: 1.3rem; margin-bottom: 0.8rem;">🗣️ 學生心情引導提問：</h3>
+            <div id="tip-display-green" style="background: rgba(15,23,42,0.8); border: 1px solid var(--c-green); border-radius: 14px; padding: 1.2rem; font-size: 1.15rem; line-height: 1.6; min-height: 140px; color: #fff;">
+              👉 請在左側點選一張綠色卡片，看看引導提示！
+            </div>
+          </div>
+          <div style="background: var(--c-green-bg); border-radius: 12px; padding: 1rem; font-size: 0.95rem; line-height: 1.5; color: #a7f3d0;">
+            <strong>💡 老師溫馨提醒：</strong> 綠色區是大腦學習與吸收新知識的最佳狀態！多讓自己處在放鬆安心的綠區，生活更快樂。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7: Interactive Sentence Builder -->
+    <div class="slide" id="slide-7">
+      <div class="slide-header">
+        <h2>🔑 表達心情的五大魔法咒語（互動句型機）</h2>
+        <p>點選下方標籤，在大屏上組裝出你今天的心情句子！</p>
+      </div>
+      <div class="sentence-display" id="sentence-box">
+        「我現在在 <span style="color:var(--c-yellow);">【黃色】</span> 象限，最適合我的是 <span style="color:var(--c-yellow);">【快樂卡】</span>！因為今天 <span style="color:var(--primary);">【大隊接力全班第一名】</span>，我的身體感覺 <span style="color:var(--c-green);">【滿臉笑容好興奮】</span>，我現在想 <span style="color:var(--c-gold);">【和大家擊掌歡呼】</span>！」
+      </div>
+      <div class="card">
+        <div style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.5rem;">① 選擇象限顏色：</div>
+        <div class="tags-row">
+          <button class="tag-choice" onclick="setPart('color', '紅色', 'var(--c-red)')">🔴 紅色象限</button>
+          <button class="tag-choice" onclick="setPart('color', '黃色', 'var(--c-yellow)')">🟡 黃色象限</button>
+          <button class="tag-choice" onclick="setPart('color', '藍色', 'var(--c-blue)')">🔵 藍色象限</button>
+          <button class="tag-choice" onclick="setPart('color', '綠色', 'var(--c-green)')">🟢 綠色象限</button>
+        </div>
+
+        <div style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.5rem;">② 選擇心情卡片：</div>
+        <div class="tags-row">
+          <button class="tag-choice" onclick="setPart('card', '生氣卡')">生氣卡</button>
+          <button class="tag-choice" onclick="setPart('card', '緊張卡')">緊張卡</button>
+          <button class="tag-choice" onclick="setPart('card', '狂喜卡')">狂喜卡</button>
+          <button class="tag-choice" onclick="setPart('card', '期待卡')">期待卡</button>
+          <button class="tag-choice" onclick="setPart('card', '難過卡')">難過卡</button>
+          <button class="tag-choice" onclick="setPart('card', '孤單卡')">孤單卡</button>
+          <button class="tag-choice" onclick="setPart('card', '平靜卡')">平靜卡</button>
+          <button class="tag-choice" onclick="setPart('card', '安心卡')">安心卡</button>
+        </div>
+
+        <div style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.5rem;">③ 選擇身體感覺：</div>
+        <div class="tags-row">
+          <button class="tag-choice" onclick="setPart('body', '心跳好快好緊繃')">心跳很快</button>
+          <button class="tag-choice" onclick="setPart('body', '渾身無力眼眶酸')">眼眶酸酸</button>
+          <button class="tag-choice" onclick="setPart('body', '手舞足蹈眼睛發亮')">眼睛發亮</button>
+          <button class="tag-choice" onclick="setPart('body', '呼吸很慢很放鬆')">呼吸放鬆</button>
+        </div>
+
+        <div style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.5rem;">④ 提出我的需求：</div>
+        <div class="tags-row">
+          <button class="tag-choice" onclick="setPart('need', '一個人安靜五分鐘')">安靜五分鐘</button>
+          <button class="tag-choice" onclick="setPart('need', '喝口溫開水深呼吸')">喝水深呼吸</button>
+          <button class="tag-choice" onclick="setPart('need', '得到一個大擁抱')">要一個擁抱</button>
+          <button class="tag-choice" onclick="setPart('need', '找老師聊聊心事')">找老師聊聊</button>
+          <button class="tag-choice" onclick="setPart('need', '和全班一起歡呼分享')">歡呼分享快樂</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8: Scenario Practice -->
+    <div class="slide" id="slide-8">
+      <div class="slide-header">
+        <h2>🎭 課堂情境大挑戰：如果是你，會翻哪一張卡片？</h2>
+        <p>點選情境卡片，看看情緒小偵探的建議解答</p>
+      </div>
+      <div class="grid-2">
+        <div class="card" onclick="revealScenario(1)" style="cursor: pointer; border-left: 5px solid var(--c-blue);">
+          <h3 style="font-size: 1.25rem; color: var(--c-blue); margin-bottom: 0.6rem;">情境 A：下課想加入同學玩球，同學卻說人滿了……</h3>
+          <p style="color: var(--text-muted); line-height: 1.5;">👉 點擊查看情緒座標與自我照顧方法</p>
+          <div id="sc-ans-1" style="display: none; margin-top: 1rem; padding: 0.8rem; background: rgba(56,189,248,0.15); border-radius: 10px; color: #fff;">
+            💡 <strong>藍區【孤單卡 / 失望卡】</strong>：覺得心裡空空的。先深呼吸，找其他同學下棋看書，或跟老師說說話！
+          </div>
+        </div>
+        <div class="card" onclick="revealScenario(2)" style="cursor: pointer; border-left: 5px solid var(--c-red);">
+          <h3 style="font-size: 1.25rem; color: var(--c-red); margin-bottom: 0.6rem;">情境 B：發現辛苦畫的美勞作品被同學不小心撕破！</h3>
+          <p style="color: var(--text-muted); line-height: 1.5;">👉 點擊查看情緒座標與自我照顧方法</p>
+          <div id="sc-ans-2" style="display: none; margin-top: 1rem; padding: 0.8rem; background: rgba(244,63,94,0.15); border-radius: 10px; color: #fff;">
+            💡 <strong>紅區【暴怒卡 / 生氣卡】</strong>：拳頭握緊想發火！先停 3 秒閉眼深呼吸，溫和告訴對方「我很難過，請你幫我一起黏好」。
+          </div>
+        </div>
+        <div class="card" onclick="revealScenario(3)" style="cursor: pointer; border-left: 5px solid var(--c-yellow);">
+          <h3 style="font-size: 1.25rem; color: var(--c-yellow); margin-bottom: 0.6rem;">情境 C：練習了一整個月的大隊接力，全班第一名！</h3>
+          <p style="color: var(--text-muted); line-height: 1.5;">👉 點擊查看情緒座標與自我照顧方法</p>
+          <div id="sc-ans-3" style="display: none; margin-top: 1rem; padding: 0.8rem; background: rgba(251,191,36,0.15); border-radius: 10px; color: #fff;">
+            💡 <strong>黃區【狂喜卡 / 得意卡】</strong>：興奮得想跳舞！和全班擊掌歡呼，大聲對辛苦練習的每位同學說「大家辛苦了」！
+          </div>
+        </div>
+        <div class="card" onclick="revealScenario(4)" style="cursor: pointer; border-left: 5px solid var(--c-green);">
+          <h3 style="font-size: 1.25rem; color: var(--c-green); margin-bottom: 0.6rem;">情境 D：午修鐘聲響起，趴在桌上聽著外面的微風與鳥叫聲。</h3>
+          <p style="color: var(--text-muted); line-height: 1.5;">👉 點擊查看情緒座標與自我照顧方法</p>
+          <div id="sc-ans-4" style="display: none; margin-top: 1rem; padding: 0.8rem; background: rgba(52,211,153,0.15); border-radius: 10px; color: #fff;">
+            💡 <strong>綠區【平靜卡 / 放鬆卡】</strong>：呼吸均勻好舒服。閉上雙眼讓腦袋休息 15 分鐘，給下午的自己充飽電力！
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 9: Emotion Regulation Toolbox -->
+    <div class="slide" id="slide-9">
+      <div class="slide-header">
+        <h2>🧰 心情急救箱：從紅/藍區前往綠/黃區的五大魔法</h2>
+        <p>當你感到生氣或難過時，試試這些神奇魔法</p>
+      </div>
+      <div class="grid-4">
+        <div class="card" style="border-color: var(--c-blue); text-align: center;">
+          <div style="font-size: 3rem; margin-bottom: 0.5rem;">🌬️</div>
+          <h3 style="font-size: 1.2rem; color: var(--c-blue); margin-bottom: 0.5rem;">4-7-8 深呼吸</h3>
+          <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.5;">吸氣 4 秒<br>憋氣 7 秒<br>慢慢吐氣 8 秒<br>讓狂跳的心慢下來！</p>
+        </div>
+        <div class="card" style="border-color: var(--c-green); text-align: center;">
+          <div style="font-size: 3rem; margin-bottom: 0.5rem;">💧</div>
+          <h3 style="font-size: 1.2rem; color: var(--c-green); margin-bottom: 0.5rem;">喝口神奇溫開水</h3>
+          <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.5;">慢慢吞下一口水<br>感受溫水流過喉嚨<br>滋潤身體<br>放鬆緊繃的胃部！</p>
+        </div>
+        <div class="card" style="border-color: var(--c-yellow); text-align: center;">
+          <div style="font-size: 3rem; margin-bottom: 0.5rem;">🤝</div>
+          <h3 style="font-size: 1.2rem; color: var(--c-yellow); margin-bottom: 0.5rem;">找心情神隊友</h3>
+          <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.5;">不用一個人扛！<br>找導師、好友或爸媽<br>說出你的心事<br>得到暖心抱抱！</p>
+        </div>
+        <div class="card" style="border-color: var(--c-red); text-align: center;">
+          <div style="font-size: 3rem; margin-bottom: 0.5rem;">🎨</div>
+          <h3 style="font-size: 1.2rem; color: var(--c-red); margin-bottom: 0.5rem;">畫出來揉成球</h3>
+          <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.5;">拿一張廢紙<br>用力畫出心中的烏雲<br>然後揉成小紙球<br>丟進回收桶！</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 10: Live Classroom Check-in -->
+    <div class="slide" id="slide-10" style="text-align: center; align-items: center;">
+      <div class="badge-unit" style="margin-bottom: 1rem;">🌟 全班課堂即時打卡</div>
+      <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem;">今天你的心情翻翻卡是哪一張？</h2>
+      <p style="font-size: 1.15rem; color: var(--text-muted); margin-bottom: 1.5rem;">請同學輪流上台點選大屏，統計我們 304 班今天的心情氣象圖！</p>
+      
+      <div style="display: flex; gap: 1.5rem; justify-content: center; width: 100%; max-width: 900px; margin-bottom: 1.5rem;">
+        <div class="card" style="flex: 1; border-color: var(--c-red); cursor: pointer;" onclick="addVote('red')">
+          <div style="font-size: 2.2rem;">🔴</div>
+          <h3 style="color: var(--c-red); margin: 0.4rem 0;">紅色象限</h3>
+          <div id="vote-red" style="font-size: 2.5rem; font-weight: 900; color: #fff;">0 人</div>
+        </div>
+        <div class="card" style="flex: 1; border-color: var(--c-yellow); cursor: pointer;" onclick="addVote('yellow')">
+          <div style="font-size: 2.2rem;">🟡</div>
+          <h3 style="color: var(--c-yellow); margin: 0.4rem 0;">黃色象限</h3>
+          <div id="vote-yellow" style="font-size: 2.5rem; font-weight: 900; color: #fff;">0 人</div>
+        </div>
+        <div class="card" style="flex: 1; border-color: var(--c-blue); cursor: pointer;" onclick="addVote('blue')">
+          <div style="font-size: 2.2rem;">🔵</div>
+          <h3 style="color: var(--c-blue); margin: 0.4rem 0;">藍色象限</h3>
+          <div id="vote-blue" style="font-size: 2.5rem; font-weight: 900; color: #fff;">0 人</div>
+        </div>
+        <div class="card" style="flex: 1; border-color: var(--c-green); cursor: pointer;" onclick="addVote('green')">
+          <div style="font-size: 2.2rem;">🟢</div>
+          <h3 style="color: var(--c-green); margin: 0.4rem 0;">綠色象限</h3>
+          <div id="vote-green" style="font-size: 2.5rem; font-weight: 900; color: #fff;">0 人</div>
+        </div>
+      </div>
+
+      <button class="btn-chip" onclick="resetVotes()" style="font-size: 0.95rem; padding: 0.5rem 1.2rem;">🔄 重置全班打卡數據</button>
+    </div>
+
+  </main>
+
+  <!-- Bottom Control Bar -->
+  <footer>
+    <div class="nav-controls">
+      <button class="btn-nav" id="btn-prev" onclick="changeSlide(-1)" disabled>◀ 上一頁</button>
+      <button class="btn-nav" id="btn-next" onclick="changeSlide(1)">下一頁 ▶</button>
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+
+    <div class="counter-display" id="counter-display">1 / 10</div>
+  </footer>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 10;
+
+    function updateSlide() {
+      document.querySelectorAll('.slide').forEach((s, idx) => {
+        s.classList.toggle('active', idx + 1 === currentSlide);
+      });
+
+      document.getElementById('counter-display').textContent = `${currentSlide} / ${totalSlides}`;
+      const percent = (currentSlide / totalSlides) * 100;
+      document.getElementById('progress-fill').style.width = `${percent}%`;
+
+      document.getElementById('btn-prev').disabled = currentSlide === 1;
+      document.getElementById('btn-next').disabled = currentSlide === totalSlides;
+
+      // Header chip update
+      document.querySelectorAll('.quick-jump .btn-chip').forEach((chip, i) => {
+        chip.classList.toggle('active', i === currentSlide - 1);
+      });
+    }
+
+    function changeSlide(dir) {
+      currentSlide = Math.min(Math.max(1, currentSlide + dir), totalSlides);
+      updateSlide();
+    }
+
+    function goToSlide(n) {
+      currentSlide = n;
+      updateSlide();
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Space') {
+        if (currentSlide < totalSlides) changeSlide(1);
+      } else if (e.key === 'ArrowLeft') {
+        if (currentSlide > 1) changeSlide(-1);
+      }
+    });
+
+    // Tip Display Helper for Slides 3-6
+    function showTip(name, text, color='red') {
+      const el = document.getElementById(`tip-display-${color}`);
+      if (el) {
+        el.innerHTML = `🌟 <strong>【${name}卡】</strong><br><br>${text}`;
+      }
+    }
+
+    // Sentence builder logic (Slide 7)
+    let sData = { color: '黃色', card: '快樂卡', event: '今天發生了開心的事', body: '滿臉笑容好興奮', need: '和全班擊掌歡呼分享' };
+
+    function setPart(key, val, colorHex=null) {
+      sData[key] = val;
+      const box = document.getElementById('sentence-box');
+      box.innerHTML = `「我現在在 <span style="color:${colorHex || 'var(--c-yellow)'};">【${sData.color}】</span> 象限，最適合我的是 <span style="color:var(--c-yellow);">【${sData.card}】</span>！因為今天 <span style="color:var(--primary);">【${sData.event}】</span>，我的身體感覺 <span style="color:var(--c-green);">【${sData.body}】</span>，我現在想 <span style="color:var(--c-gold);">【${sData.need}】</span>！」`;
+    }
+
+    // Scenario Reveal (Slide 8)
+    function revealScenario(id) {
+      const el = document.getElementById(`sc-ans-${id}`);
+      if (el) {
+        el.style.display = el.style.display === 'none' ? 'block' : 'none';
+      }
+    }
+
+    // Voting tally (Slide 10)
+    let votes = { red: 0, yellow: 0, blue: 0, green: 0 };
+    function addVote(color) {
+      votes[color]++;
+      document.getElementById(`vote-${color}`).textContent = `${votes[color]} 人`;
+    }
+    function resetVotes() {
+      votes = { red: 0, yellow: 0, blue: 0, green: 0 };
+      ['red', 'yellow', 'blue', 'green'].forEach(c => {
+        document.getElementById(`vote-${c}`).textContent = '0 人';
+      });
+    }
+
+    // Init
+    updateSlide();
+  </script>
+</body>
+</html>

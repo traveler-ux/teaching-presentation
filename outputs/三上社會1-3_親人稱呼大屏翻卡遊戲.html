@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>三上社會 1-3：親人的稱呼翻卡遊戲（大屏互動教學版）</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;800;900&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --bg-card: rgba(26, 34, 52, 0.95);
+      --border-card: rgba(255, 255, 255, 0.15);
+      --primary: #f97316;
+      --primary-glow: rgba(249, 115, 22, 0.4);
+      --c-blue: #38bdf8;
+      --c-yellow: #fbbf24;
+      --c-green: #34d399;
+      --c-purple: #c084fc;
+      --c-red: #f43f5e;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-family: 'Noto Sans TC', 'Outfit', system-ui, -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-x: hidden;
+      overflow-y: auto;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(249, 115, 22, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 85% 15%, rgba(56, 189, 248, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 50% 90%, rgba(52, 211, 153, 0.15) 0%, transparent 50%);
+    }
+
+    header {
+      padding: 0.8rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-card);
+      z-index: 100;
+    }
+
+    .badge-unit {
+      background: rgba(249, 115, 22, 0.2);
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      padding: 0.35rem 0.9rem;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.3rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-card);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.45rem 1.1rem;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #000;
+      font-weight: 800;
+      box-shadow: 0 0 14px var(--primary-glow);
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .view-box {
+      width: 100%;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .view-box.active {
+      display: block !important;
+      opacity: 1 !important;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 24px;
+      padding: 1.8rem;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+    }
+
+    /* --- MODE 1: MEMORY MATCH FLIP GAME --- */
+    .game-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+      background: rgba(15, 23, 42, 0.85);
+      padding: 0.8rem 1.5rem;
+      border-radius: 16px;
+      border: 1px solid var(--border-card);
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    .match-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      perspective: 1000px;
+      min-height: 480px;
+    }
+
+    .flip-card-match {
+      position: relative;
+      width: 100%;
+      height: 110px;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .flip-card-match.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-match.matched {
+      transform: rotateY(180deg);
+      pointer-events: none;
+    }
+
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0.8rem;
+      font-weight: 800;
+      border: 2px solid var(--border-card);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+    }
+
+    .card-front {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: var(--primary);
+      font-size: 1.8rem;
+      border-color: rgba(249, 115, 22, 0.3);
+    }
+
+    .card-front::after {
+      content: "❓";
+      font-size: 2.2rem;
+    }
+
+    .card-back {
+      background: #1e293b;
+      transform: rotateY(180deg);
+      color: #fff;
+    }
+
+    .card-back.type-rel {
+      background: linear-gradient(135deg, #0369a1, #0f172a);
+      border-color: var(--c-blue);
+      font-size: 1.15rem;
+      color: #e0f2fe;
+    }
+
+    .card-back.type-name {
+      background: linear-gradient(135deg, #c2410c, #0f172a);
+      border-color: var(--primary);
+      font-size: 1.4rem;
+      color: #ffedd5;
+    }
+
+    .flip-card-match.matched .card-back {
+      border-color: var(--c-green);
+      background: linear-gradient(135deg, #065f46, #0f172a);
+      box-shadow: 0 0 20px rgba(52, 211, 153, 0.5);
+    }
+
+    /* --- MODE 2: FLASHCARD GALLERY --- */
+    .flash-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.2rem;
+    }
+
+    .flash-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 2px solid var(--border-card);
+      border-radius: 18px;
+      padding: 1.2rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      min-height: 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .flash-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.4);
+    }
+
+    .flash-card.dad { border-color: var(--c-blue); }
+    .flash-card.mom { border-color: var(--primary); }
+    .flash-card.cousin { border-color: var(--c-green); }
+
+    /* --- MODE 3: SORTING TANG VS BIAO --- */
+    .sort-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1.2rem;
+    }
+
+    .sort-bin {
+      background: rgba(15, 23, 42, 0.9);
+      border: 2px dashed var(--border-card);
+      border-radius: 20px;
+      padding: 1.5rem;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .sort-bin.tang { border-color: var(--c-green); }
+    .sort-bin.biao { border-color: var(--c-purple); }
+
+    .draggable-chip {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-card);
+      color: var(--text-main);
+      padding: 0.6rem 1.2rem;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin: 0.4rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-block;
+    }
+
+    .draggable-chip:hover {
+      transform: scale(1.06);
+      background: var(--c-yellow);
+      color: #000;
+    }
+
+    /* Common Buttons */
+    .btn-action {
+      background: linear-gradient(135deg, var(--primary), #ea580c);
+      color: #fff;
+      border: none;
+      padding: 0.65rem 1.4rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 18px var(--primary-glow);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <span class="badge-unit">👨‍👩‍👧‍👦 康軒三上社會 1-3</span>
+      <strong style="font-size: 1.1rem;">親人的稱呼：翻卡遊戲大挑戰</strong>
+    </div>
+
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchView('memory')">🎴 記憶翻翻樂</button>
+      <button class="tab-btn" onclick="switchView('gallery')">📖 親人稱呼速查卡</button>
+      <button class="tab-btn" onclick="switchView('sort')">⚖️ 堂表大分流</button>
+      <button class="tab-btn" onclick="switchView('quiz')">🏆 九宮格擂台</button>
+    </div>
+
+    <button class="tab-btn" onclick="toggleFullScreen()" style="border: 1px solid var(--border-card);">⛶ 全螢幕</button>
+  </header>
+
+  <main>
+
+    <!-- VIEW 1: MEMORY MATCH FLIP GAME -->
+    <div class="view-box active" id="view-memory">
+      <div class="card">
+        
+        <div class="game-stats">
+          <div class="stat-pill">
+            <span>⏱️ 時間：</span>
+            <span id="match-timer" style="color: var(--c-yellow);">00:00</span>
+          </div>
+          <div class="stat-pill">
+            <span>🎯 翻牌步數：</span>
+            <span id="match-moves" style="color: var(--c-blue);">0 步</span>
+          </div>
+          <div class="stat-pill">
+            <span>🌟 配對進度：</span>
+            <span id="match-score" style="color: var(--c-green);">0 / 8 對</span>
+          </div>
+          <div>
+            <select id="diff-select" onchange="initMemoryGame()" style="background:#1e293b; color:#fff; padding:0.4rem 0.8rem; border-radius:8px; border:1px solid var(--border-card); font-weight:700; margin-right:0.5rem;">
+              <option value="easy">關卡一：祖父母與長輩組 (8張/4對)</option>
+              <option value="medium" selected>關卡二：父系母系叔伯姑舅姨 (16張/8對)</option>
+              <option value="hard">關卡三：堂表兄弟姊妹全能王 (16張/8對)</option>
+            </select>
+            <button class="btn-action" onclick="initMemoryGame()">🔄 重新洗牌</button>
+          </div>
+        </div>
+
+        <div class="match-grid" id="match-grid">
+          <!-- Static Fallback Cards (will be replaced by JS on load) -->
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="5" data-type="rel"><div class="card-front"></div><div class="card-back type-rel"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【關係題目】</span><span>爸爸的哥哥</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="5" data-type="name"><div class="card-front"></div><div class="card-back type-name"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【親人稱呼】</span><span>伯父 (伯伯)</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="6" data-type="rel"><div class="card-front"></div><div class="card-back type-rel"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【關係題目】</span><span>爸爸的弟弟</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="6" data-type="name"><div class="card-front"></div><div class="card-back type-name"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【親人稱呼】</span><span>叔叔</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="7" data-type="rel"><div class="card-front"></div><div class="card-back type-rel"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【關係題目】</span><span>爸爸的姊妹</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="7" data-type="name"><div class="card-front"></div><div class="card-back type-name"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【親人稱呼】</span><span>姑姑 (姑母)</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="8" data-type="rel"><div class="card-front"></div><div class="card-back type-rel"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【關係題目】</span><span>媽媽的兄弟</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="8" data-type="name"><div class="card-front"></div><div class="card-back type-name"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【親人稱呼】</span><span>舅舅 (舅父)</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="9" data-type="rel"><div class="card-front"></div><div class="card-back type-rel"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【關係題目】</span><span>媽媽的姊妹</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="9" data-type="name"><div class="card-front"></div><div class="card-back type-name"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【親人稱呼】</span><span>阿姨 (姨母)</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="10" data-type="rel"><div class="card-front"></div><div class="card-back type-rel"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【關係題目】</span><span>伯父的小孩</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="10" data-type="name"><div class="card-front"></div><div class="card-back type-name"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【親人稱呼】</span><span>堂兄弟姊妹</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="12" data-type="rel"><div class="card-front"></div><div class="card-back type-rel"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【關係題目】</span><span>姑姑的小孩</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="12" data-type="name"><div class="card-front"></div><div class="card-back type-name"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【親人稱呼】</span><span>表兄弟姊妹</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="13" data-type="rel"><div class="card-front"></div><div class="card-back type-rel"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【關係題目】</span><span>舅舅的小孩</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="13" data-type="name"><div class="card-front"></div><div class="card-back type-name"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【親人稱呼】</span><span>表兄弟姊妹</span></div></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- VIEW 2: FLASHCARD GALLERY -->
+    <div class="view-box" id="view-gallery">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.8rem;">
+          <div>
+            <h2 style="font-size: 1.8rem; color: var(--c-yellow);">📖 親人稱呼速查翻翻卡</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">點擊任一卡片可翻轉查看詳細血親關係、配偶稱謂與記憶口訣！</p>
+          </div>
+          <div style="display: flex; gap: 0.6rem;">
+            <button class="tab-btn active" onclick="filterGallery('all')">全部</button>
+            <button class="tab-btn" onclick="filterGallery('dad')">👨 父系家族</button>
+            <button class="tab-btn" onclick="filterGallery('mom')">👩 母系家族</button>
+            <button class="tab-btn" onclick="filterGallery('cousin')">👥 堂表平輩</button>
+          </div>
+        </div>
+
+        <div class="flash-grid" id="flash-grid">
+          <!-- Dynamically generated flashcards -->
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: TANG VS BIAO SORTING -->
+    <div class="view-box" id="view-sort">
+      <div class="card">
+        <div style="text-align: center; margin-bottom: 1.2rem;">
+          <h2 style="font-size: 2rem; color: var(--c-green);">⚖️ 堂兄弟姊妹 vs 表兄弟姊妹：大分流挑戰</h2>
+          <p style="color: var(--text-muted); font-size: 1.05rem; margin-top: 0.3rem;">
+            口訣：<strong style="color: var(--c-green);">「伯叔之子為堂」</strong>、<strong style="color: var(--c-purple);">「姑舅姨之子為表」</strong>！請點擊下方題目歸類！
+          </p>
+        </div>
+
+        <div id="chips-pool" style="text-align: center; min-height: 70px; margin-bottom: 1rem;">
+          <!-- Active sorting chips -->
+        </div>
+
+        <div class="sort-container">
+          <div class="sort-bin tang">
+            <h3 style="color: var(--c-green); font-size: 1.4rem; margin-bottom: 0.6rem;">🌿 堂兄弟姊妹（同姓大本營）</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">只有「伯父」和「叔叔」的小孩！</p>
+            <div id="bin-tang" style="width: 100%; min-height: 140px; display: flex; flex-wrap: wrap; justify-content: center;"></div>
+          </div>
+
+          <div class="sort-bin biao">
+            <h3 style="color: var(--c-purple); font-size: 1.4rem; margin-bottom: 0.6rem;">🍇 表兄弟姊妹（異姓好朋友）</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">「姑姑」、「舅舅」、「阿姨」的小孩！</p>
+            <div id="bin-biao" style="width: 100%; min-height: 140px; display: flex; flex-wrap: wrap; justify-content: center;"></div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 1.2rem;">
+          <button class="btn-action" onclick="initSortingGame()">🔄 重新出題</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 4: TEAM QUIZ 9-GRID -->
+    <div class="view-box" id="view-quiz">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.8rem;">
+          <div>
+            <h2 style="font-size: 2rem; color: var(--c-yellow); display: flex; align-items: center; gap: 0.6rem;">
+              🏆 親人稱謂九宮格大擂台
+              <span id="quiz-round-tag" style="font-size: 0.9rem; background: rgba(251,191,36,0.2); border: 1px solid var(--c-yellow); color: var(--c-yellow); padding: 0.2rem 0.6rem; border-radius: 9999px;">題庫隨機抽取中</span>
+            </h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">小組輪流選號翻開謎題，答對還可標記紅隊/藍隊進行九宮格連線！</p>
+          </div>
+          <div style="display: flex; gap: 0.6rem; align-items: center;">
+            <button class="btn-action" onclick="shuffleNineGrid()" style="font-size: 1.05rem; padding: 0.65rem 1.4rem; display: flex; align-items: center; gap: 0.4rem;">
+              🎲 重新洗題目 (換一批)
+            </button>
+            <button class="tab-btn" onclick="resetNineGridMarks()" style="border: 1px solid var(--border-card);">
+              🧹 清除連線標記
+            </button>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 720px; margin: 0 auto;" id="nine-grid">
+          <!-- 9 grid boxes -->
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Lazy Safe Audio Synthesizer
+    let audioCtx = null;
+    function playSfx(type) {
+      try {
+        if (!audioCtx && (window.AudioContext || window.webkitAudioContext)) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        if (!audioCtx) return;
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === 'flip') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.08);
+        } else if (type === 'match') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+          osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
+          osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2);
+          gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.35);
+        } else if (type === 'fail') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+          osc.frequency.setValueAtTime(180, audioCtx.currentTime + 0.12);
+          gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.25);
+        } else if (type === 'shuffle') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(350, audioCtx.currentTime);
+          osc.frequency.setValueAtTime(550, audioCtx.currentTime + 0.08);
+          osc.frequency.setValueAtTime(750, audioCtx.currentTime + 0.16);
+          gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.28);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.28);
+        }
+      } catch(e) {
+        // audio muted or blocked, safe to ignore
+      }
+    }
+
+    // --- MEMORY GAME DATABASE ---
+    const allPairs = [
+      { id: 1, rel: "爸爸的爸爸", name: "爺爺 (祖父)", cat: "dad" },
+      { id: 2, rel: "爸爸的媽媽", name: "奶奶 (祖母)", cat: "dad" },
+      { id: 3, rel: "媽媽的爸爸", name: "外公 (外祖父)", cat: "mom" },
+      { id: 4, rel: "媽媽的媽媽", name: "外婆 (外祖母)", cat: "mom" },
+      { id: 5, rel: "爸爸的哥哥", name: "伯父 (伯伯)", cat: "dad" },
+      { id: 6, rel: "爸爸的弟弟", name: "叔叔", cat: "dad" },
+      { id: 7, rel: "爸爸的姊妹", name: "姑姑 (姑母)", cat: "dad" },
+      { id: 8, rel: "媽媽的兄弟", name: "舅舅 (舅父)", cat: "mom" },
+      { id: 9, rel: "媽媽的姊妹", name: "阿姨 (姨母)", cat: "mom" },
+      { id: 10, rel: "伯父的小孩", name: "堂兄弟姊妹", cat: "cousin" },
+      { id: 11, rel: "叔叔的小孩", name: "堂兄弟姊妹", cat: "cousin" },
+      { id: 12, rel: "姑姑的小孩", name: "表兄弟姊妹", cat: "cousin" },
+      { id: 13, rel: "舅舅的小孩", name: "表兄弟姊妹", cat: "cousin" },
+      { id: 14, rel: "阿姨的小孩", name: "表兄弟姊妹", cat: "cousin" }
+    ];
+
+    let flippedCards = [];
+    let matchedCount = 0;
+    let moves = 0;
+    let timerSeconds = 0;
+    let timerInterval = null;
+    let currentTotalPairs = 8;
+
+    function initMemoryGame() {
+      const diffEl = document.getElementById('diff-select');
+      const diff = diffEl ? diffEl.value : 'medium';
+      let selectedPairs = [];
+
+      if (diff === 'easy') {
+        selectedPairs = allPairs.slice(0, 4); // 4 pairs (8 cards)
+      } else if (diff === 'medium') {
+        selectedPairs = allPairs.slice(4, 12); // 8 pairs (16 cards)
+      } else {
+        selectedPairs = [allPairs[4], allPairs[5], allPairs[6], allPairs[7], allPairs[8], allPairs[9], allPairs[12], allPairs[13]]; // 8 pairs (16 cards)
+      }
+
+      currentTotalPairs = selectedPairs.length;
+      matchedCount = 0;
+      moves = 0;
+      flippedCards = [];
+      if (timerInterval) clearInterval(timerInterval);
+      timerSeconds = 0;
+
+      const movesEl = document.getElementById('match-moves');
+      if (movesEl) movesEl.textContent = `0 步`;
+      const scoreEl = document.getElementById('match-score');
+      if (scoreEl) scoreEl.textContent = `0 / ${currentTotalPairs} 對`;
+      const timerEl = document.getElementById('match-timer');
+      if (timerEl) timerEl.textContent = `00:00`;
+
+      timerInterval = setInterval(() => {
+        timerSeconds++;
+        const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+        const secs = String(timerSeconds % 60).padStart(2, '0');
+        const tEl = document.getElementById('match-timer');
+        if (tEl) tEl.textContent = `${mins}:${secs}`;
+      }, 1000);
+
+      // Create card elements
+      let deck = [];
+      selectedPairs.forEach(p => {
+        deck.push({ id: p.id, type: 'rel', text: p.rel, label: '【關係題目】' });
+        deck.push({ id: p.id, type: 'name', text: p.name, label: '【親人稱呼】' });
+      });
+
+      // Shuffle
+      deck.sort(() => Math.random() - 0.5);
+
+      const grid = document.getElementById('match-grid');
+      if (grid) {
+        grid.innerHTML = '';
+        deck.forEach((c, index) => {
+          const cardEl = document.createElement('div');
+          cardEl.className = 'flip-card-match';
+          cardEl.dataset.id = c.id;
+          cardEl.dataset.type = c.type;
+          cardEl.innerHTML = `
+            <div class="card-front"></div>
+            <div class="card-back type-${c.type}">
+              <span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">${c.label}</span>
+              <span>${c.text}</span>
+            </div>
+          `;
+          cardEl.addEventListener('click', () => handleCardClick(cardEl));
+          grid.appendChild(cardEl);
+        });
+      }
+    }
+
+    function handleCardClick(cardEl) {
+      if (flippedCards.length >= 2 || cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) {
+        return;
+      }
+
+      cardEl.classList.add('flipped');
+      playSfx('flip');
+      flippedCards.push(cardEl);
+
+      if (flippedCards.length === 2) {
+        moves++;
+        const movesEl = document.getElementById('match-moves');
+        if (movesEl) movesEl.textContent = `${moves} 步`;
+
+        const [c1, c2] = flippedCards;
+        if (c1.dataset.id === c2.dataset.id && c1.dataset.type !== c2.dataset.type) {
+          playSfx('match');
+          c1.classList.add('matched');
+          c2.classList.add('matched');
+          matchedCount++;
+          const scoreEl = document.getElementById('match-score');
+          if (scoreEl) scoreEl.textContent = `${matchedCount} / ${currentTotalPairs} 對`;
+          flippedCards = [];
+
+          if (matchedCount === currentTotalPairs) {
+            if (timerInterval) clearInterval(timerInterval);
+            setTimeout(() => {
+              const timerEl = document.getElementById('match-timer');
+              alert(`🎉 太厲害了！全數配對成功！\n耗時：${timerEl ? timerEl.textContent : ''}，翻牌步數：${moves} 步！`);
+            }, 400);
+          }
+        } else {
+          playSfx('fail');
+          setTimeout(() => {
+            c1.classList.remove('flipped');
+            c2.classList.remove('flipped');
+            flippedCards = [];
+          }, 900);
+        }
+      }
+    }
+
+    // --- FLASHCARD GALLERY DATA ---
+    const galleryData = [
+      { title: "爺爺 / 奶奶", side: "dad", desc: "爸爸的爸爸叫爺爺（祖父），爸爸的媽媽叫奶奶（祖母）。", tip: "過年會去爺爺奶奶家吃年夜飯！" },
+      { title: "外公 / 外婆", side: "mom", desc: "媽媽的爸爸叫外公（外祖父），媽媽的媽媽叫外婆（外祖母）。", tip: "放暑假常去外公外婆家玩！" },
+      { title: "伯父 (伯伯)", side: "dad", desc: "爸爸的哥哥。伯父的妻子稱呼為「伯母」。", tip: "伯父比爸爸年長，尊稱伯伯。" },
+      { title: "叔叔", side: "dad", desc: "爸爸的弟弟。叔叔的妻子稱呼為「嬸嬸」。", tip: "叔叔比爸爸年輕。" },
+      { title: "姑姑 (姑母)", side: "dad", desc: "爸爸的姊姊或妹妹。姑姑的丈夫稱呼為「姑丈」。", tip: "爸爸的女性同胞手足。" },
+      { title: "舅舅 (舅父)", side: "mom", desc: "媽媽的哥哥或弟弟。舅舅的妻子稱呼為「舅媽」。", tip: "媽媽的男性同胞手足。" },
+      { title: "阿姨 (姨母)", side: "mom", desc: "媽媽的姊姊或妹妹。阿姨的丈夫稱呼為「姨丈」。", tip: "媽媽的女性同胞手足。" },
+      { title: "堂兄弟姊妹", side: "cousin", desc: "伯父和叔叔的孩子！通常擁有相同的姓氏。", tip: "口訣：伯叔同堂！" },
+      { title: "表兄弟姊妹", side: "cousin", desc: "姑姑、舅舅、阿姨的孩子！姓氏通常與我們不同。", tip: "口訣：姑舅姨都是表！" }
+    ];
+
+    function renderGallery(filter = 'all') {
+      const container = document.getElementById('flash-grid');
+      if (!container) return;
+      container.innerHTML = '';
+      galleryData.forEach(item => {
+        if (filter !== 'all' && item.side !== filter) return;
+        const div = document.createElement('div');
+        div.className = `flash-card ${item.side}`;
+        div.innerHTML = `
+          <div>
+            <div style="font-size: 0.85rem; color: var(--primary); font-weight:800; margin-bottom: 0.3rem;">
+              ${item.side === 'dad' ? '👨 父系長輩' : item.side === 'mom' ? '👩 母系長輩' : '👥 平輩親屬'}
+            </div>
+            <h3 style="font-size: 1.4rem; color: #fff; margin-bottom: 0.6rem;">${item.title}</h3>
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.5;">${item.desc}</p>
+          </div>
+          <div style="background: rgba(255,255,255,0.06); padding: 0.5rem 0.8rem; border-radius: 10px; font-size: 0.85rem; color: var(--c-yellow); margin-top: 0.8rem;">
+            💡 ${item.tip}
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function filterGallery(cat) {
+      document.querySelectorAll('#view-gallery .tab-btn').forEach(b => b.classList.remove('active'));
+      if (window.event && window.event.target) {
+        window.event.target.classList.add('active');
+      }
+      renderGallery(cat);
+    }
+
+    // --- SORTING GAME DATA ---
+    const sortQuestions = [
+      { text: "伯父的大兒子", ans: "tang" },
+      { text: "姑姑的小女兒", ans: "biao" },
+      { text: "叔叔的龍鳳胎弟弟", ans: "tang" },
+      { text: "舅舅的雙胞胎兒子", ans: "biao" },
+      { text: "小阿姨剛滿月的小寶寶", ans: "biao" },
+      { text: "二伯父的女兒", ans: "tang" }
+    ];
+
+    function initSortingGame() {
+      const pool = document.getElementById('chips-pool');
+      const binTang = document.getElementById('bin-tang');
+      const binBiao = document.getElementById('bin-biao');
+      if (!pool || !binTang || !binBiao) return;
+
+      pool.innerHTML = '';
+      binTang.innerHTML = '';
+      binBiao.innerHTML = '';
+
+      sortQuestions.forEach(q => {
+        const chip = document.createElement('div');
+        chip.className = 'draggable-chip';
+        chip.textContent = q.text;
+        chip.onclick = () => {
+          const choice = confirm(`你要將【${q.text}】分派到：\n按「確定」= 🌿 堂兄弟姊妹\n按「取消」= 🍇 表兄弟姊妹`);
+          const chosen = choice ? 'tang' : 'biao';
+          if (chosen === q.ans) {
+            playSfx('match');
+            chip.style.pointerEvents = 'none';
+            chip.style.background = chosen === 'tang' ? 'rgba(52,211,153,0.3)' : 'rgba(192,132,252,0.3)';
+            chip.style.borderColor = chosen === 'tang' ? 'var(--c-green)' : 'var(--c-purple)';
+            if (chosen === 'tang') binTang.appendChild(chip);
+            else binBiao.appendChild(chip);
+          } else {
+            playSfx('fail');
+            alert(`❌ 答錯囉！請再想一想口訣：\n『伯叔之子為堂，姑舅姨之子為表』！`);
+          }
+        };
+        pool.appendChild(chip);
+      });
+    }
+
+    // --- NINE GRID QUIZ FULL POOL & SHUFFLE SYSTEM ---
+    const fullNinePool = [
+      { q: "媽媽的哥哥，我要稱呼他為？", a: "舅舅 (舅父)" },
+      { q: "爸爸的弟弟，我要稱呼他為？", a: "叔叔" },
+      { q: "叔叔的妻子，我要稱呼她為？", a: "嬸嬸" },
+      { q: "爸爸的姊姊或妹妹，我要稱呼她為？", a: "姑姑 (姑母)" },
+      { q: "伯父的小孩，我和他的關係是？", a: "堂兄弟姊妹" },
+      { q: "媽媽的姊妹，我要稱呼她為？", a: "阿姨 (姨母)" },
+      { q: "阿姨的丈夫，我要稱呼他為？", a: "姨丈" },
+      { q: "舅舅的小孩，我和他的關係是？", a: "表兄弟姊妹" },
+      { q: "姑姑的小孩，我和他的關係是？", a: "表兄弟姊妹" },
+      { q: "爸爸的爸爸，我要稱呼他為？", a: "爺爺 (祖父)" },
+      { q: "爸爸的媽媽，我要稱呼她為？", a: "奶奶 (祖母)" },
+      { q: "媽媽的爸爸，我要稱呼他為？", a: "外公 (外祖父)" },
+      { q: "媽媽的媽媽，我要稱呼她為？", a: "外婆 (外祖母)" },
+      { q: "爸爸的哥哥，我要稱呼他為？", a: "伯父 (伯伯)" },
+      { q: "伯父的妻子，我要稱呼她為？", a: "伯母" },
+      { q: "舅舅的妻子，我要稱呼她為？", a: "舅媽" },
+      { q: "姑姑的丈夫，我要稱呼他為？", a: "姑丈" },
+      { q: "叔叔的小孩，我和他的關係是？", a: "堂兄弟姊妹" },
+      { q: "媽媽的弟弟，我要稱呼他為？", a: "舅舅 (舅父)" },
+      { q: "媽媽的大姊，我要稱呼她為？", a: "大阿姨 (姨母)" },
+      { q: "爸爸的妹妹，我要稱呼她為？", a: "姑姑 (姑母)" },
+      { q: "堂兄弟姊妹通常和我們擁有什麼特徵？", a: "相同姓氏 (伯叔同堂)" },
+      { q: "表兄弟姊妹通常和我們擁有什麼特徵？", a: "不同姓氏 (姑舅姨為表)" },
+      { q: "爸爸的手足中，誰的孩子是表兄弟姊妹？", a: "姑姑的孩子" }
+    ];
+
+    let currentNineQuestions = [];
+    let nineGridRound = 1;
+
+    function shuffleNineGrid() {
+      playSfx('shuffle');
+      nineGridRound++;
+      const shuffled = [...fullNinePool].sort(() => Math.random() - 0.5);
+      currentNineQuestions = shuffled.slice(0, 9).map((item, idx) => ({
+        n: idx + 1,
+        q: item.q,
+        a: item.a,
+        team: null
+      }));
+
+      const tag = document.getElementById('quiz-round-tag');
+      if (tag) {
+        tag.textContent = `第 ${nineGridRound} 輪 · 24 題題庫隨機換新`;
+        tag.style.background = 'rgba(52,211,153,0.2)';
+        tag.style.borderColor = 'var(--c-green)';
+        tag.style.color = 'var(--c-green)';
+      }
+
+      renderNineGrid();
+    }
+
+    function initNineGrid() {
+      if (currentNineQuestions.length === 0) {
+        shuffleNineGrid();
+      } else {
+        renderNineGrid();
+      }
+    }
+
+    function renderNineGrid() {
+      const container = document.getElementById('nine-grid');
+      if (!container) return;
+      container.innerHTML = '';
+      currentNineQuestions.forEach((item, idx) => {
+        const box = document.createElement('div');
+        box.style.background = '#1e293b';
+        box.style.border = '2px solid var(--border-card)';
+        box.style.borderRadius = '16px';
+        box.style.minHeight = '145px';
+        box.style.display = 'flex';
+        box.style.flexDirection = 'column';
+        box.style.justifyContent = 'center';
+        box.style.alignItems = 'center';
+        box.style.cursor = 'pointer';
+        box.style.padding = '0.75rem';
+        box.style.textAlign = 'center';
+        box.style.transition = 'all 0.25s ease';
+        box.style.position = 'relative';
+
+        if (item.team === 'red') {
+          box.style.background = 'rgba(244,63,94,0.25)';
+          box.style.borderColor = 'var(--c-red)';
+        } else if (item.team === 'blue') {
+          box.style.background = 'rgba(56,189,248,0.25)';
+          box.style.borderColor = 'var(--c-blue)';
+        }
+
+        box.innerHTML = `<span style="font-size: 2.8rem; font-weight: 900; color: var(--c-yellow);">${item.n}</span><span style="font-size:0.85rem; color:var(--text-muted);">點擊翻題</span>`;
+        
+        let state = 0;
+        box.onclick = (e) => {
+          if (e.target.tagName === 'BUTTON') return;
+          playSfx('flip');
+          if (state === 0) {
+            state = 1;
+            box.style.background = 'rgba(249, 115, 22, 0.2)';
+            box.style.borderColor = 'var(--primary)';
+            box.innerHTML = `
+              <div style="font-size:0.8rem; color:var(--primary); font-weight:800; margin-bottom:4px;">第 ${item.n} 題謎題</div>
+              <p style="font-size:1.05rem; font-weight:800; color:#fff; line-height:1.4; margin-bottom:6px;">${item.q}</p>
+              <span style="font-size:0.8rem; color:var(--c-yellow);">點擊公布答案</span>
+            `;
+          } else if (state === 1) {
+            state = 2;
+            playSfx('match');
+            box.style.background = 'rgba(52, 211, 153, 0.2)';
+            box.style.borderColor = 'var(--c-green)';
+            box.innerHTML = `
+              <div style="font-size:0.8rem; color:var(--c-green); font-weight:800; margin-bottom:2px;">答案公布</div>
+              <h3 style="font-size:1.35rem; color:#fff; margin-bottom:6px;">${item.a}</h3>
+              <div style="display:flex; gap:0.4rem; justify-content:center; margin-top:4px;">
+                <button onclick="markTeam(${idx}, 'red')" style="background:var(--c-red); color:#fff; border:none; padding:2px 8px; border-radius:6px; font-size:0.75rem; font-weight:800; cursor:pointer;">🔴 紅隊得分</button>
+                <button onclick="markTeam(${idx}, 'blue')" style="background:var(--c-blue); color:#000; border:none; padding:2px 8px; border-radius:6px; font-size:0.75rem; font-weight:800; cursor:pointer;">🔵 藍隊得分</button>
+              </div>
+            `;
+          }
+        };
+        container.appendChild(box);
+      });
+    }
+
+    function markTeam(idx, team) {
+      if (currentNineQuestions[idx]) {
+        currentNineQuestions[idx].team = team;
+        playSfx('match');
+        renderNineGrid();
+      }
+    }
+
+    function resetNineGridMarks() {
+      currentNineQuestions.forEach(q => q.team = null);
+      renderNineGrid();
+    }
+
+    // Tab Switching
+    function switchView(viewName) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view-box').forEach(v => v.classList.remove('active'));
+
+      if (viewName === 'memory') {
+        document.querySelector('.nav-tabs .tab-btn:nth-child(1)').classList.add('active');
+        document.getElementById('view-memory').classList.add('active');
+      } else if (viewName === 'gallery') {
+        document.querySelector('.nav-tabs .tab-btn:nth-child(2)').classList.add('active');
+        document.getElementById('view-gallery').classList.add('active');
+        renderGallery();
+      } else if (viewName === 'sort') {
+        document.querySelector('.nav-tabs .tab-btn:nth-child(3)').classList.add('active');
+        document.getElementById('view-sort').classList.add('active');
+        initSortingGame();
+      } else if (viewName === 'quiz') {
+        document.querySelector('.nav-tabs .tab-btn:nth-child(4)').classList.add('active');
+        document.getElementById('view-quiz').classList.add('active');
+        initNineGrid();
+      }
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    // Safe Auto-Init
+    function safeInit() {
+      try {
+        initMemoryGame();
+      } catch(e) {
+        console.warn('Init error:', e);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', safeInit);
+    } else {
+      safeInit();
+    }
+
+    window.addEventListener('load', () => {
+      const grid = document.getElementById('match-grid');
+      if (grid && grid.children.length === 0) {
+        safeInit();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -10,8 +10,8 @@
   <style>
     :root {
       --bg-dark: #090d16;
-      --bg-card: rgba(26, 34, 52, 0.9);
-      --border-card: rgba(255, 255, 255, 0.12);
+      --bg-card: rgba(26, 34, 52, 0.95);
+      --border-card: rgba(255, 255, 255, 0.15);
       --primary: #f97316;
       --primary-glow: rgba(249, 115, 22, 0.4);
       --c-blue: #38bdf8;
@@ -21,7 +21,7 @@
       --c-red: #f43f5e;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --font-family: 'Noto Sans TC', 'Outfit', system-ui, sans-serif;
+      --font-family: 'Noto Sans TC', 'Outfit', system-ui, -apple-system, sans-serif;
     }
 
     * {
@@ -41,10 +41,11 @@
       flex-direction: column;
       justify-content: space-between;
       overflow-x: hidden;
+      overflow-y: auto;
       background-image: 
-        radial-gradient(circle at 15% 15%, rgba(249, 115, 22, 0.15) 0%, transparent 45%),
-        radial-gradient(circle at 85% 15%, rgba(56, 189, 248, 0.15) 0%, transparent 45%),
-        radial-gradient(circle at 50% 90%, rgba(52, 211, 153, 0.12) 0%, transparent 50%);
+        radial-gradient(circle at 15% 15%, rgba(249, 115, 22, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 85% 15%, rgba(56, 189, 248, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 50% 90%, rgba(52, 211, 153, 0.15) 0%, transparent 50%);
     }
 
     header {
@@ -52,7 +53,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(15, 23, 42, 0.85);
+      background: rgba(15, 23, 42, 0.92);
       backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-card);
       z-index: 100;
@@ -111,16 +112,13 @@
     .view-box {
       width: 100%;
       display: none;
-      animation: fadeIn 0.35s ease forwards;
+      opacity: 0;
+      transition: opacity 0.25s ease;
     }
 
     .view-box.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
+      display: block !important;
+      opacity: 1 !important;
     }
 
     .card {
@@ -138,10 +136,12 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1.2rem;
-      background: rgba(15, 23, 42, 0.8);
+      background: rgba(15, 23, 42, 0.85);
       padding: 0.8rem 1.5rem;
       border-radius: 16px;
       border: 1px solid var(--border-card);
+      flex-wrap: wrap;
+      gap: 0.8rem;
     }
 
     .stat-pill {
@@ -371,7 +371,23 @@
         </div>
 
         <div class="match-grid" id="match-grid">
-          <!-- Dynamically Generated Cards -->
+          <!-- Static Fallback Cards (will be replaced by JS on load) -->
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="5" data-type="rel"><div class="card-front"></div><div class="card-back type-rel"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【關係題目】</span><span>爸爸的哥哥</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="5" data-type="name"><div class="card-front"></div><div class="card-back type-name"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【親人稱呼】</span><span>伯父 (伯伯)</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="6" data-type="rel"><div class="card-front"></div><div class="card-back type-rel"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【關係題目】</span><span>爸爸的弟弟</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="6" data-type="name"><div class="card-front"></div><div class="card-back type-name"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【親人稱呼】</span><span>叔叔</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="7" data-type="rel"><div class="card-front"></div><div class="card-back type-rel"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【關係題目】</span><span>爸爸的姊妹</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="7" data-type="name"><div class="card-front"></div><div class="card-back type-name"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【親人稱呼】</span><span>姑姑 (姑母)</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="8" data-type="rel"><div class="card-front"></div><div class="card-back type-rel"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【關係題目】</span><span>媽媽的兄弟</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="8" data-type="name"><div class="card-front"></div><div class="card-back type-name"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【親人稱呼】</span><span>舅舅 (舅父)</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="9" data-type="rel"><div class="card-front"></div><div class="card-back type-rel"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【關係題目】</span><span>媽媽的姊妹</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="9" data-type="name"><div class="card-front"></div><div class="card-back type-name"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【親人稱呼】</span><span>阿姨 (姨母)</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="10" data-type="rel"><div class="card-front"></div><div class="card-back type-rel"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【關係題目】</span><span>伯父的小孩</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="10" data-type="name"><div class="card-front"></div><div class="card-back type-name"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【親人稱呼】</span><span>堂兄弟姊妹</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="12" data-type="rel"><div class="card-front"></div><div class="card-back type-rel"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【關係題目】</span><span>姑姑的小孩</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="12" data-type="name"><div class="card-front"></div><div class="card-back type-name"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【親人稱呼】</span><span>表兄弟姊妹</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="13" data-type="rel"><div class="card-front"></div><div class="card-back type-rel"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【關係題目】</span><span>舅舅的小孩</span></div></div>
+          <div class="flip-card-match" onclick="handleCardClick(this)" data-id="13" data-type="name"><div class="card-front"></div><div class="card-back type-name"><span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">【親人稱呼】</span><span>表兄弟姊妹</span></div></div>
         </div>
 
       </div>
@@ -380,7 +396,7 @@
     <!-- VIEW 2: FLASHCARD GALLERY -->
     <div class="view-box" id="view-gallery">
       <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.8rem;">
           <div>
             <h2 style="font-size: 1.8rem; color: var(--c-yellow);">📖 親人稱呼速查翻翻卡</h2>
             <p style="color: var(--text-muted); font-size: 0.95rem;">點擊任一卡片可翻轉查看詳細血親關係、配偶稱謂與記憶口訣！</p>
@@ -463,48 +479,59 @@
   </main>
 
   <script>
-    // Audio synthesizer (Web Audio API)
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // Lazy Safe Audio Synthesizer
+    let audioCtx = null;
     function playSfx(type) {
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      try {
+        if (!audioCtx && (window.AudioContext || window.webkitAudioContext)) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        if (!audioCtx) return;
 
-      if (type === 'flip') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.08);
-      } else if (type === 'match') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
-        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
-        osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2);
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.35);
-      } else if (type === 'fail') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
-        osc.frequency.setValueAtTime(180, audioCtx.currentTime + 0.12);
-        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.25);
-      } else if (type === 'shuffle') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(350, audioCtx.currentTime);
-        osc.frequency.setValueAtTime(550, audioCtx.currentTime + 0.08);
-        osc.frequency.setValueAtTime(750, audioCtx.currentTime + 0.16);
-        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.28);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.28);
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === 'flip') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.08);
+        } else if (type === 'match') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+          osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
+          osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2);
+          gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.35);
+        } else if (type === 'fail') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+          osc.frequency.setValueAtTime(180, audioCtx.currentTime + 0.12);
+          gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.25);
+        } else if (type === 'shuffle') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(350, audioCtx.currentTime);
+          osc.frequency.setValueAtTime(550, audioCtx.currentTime + 0.08);
+          osc.frequency.setValueAtTime(750, audioCtx.currentTime + 0.16);
+          gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.28);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.28);
+        }
+      } catch(e) {
+        // audio muted or blocked, safe to ignore
       }
     }
 
@@ -534,7 +561,8 @@
     let currentTotalPairs = 8;
 
     function initMemoryGame() {
-      const diff = document.getElementById('diff-select').value;
+      const diffEl = document.getElementById('diff-select');
+      const diff = diffEl ? diffEl.value : 'medium';
       let selectedPairs = [];
 
       if (diff === 'easy') {
@@ -549,21 +577,25 @@
       matchedCount = 0;
       moves = 0;
       flippedCards = [];
-      clearInterval(timerInterval);
+      if (timerInterval) clearInterval(timerInterval);
       timerSeconds = 0;
 
-      document.getElementById('match-moves').textContent = `0 步`;
-      document.getElementById('match-score').textContent = `0 / ${currentTotalPairs} 對`;
-      document.getElementById('match-timer').textContent = `00:00`;
+      const movesEl = document.getElementById('match-moves');
+      if (movesEl) movesEl.textContent = `0 步`;
+      const scoreEl = document.getElementById('match-score');
+      if (scoreEl) scoreEl.textContent = `0 / ${currentTotalPairs} 對`;
+      const timerEl = document.getElementById('match-timer');
+      if (timerEl) timerEl.textContent = `00:00`;
 
       timerInterval = setInterval(() => {
         timerSeconds++;
         const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
         const secs = String(timerSeconds % 60).padStart(2, '0');
-        document.getElementById('match-timer').textContent = `${mins}:${secs}`;
+        const tEl = document.getElementById('match-timer');
+        if (tEl) tEl.textContent = `${mins}:${secs}`;
       }, 1000);
 
-      // Create card elements (each pair generates 1 relationship card + 1 name card)
+      // Create card elements
       let deck = [];
       selectedPairs.forEach(p => {
         deck.push({ id: p.id, type: 'rel', text: p.rel, label: '【關係題目】' });
@@ -574,22 +606,24 @@
       deck.sort(() => Math.random() - 0.5);
 
       const grid = document.getElementById('match-grid');
-      grid.innerHTML = '';
-      deck.forEach((c, index) => {
-        const cardEl = document.createElement('div');
-        cardEl.className = 'flip-card-match';
-        cardEl.dataset.id = c.id;
-        cardEl.dataset.type = c.type;
-        cardEl.innerHTML = `
-          <div class="card-front"></div>
-          <div class="card-back type-${c.type}">
-            <span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">${c.label}</span>
-            <span>${c.text}</span>
-          </div>
-        `;
-        cardEl.addEventListener('click', () => handleCardClick(cardEl));
-        grid.appendChild(cardEl);
-      });
+      if (grid) {
+        grid.innerHTML = '';
+        deck.forEach((c, index) => {
+          const cardEl = document.createElement('div');
+          cardEl.className = 'flip-card-match';
+          cardEl.dataset.id = c.id;
+          cardEl.dataset.type = c.type;
+          cardEl.innerHTML = `
+            <div class="card-front"></div>
+            <div class="card-back type-${c.type}">
+              <span style="font-size:0.8rem; opacity:0.8; margin-bottom:4px;">${c.label}</span>
+              <span>${c.text}</span>
+            </div>
+          `;
+          cardEl.addEventListener('click', () => handleCardClick(cardEl));
+          grid.appendChild(cardEl);
+        });
+      }
     }
 
     function handleCardClick(cardEl) {
@@ -603,23 +637,25 @@
 
       if (flippedCards.length === 2) {
         moves++;
-        document.getElementById('match-moves').textContent = `${moves} 步`;
+        const movesEl = document.getElementById('match-moves');
+        if (movesEl) movesEl.textContent = `${moves} 步`;
 
         const [c1, c2] = flippedCards;
-        // Check match: must have same id AND different types (one rel, one name)
         if (c1.dataset.id === c2.dataset.id && c1.dataset.type !== c2.dataset.type) {
           playSfx('match');
           c1.classList.add('matched');
           c2.classList.add('matched');
           matchedCount++;
-          document.getElementById('match-score').textContent = `${matchedCount} / ${currentTotalPairs} 對`;
+          const scoreEl = document.getElementById('match-score');
+          if (scoreEl) scoreEl.textContent = `${matchedCount} / ${currentTotalPairs} 對`;
           flippedCards = [];
 
           if (matchedCount === currentTotalPairs) {
-            clearInterval(timerInterval);
+            if (timerInterval) clearInterval(timerInterval);
             setTimeout(() => {
-              alert(`🎉 太厲害了！全數配對成功！\n耗時：${document.getElementById('match-timer').textContent}，翻牌步數：${moves} 步！`);
-            }, 500);
+              const timerEl = document.getElementById('match-timer');
+              alert(`🎉 太厲害了！全數配對成功！\n耗時：${timerEl ? timerEl.textContent : ''}，翻牌步數：${moves} 步！`);
+            }, 400);
           }
         } else {
           playSfx('fail');
@@ -627,7 +663,7 @@
             c1.classList.remove('flipped');
             c2.classList.remove('flipped');
             flippedCards = [];
-          }, 1000);
+          }, 900);
         }
       }
     }
@@ -647,6 +683,7 @@
 
     function renderGallery(filter = 'all') {
       const container = document.getElementById('flash-grid');
+      if (!container) return;
       container.innerHTML = '';
       galleryData.forEach(item => {
         if (filter !== 'all' && item.side !== filter) return;
@@ -670,7 +707,9 @@
 
     function filterGallery(cat) {
       document.querySelectorAll('#view-gallery .tab-btn').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
+      if (window.event && window.event.target) {
+        window.event.target.classList.add('active');
+      }
       renderGallery(cat);
     }
 
@@ -688,6 +727,8 @@
       const pool = document.getElementById('chips-pool');
       const binTang = document.getElementById('bin-tang');
       const binBiao = document.getElementById('bin-biao');
+      if (!pool || !binTang || !binBiao) return;
+
       pool.innerHTML = '';
       binTang.innerHTML = '';
       binBiao.innerHTML = '';
@@ -715,7 +756,6 @@
       });
     }
 
-    // --- NINE GRID QUIZ DATA ---
     // --- NINE GRID QUIZ FULL POOL & SHUFFLE SYSTEM ---
     const fullNinePool = [
       { q: "媽媽的哥哥，我要稱呼他為？", a: "舅舅 (舅父)" },
@@ -750,7 +790,6 @@
     function shuffleNineGrid() {
       playSfx('shuffle');
       nineGridRound++;
-      // Shuffle copy of pool
       const shuffled = [...fullNinePool].sort(() => Math.random() - 0.5);
       currentNineQuestions = shuffled.slice(0, 9).map((item, idx) => ({
         n: idx + 1,
@@ -780,6 +819,7 @@
 
     function renderNineGrid() {
       const container = document.getElementById('nine-grid');
+      if (!container) return;
       container.innerHTML = '';
       currentNineQuestions.forEach((item, idx) => {
         const box = document.createElement('div');
@@ -807,11 +847,9 @@
 
         box.innerHTML = `<span style="font-size: 2.8rem; font-weight: 900; color: var(--c-yellow);">${item.n}</span><span style="font-size:0.85rem; color:var(--text-muted);">點擊翻題</span>`;
         
-        let state = 0; // 0: unopened, 1: question, 2: answer
+        let state = 0;
         box.onclick = (e) => {
-          // If clicked on team buttons, ignore
           if (e.target.tagName === 'BUTTON') return;
-
           playSfx('flip');
           if (state === 0) {
             state = 1;
@@ -885,8 +923,27 @@
       }
     }
 
-    // Init
-    initMemoryGame();
+    // Safe Auto-Init
+    function safeInit() {
+      try {
+        initMemoryGame();
+      } catch(e) {
+        console.warn('Init error:', e);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', safeInit);
+    } else {
+      safeInit();
+    }
+
+    window.addEventListener('load', () => {
+      const grid = document.getElementById('match-grid');
+      if (grid && grid.children.length === 0) {
+        safeInit();
+      }
+    });
   </script>
 </body>
 </html>

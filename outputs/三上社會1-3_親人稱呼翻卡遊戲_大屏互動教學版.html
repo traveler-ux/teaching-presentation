@@ -436,12 +436,25 @@
     <!-- VIEW 4: TEAM QUIZ 9-GRID -->
     <div class="view-box" id="view-quiz">
       <div class="card">
-        <div style="text-align: center; margin-bottom: 1.2rem;">
-          <h2 style="font-size: 2rem; color: var(--c-yellow);">🏆 親人稱謂九宮格大擂台</h2>
-          <p style="color: var(--text-muted);">小組輪流選號翻開謎題，答對連成一條線獲勝！</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.8rem;">
+          <div>
+            <h2 style="font-size: 2rem; color: var(--c-yellow); display: flex; align-items: center; gap: 0.6rem;">
+              🏆 親人稱謂九宮格大擂台
+              <span id="quiz-round-tag" style="font-size: 0.9rem; background: rgba(251,191,36,0.2); border: 1px solid var(--c-yellow); color: var(--c-yellow); padding: 0.2rem 0.6rem; border-radius: 9999px;">題庫隨機抽取中</span>
+            </h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">小組輪流選號翻開謎題，答對還可標記紅隊/藍隊進行九宮格連線！</p>
+          </div>
+          <div style="display: flex; gap: 0.6rem; align-items: center;">
+            <button class="btn-action" onclick="shuffleNineGrid()" style="font-size: 1.05rem; padding: 0.65rem 1.4rem; display: flex; align-items: center; gap: 0.4rem;">
+              🎲 重新洗題目 (換一批)
+            </button>
+            <button class="tab-btn" onclick="resetNineGridMarks()" style="border: 1px solid var(--border-card);">
+              🧹 清除連線標記
+            </button>
+          </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 650px; margin: 0 auto;" id="nine-grid">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 720px; margin: 0 auto;" id="nine-grid">
           <!-- 9 grid boxes -->
         </div>
       </div>
@@ -483,7 +496,17 @@
         gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
         osc.start();
         osc.stop(audioCtx.currentTime + 0.25);
+      } else if (type === 'shuffle') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(350, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(550, audioCtx.currentTime + 0.08);
+        osc.frequency.setValueAtTime(750, audioCtx.currentTime + 0.16);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.28);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.28);
       }
+    }
     }
 
     // --- MEMORY GAME DATABASE ---
@@ -694,54 +717,142 @@
     }
 
     // --- NINE GRID QUIZ DATA ---
-    const nineQuestions = [
-      { n: 1, q: "媽媽的哥哥，我要稱呼他為？", a: "舅舅 (舅父)" },
-      { n: 2, q: "爸爸的弟弟，我要稱呼他為？", a: "叔叔" },
-      { n: 3, q: "叔叔的妻子，我要稱呼她為？", a: "嬸嬸" },
-      { n: 4, q: "爸爸的姊姊或妹妹，我要稱呼她為？", a: "姑姑" },
-      { n: 5, q: "伯父的小孩，我和他的關係是？", a: "堂兄弟姊妹" },
-      { n: 6, q: "媽媽的姊妹，我要稱呼她為？", a: "阿姨" },
-      { n: 7, q: "阿姨的丈夫，我要稱呼他為？", a: "姨丈" },
-      { n: 8, q: "舅舅的小孩，我和他的關係是？", a: "表兄弟姊妹" },
-      { n: 9, q: "姑姑的小孩，我和他的關係是？", a: "表兄弟姊妹" }
+    // --- NINE GRID QUIZ FULL POOL & SHUFFLE SYSTEM ---
+    const fullNinePool = [
+      { q: "媽媽的哥哥，我要稱呼他為？", a: "舅舅 (舅父)" },
+      { q: "爸爸的弟弟，我要稱呼他為？", a: "叔叔" },
+      { q: "叔叔的妻子，我要稱呼她為？", a: "嬸嬸" },
+      { q: "爸爸的姊姊或妹妹，我要稱呼她為？", a: "姑姑 (姑母)" },
+      { q: "伯父的小孩，我和他的關係是？", a: "堂兄弟姊妹" },
+      { q: "媽媽的姊妹，我要稱呼她為？", a: "阿姨 (姨母)" },
+      { q: "阿姨的丈夫，我要稱呼他為？", a: "姨丈" },
+      { q: "舅舅的小孩，我和他的關係是？", a: "表兄弟姊妹" },
+      { q: "姑姑的小孩，我和他的關係是？", a: "表兄弟姊妹" },
+      { q: "爸爸的爸爸，我要稱呼他為？", a: "爺爺 (祖父)" },
+      { q: "爸爸的媽媽，我要稱呼她為？", a: "奶奶 (祖母)" },
+      { q: "媽媽的爸爸，我要稱呼他為？", a: "外公 (外祖父)" },
+      { q: "媽媽的媽媽，我要稱呼她為？", a: "外婆 (外祖母)" },
+      { q: "爸爸的哥哥，我要稱呼他為？", a: "伯父 (伯伯)" },
+      { q: "伯父的妻子，我要稱呼她為？", a: "伯母" },
+      { q: "舅舅的妻子，我要稱呼她為？", a: "舅媽" },
+      { q: "姑姑的丈夫，我要稱呼他為？", a: "姑丈" },
+      { q: "叔叔的小孩，我和他的關係是？", a: "堂兄弟姊妹" },
+      { q: "媽媽的弟弟，我要稱呼他為？", a: "舅舅 (舅父)" },
+      { q: "媽媽的大姊，我要稱呼她為？", a: "大阿姨 (姨母)" },
+      { q: "爸爸的妹妹，我要稱呼她為？", a: "姑姑 (姑母)" },
+      { q: "堂兄弟姊妹通常和我們擁有什麼特徵？", a: "相同姓氏 (伯叔同堂)" },
+      { q: "表兄弟姊妹通常和我們擁有什麼特徵？", a: "不同姓氏 (姑舅姨為表)" },
+      { q: "爸爸的手足中，誰的孩子是表兄弟姊妹？", a: "姑姑的孩子" }
     ];
 
+    let currentNineQuestions = [];
+    let nineGridRound = 1;
+
+    function shuffleNineGrid() {
+      playSfx('shuffle');
+      nineGridRound++;
+      // Shuffle copy of pool
+      const shuffled = [...fullNinePool].sort(() => Math.random() - 0.5);
+      currentNineQuestions = shuffled.slice(0, 9).map((item, idx) => ({
+        n: idx + 1,
+        q: item.q,
+        a: item.a,
+        team: null
+      }));
+
+      const tag = document.getElementById('quiz-round-tag');
+      if (tag) {
+        tag.textContent = `第 ${nineGridRound} 輪 · 24 題題庫隨機換新`;
+        tag.style.background = 'rgba(52,211,153,0.2)';
+        tag.style.borderColor = 'var(--c-green)';
+        tag.style.color = 'var(--c-green)';
+      }
+
+      renderNineGrid();
+    }
+
     function initNineGrid() {
+      if (currentNineQuestions.length === 0) {
+        shuffleNineGrid();
+      } else {
+        renderNineGrid();
+      }
+    }
+
+    function renderNineGrid() {
       const container = document.getElementById('nine-grid');
       container.innerHTML = '';
-      nineQuestions.forEach(item => {
+      currentNineQuestions.forEach((item, idx) => {
         const box = document.createElement('div');
         box.style.background = '#1e293b';
         box.style.border = '2px solid var(--border-card)';
         box.style.borderRadius = '16px';
-        box.style.height = '140px';
+        box.style.minHeight = '145px';
         box.style.display = 'flex';
         box.style.flexDirection = 'column';
         box.style.justifyContent = 'center';
         box.style.alignItems = 'center';
         box.style.cursor = 'pointer';
-        box.style.padding = '0.8rem';
+        box.style.padding = '0.75rem';
         box.style.textAlign = 'center';
-        box.style.transition = 'all 0.2s ease';
+        box.style.transition = 'all 0.25s ease';
+        box.style.position = 'relative';
+
+        if (item.team === 'red') {
+          box.style.background = 'rgba(244,63,94,0.25)';
+          box.style.borderColor = 'var(--c-red)';
+        } else if (item.team === 'blue') {
+          box.style.background = 'rgba(56,189,248,0.25)';
+          box.style.borderColor = 'var(--c-blue)';
+        }
 
         box.innerHTML = `<span style="font-size: 2.8rem; font-weight: 900; color: var(--c-yellow);">${item.n}</span><span style="font-size:0.85rem; color:var(--text-muted);">點擊翻題</span>`;
         
-        let isOpen = false;
-        box.onclick = () => {
+        let state = 0; // 0: unopened, 1: question, 2: answer
+        box.onclick = (e) => {
+          // If clicked on team buttons, ignore
+          if (e.target.tagName === 'BUTTON') return;
+
           playSfx('flip');
-          if (!isOpen) {
-            isOpen = true;
+          if (state === 0) {
+            state = 1;
             box.style.background = 'rgba(249, 115, 22, 0.2)';
             box.style.borderColor = 'var(--primary)';
-            box.innerHTML = `<p style="font-size:1.05rem; font-weight:800; color:#fff; margin-bottom:6px;">${item.q}</p><span style="font-size:0.85rem; color:var(--c-yellow);">再點一次公布答案</span>`;
-          } else {
-            box.style.background = 'rgba(52, 211, 153, 0.25)';
+            box.innerHTML = `
+              <div style="font-size:0.8rem; color:var(--primary); font-weight:800; margin-bottom:4px;">第 ${item.n} 題謎題</div>
+              <p style="font-size:1.05rem; font-weight:800; color:#fff; line-height:1.4; margin-bottom:6px;">${item.q}</p>
+              <span style="font-size:0.8rem; color:var(--c-yellow);">點擊公布答案</span>
+            `;
+          } else if (state === 1) {
+            state = 2;
+            playSfx('match');
+            box.style.background = 'rgba(52, 211, 153, 0.2)';
             box.style.borderColor = 'var(--c-green)';
-            box.innerHTML = `<span style="font-size:0.85rem; color:var(--c-green); font-weight:800;">答案公布</span><h3 style="font-size:1.35rem; color:#fff;">${item.a}</h3>`;
+            box.innerHTML = `
+              <div style="font-size:0.8rem; color:var(--c-green); font-weight:800; margin-bottom:2px;">答案公布</div>
+              <h3 style="font-size:1.35rem; color:#fff; margin-bottom:6px;">${item.a}</h3>
+              <div style="display:flex; gap:0.4rem; justify-content:center; margin-top:4px;">
+                <button onclick="markTeam(${idx}, 'red')" style="background:var(--c-red); color:#fff; border:none; padding:2px 8px; border-radius:6px; font-size:0.75rem; font-weight:800; cursor:pointer;">🔴 紅隊得分</button>
+                <button onclick="markTeam(${idx}, 'blue')" style="background:var(--c-blue); color:#000; border:none; padding:2px 8px; border-radius:6px; font-size:0.75rem; font-weight:800; cursor:pointer;">🔵 藍隊得分</button>
+              </div>
+            `;
           }
         };
         container.appendChild(box);
       });
+    }
+
+    function markTeam(idx, team) {
+      if (currentNineQuestions[idx]) {
+        currentNineQuestions[idx].team = team;
+        playSfx('match');
+        renderNineGrid();
+      }
+    }
+
+    function resetNineGridMarks() {
+      currentNineQuestions.forEach(q => q.team = null);
+      renderNineGrid();
     }
 
     // Tab Switching

@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🎯 支援前線大作戰：三年級大屏互動簡報</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;900&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-hover: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-amber: #fbbf24;
+      --accent-red: #f87171;
+      --accent-green: #34d399;
+      --accent-purple: #c084fc;
+      --team1-red: #ef4444;
+      --team2-blue: #3b82f6;
+      --team3-green: #10b981;
+      --font-main: 'Noto Sans TC', sans-serif;
+      --font-num: 'Fredoka', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body {
+      background: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-main);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation & Scoreboard Bar */
+    #top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 24px;
+      background: rgba(15, 23, 42, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--accent-amber);
+    }
+    .badge-pill {
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--accent-blue);
+      border: 1px solid var(--accent-blue);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* Live 3-Team Scoreboard */
+    .scoreboard {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .score-card {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card);
+      padding: 6px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+    .score-card.t1 { border-left: 4px solid var(--team1-red); }
+    .score-card.t2 { border-left: 4px solid var(--team2-blue); }
+    .score-card.t3 { border-left: 4px solid var(--team3-green); }
+
+    .team-label { font-size: 14px; font-weight: 700; }
+    .team-val {
+      font-family: var(--font-num);
+      font-size: 24px;
+      font-weight: 700;
+      min-width: 44px;
+      text-align: center;
+      color: #fff;
+    }
+    .btn-score {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .btn-score:hover { background: var(--accent-amber); color: #000; }
+
+    .top-controls {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-ctrl {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-ctrl:hover { background: var(--accent-blue); color: #000; }
+
+    /* Slide Container */
+    #slide-viewport {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .slide {
+      position: absolute;
+      width: 94%;
+      height: 92%;
+      background: radial-gradient(circle at 50% 30%, #1e293b 0%, #0f172a 100%);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 28px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      opacity: 0;
+      transform: translateX(100px) scale(0.96);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+      pointer-events: auto;
+    }
+
+    /* Slide Header */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+    .slide-tag {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .slide-title {
+      font-size: 40px;
+      font-weight: 900;
+      line-height: 1.2;
+      color: #fff;
+    }
+
+    /* Slide Content Layouts */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      gap: 30px;
+      align-items: stretch;
+    }
+
+    /* Column Cards */
+    .col-card {
+      flex: 1;
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      position: relative;
+    }
+    .col-card.highlight {
+      border: 2px solid var(--accent-amber);
+      background: rgba(251, 191, 36, 0.05);
+    }
+    .col-card.danger {
+      border: 2px solid var(--accent-red);
+      background: rgba(248, 113, 113, 0.05);
+    }
+    .col-card.success {
+      border: 2px solid var(--accent-green);
+      background: rgba(52, 211, 153, 0.05);
+    }
+
+    .card-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      font-size: 20px;
+      line-height: 1.5;
+    }
+    .card-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .card-list li span.icon { font-size: 24px; }
+
+    /* Timer Widget in Mission Slides */
+    .timer-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .timer-display {
+      font-family: var(--font-num);
+      font-size: 56px;
+      font-weight: 700;
+      color: var(--accent-amber);
+      text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+    }
+    .timer-btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .timer-btn {
+      padding: 6px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-start { background: var(--accent-green); color: #000; }
+    .btn-reset { background: rgba(255,255,255,0.2); color: #fff; }
+
+    /* Reveal Trap Button */
+    .btn-reveal {
+      background: linear-gradient(135deg, #ef4444, #f97316);
+      border: none;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+      transition: all 0.2s;
+      margin-bottom: 12px;
+    }
+    .btn-reveal:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(239, 68, 68, 0.6); }
+
+    .trap-content {
+      display: none;
+      animation: fadeIn 0.3s forwards;
+    }
+    .trap-content.show { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Bottom Navigation Controls */
+    #bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 30px;
+      background: rgba(15, 23, 42, 0.95);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .nav-btn {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .nav-btn:hover { background: var(--accent-amber); color: #000; border-color: var(--accent-amber); }
+    .page-indicator {
+      font-family: var(--font-num);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .page-indicator span { color: var(--accent-blue); }
+
+    /* Cover Styling */
+    .cover-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 20px;
+    }
+    .cover-icon { font-size: 90px; }
+    .cover-main-title {
+      font-size: 64px;
+      font-weight: 900;
+      color: var(--accent-amber);
+      letter-spacing: 2px;
+      text-shadow: 0 8px 30px rgba(251, 191, 36, 0.3);
+    }
+    .cover-sub {
+      font-size: 32px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .cover-pill-box {
+      display: flex;
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .cover-pill {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 10px 24px;
+      border-radius: 999px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent-blue);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation & Live Scoreboard -->
+  <header id="top-bar">
+    <div class="brand-title">
+      <span>🎯 支援前線</span>
+      <span class="badge-pill">三年級特工隊</span>
+    </div>
+
+    <!-- Live 3-Team Scoreboard -->
+    <div class="scoreboard">
+      <div class="score-card t1">
+        <span class="team-label" style="color:var(--team1-red);">🔴 第1排 赤焰</span>
+        <button class="btn-score" onclick="changeScore(1, -10)">-</button>
+        <span class="team-val" id="score-t1">0</span>
+        <button class="btn-score" onclick="changeScore(1, 10)">+</button>
+      </div>
+
+      <div class="score-card t2">
+        <span class="team-label" style="color:var(--team2-blue);">🔵 第2排 雷霆</span>
+        <button class="btn-score" onclick="changeScore(2, -10)">-</button>
+        <span class="team-val" id="score-t2">0</span>
+        <button class="btn-score" onclick="changeScore(2, 10)">+</button>
+      </div>
+
+      <div class="score-card t3">
+        <span class="team-label" style="color:var(--team3-green);">🟢 第3排 極光</span>
+        <button class="btn-score" onclick="changeScore(3, -10)">-</button>
+        <span class="team-val" id="score-t3">0</span>
+        <button class="btn-score" onclick="changeScore(3, 10)">+</button>
+      </div>
+    </div>
+
+    <div class="top-controls">
+      <button class="btn-ctrl" onclick="playAudio('cheer')">🎉 歡呼</button>
+      <button class="btn-ctrl" onclick="toggleFullScreen()">⛶ 全螢幕</button>
+    </div>
+  </header>
+
+  <!-- Slide Viewport -->
+  <main id="slide-viewport">
+
+    <!-- Slide 1: Cover -->
+    <section class="slide active" data-slide="1">
+      <div class="cover-body">
+        <div class="cover-icon">🎯</div>
+        <h1 class="cover-main-title">支援前線大作戰</h1>
+        <h2 class="cover-sub">聽話超人 × 默契特工隊</h2>
+        <div class="cover-pill-box">
+          <div class="cover-pill">👂 專注傾聽細節</div>
+          <div class="cover-pill">📦 全排 10 人輸送帶</div>
+          <div class="cover-pill">🛑 安全傳遞不狂奔</div>
+        </div>
+        <p style="color:var(--text-muted); font-size:20px; margin-top:20px;">
+          請按下方【下一頁 ➔】或鍵盤【空白鍵 / 方向鍵】開始任務！
+        </p>
+      </div>
+    </section>
+
+    <!-- Slide 2: 3 Teams -->
+    <section class="slide" data-slide="2">
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag" style="background:rgba(56,189,248,0.2); color:var(--accent-blue);">隊伍分組</span>
+          <h2 class="slide-title">三大特工排集結！誰是今天最默契的戰隊？</h2>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="col-card" style="border-top: 6px solid var(--team1-red);">
+          <div class="card-title" style="color:var(--team1-red);">🔴 第 1 排：赤焰隊</div>
+          <div style="color:var(--accent-amber); font-weight:700; margin-bottom:12px;">口號：赤焰出擊，又快又準！</div>
+          <ul class="card-list">
+            <li><span class="icon">⚡</span><span><strong>戰鬥風格：</strong>行動果決、熱情無敵！</span></li>
+            <li><span class="icon">🎯</span><span><strong>任務重點：</strong>聽完整個指令再動手，不急躁！</span></li>
+            <li><span class="icon">👥</span><span><strong>編制：</strong>10 位特工全員緊密連線。</span></li>
+          </ul>
+        </div>
+
+        <div class="col-card" style="border-top: 6px solid var(--team2-blue);">
+          <div class="card-title" style="color:var(--team2-blue);">🔵 第 2 排：雷霆隊</div>
+          <div style="color:var(--accent-amber); font-weight:700; margin-bottom:12px;">口號：雷霆萬鈞，默契第一！</div>
+          <ul class="card-list">
+            <li><span class="icon">⚡</span><span><strong>戰鬥風格：</strong>冷靜沈穩、觀察細心！</span></li>
+            <li><span class="icon">🎯</span><span><strong>任務重點：</strong>輸送帶手傳手，每一棒穩穩接住！</span></li>
+            <li><span class="icon">👥</span><span><strong>編制：</strong>10 位特工節奏一致。</span></li>
+          </ul>
+        </div>
+
+        <div class="col-card" style="border-top: 6px solid var(--team3-green);">
+          <div class="card-title" style="color:var(--team3-green);">🟢 第 3 排：極光隊</div>
+          <div style="color:var(--accent-amber); font-weight:700; margin-bottom:12px;">口號：極光獵鷹，神耳千里！</div>
+          <ul class="card-list">
+            <li><span class="icon">⚡</span><span><strong>戰鬥風格：</strong>聽力超群、互相提醒！</span></li>
+            <li><span class="icon">🎯</span><span><strong>任務重點：</strong>專抓陷阱關鍵字，完全符合才送出！</span></li>
+            <li><span class="icon">👥</span><span><strong>編制：</strong>10 位特工零失誤保證。</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 3: 10-Person Relay System -->
+    <section class="slide" data-slide="3">
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag" style="background:rgba(192,132,252,0.2); color:var(--accent-purple);">合作機制</span>
+          <h2 class="slide-title">全排 10 人輸送帶系統：安全傳遞、絕對不狂奔！</h2>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="col-card highlight">
+          <div class="card-title" style="color:var(--accent-amber);">🏁 第 1 位：前鋒接收官</div>
+          <ul class="card-list">
+            <li><span class="icon">📍</span><span><strong>位置：</strong>坐在排頭最前線。</span></li>
+            <li><span class="icon">📢</span><span><strong>任務：</strong>將送上來的物品擺放講桌，大聲覆誦確認條件。</span></li>
+            <li><span class="icon">✋</span><span><strong>勝利判定：</strong>核對無誤後向裁判舉手喊「支援完成」！</span></li>
+          </ul>
+        </div>
+
+        <div class="col-card">
+          <div class="card-title" style="color:var(--accent-blue);">📦 第 2~9 位：中繼輸送員</div>
+          <ul class="card-list">
+            <li><span class="icon">📍</span><span><strong>位置：</strong>安穩「坐在座位上」，嚴禁離座推擠！</span></li>
+            <li><span class="icon">🤝</span><span><strong>任務：</strong>物資像輸送帶一樣由手傳手、由後往前送。</span></li>
+            <li><span class="icon">🔍</span><span><strong>品質檢查：</strong>眼睛幫忙看清楚顏色、數量對不對！</span></li>
+          </ul>
+        </div>
+
+        <div class="col-card success">
+          <div class="card-title" style="color:var(--accent-green);">🔍 第 10 位：後衛盤點員</div>
+          <ul class="card-list">
+            <li><span class="icon">📍</span><span><strong>位置：</strong>坐鎮排尾後方防線。</span></li>
+            <li><span class="icon">🎒</span><span><strong>任務：</strong>第一時間找出符合條件的物資送入輸送帶。</span></li>
+            <li><span class="icon">💡</span><span><strong>秘訣：</strong>保持冷靜，不急不躁，精準支援！</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 4: Golden Rules -->
+    <section class="slide" data-slide="4">
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag" style="background:rgba(248,113,113,0.2); color:var(--accent-red);">作戰守則</span>
+          <h2 class="slide-title">黃金安全與聽話三口訣（違規要扣分喔！）</h2>
+        </div>
+      </div>
+      <div class="slide-body" style="flex-direction:column; gap:16px;">
+        <div class="col-card" style="border-left:8px solid var(--accent-amber); padding:20px 28px;">
+          <div class="card-title" style="color:var(--accent-amber); font-size:26px;">👂 口訣一：聽完再動手</div>
+          <p style="font-size:20px; color:var(--text-main);">
+            老師大喊<strong>「支援前線，開始！」</strong>之前，全班所有人雙手平放桌上。<br>
+            🚨 <strong>偷跑拿物品算搶跑，全排直接扣 20 分！</strong>
+          </p>
+        </div>
+
+        <div class="col-card" style="border-left:8px solid var(--accent-blue); padding:20px 28px;">
+          <div class="card-title" style="color:var(--accent-blue); font-size:26px;">🤝 口訣二：傳遞不奔跑</div>
+          <p style="font-size:20px; color:var(--text-main);">
+            物品必須由手傳手、像高鐵輸送帶一樣往前傳送。<br>
+            🚨 <strong>嚴禁在走道奔跑、推擠、衝撞桌角，安全永遠第一！</strong>
+          </p>
+        </div>
+
+        <div class="col-card" style="border-left:8px solid var(--accent-green); padding:20px 28px;">
+          <div class="card-title" style="color:var(--accent-green); font-size:26px;">🎯 口訣三：正確勝過快</div>
+          <p style="font-size:20px; color:var(--text-main);">
+            全對得 100 分！若速度最快但條件拿錯（如顏色錯、數量錯），得 0 分！<br>
+            💡 <strong>聽清楚、檢查好再送出去，才是真正的王牌特工！</strong>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 5: Mission 1 -->
+    <section class="slide" data-slide="5">
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag" style="background:rgba(56,189,248,0.2); color:var(--accent-blue);">第一階段：聽力初級 • 任務 01</span>
+          <h2 class="slide-title">【任務 01】陽光調色盤</h2>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="col-card highlight">
+          <div class="card-title" style="color:var(--accent-amber);">📋 支援前線指令清單</div>
+          <ul class="card-list">
+            <li><span class="icon">👉</span><span>數量限定：剛好 <strong>「3 支」</strong> 彩色筆</span></li>
+            <li><span class="icon">👉</span><span>顏色限定：筆芯顏色必須是 <strong>「黃色」</strong></span></li>
+            <li><span class="icon">👉</span><span>送達講台由前鋒依序排好驗收</span></li>
+          </ul>
+
+          <div class="timer-panel">
+            <div class="timer-display" id="timer-5">30</div>
+            <div class="timer-btns">
+              <button class="timer-btn btn-start" onclick="startTimer(5, 30)">開始計時</button>
+              <button class="timer-btn btn-reset" onclick="resetTimer(5, 30)">重設</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1; display:flex; flex-direction:column; gap:16px;">
+          <div class="col-card danger">
+            <button class="btn-reveal" onclick="toggleTrap('trap-5')">👁️ 點擊揭曉！聽話雷達陷阱</button>
+            <div class="trap-content" id="trap-5">
+              <ul class="card-list" style="font-size:18px;">
+                <li><span class="icon">❌</span><span>拿成螢光筆或黃色鉛筆（題目限定彩色筆！）</span></li>
+                <li><span class="icon">❌</span><span>拿成綠色或橘色。</span></li>
+                <li><span class="icon">❌</span><span>送了 4 支或 5 支上來，數量不精準！</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-card success">
+            <div class="card-title" style="color:var(--accent-green); font-size:20px;">🤝 10 人合作小錦囊</div>
+            <p style="font-size:18px; line-height:1.5;">
+              前鋒收到筆後，大聲點數「1、2、3，全黃！」，親自覆誦確認再舉手向裁判報告！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 6: Mission 2 -->
+    <section class="slide" data-slide="6">
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag" style="background:rgba(56,189,248,0.2); color:var(--accent-blue);">第一階段：聽力初級 • 任務 02</span>
+          <h2 class="slide-title">【任務 02】喝水大作戰</h2>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="col-card highlight">
+          <div class="card-title" style="color:var(--accent-amber);">📋 支援前線指令清單</div>
+          <ul class="card-list">
+            <li><span class="icon">👉</span><span>數量限定：剛好 <strong>「4 個」</strong> 喝水的水壺</span></li>
+            <li><span class="icon">👉</span><span>限制條件：水壺裡面 <strong>「絕對不能有吸管」</strong>！</span></li>
+            <li><span class="icon">👉</span><span>保溫瓶、直飲杯、旋蓋式水壺皆可</span></li>
+          </ul>
+
+          <div class="timer-panel">
+            <div class="timer-display" id="timer-6">40</div>
+            <div class="timer-btns">
+              <button class="timer-btn btn-start" onclick="startTimer(6, 40)">開始計時</button>
+              <button class="timer-btn btn-reset" onclick="resetTimer(6, 40)">重設</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1; display:flex; flex-direction:column; gap:16px;">
+          <div class="col-card danger">
+            <button class="btn-reveal" onclick="toggleTrap('trap-6')">👁️ 點擊揭曉！聽話雷達陷阱</button>
+            <div class="trap-content" id="trap-6">
+              <ul class="card-list" style="font-size:18px;">
+                <li><span class="icon">❌</span><span>很多水壺外表看不出來，打開裡面藏著彈跳吸管！</span></li>
+                <li><span class="icon">❌</span><span>只要 4 個裡面有 1 個有吸管，全組扣分！</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-card success">
+            <div class="card-title" style="color:var(--accent-green); font-size:20px;">🤝 10 人合作小錦囊</div>
+            <p style="font-size:18px; line-height:1.5;">
+              中繼輸送員在接力傳遞時，立刻請同學瞄一眼蓋子內部，確定無吸管才往前送！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 7: Mission 3 -->
+    <section class="slide" data-slide="7">
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag" style="background:rgba(251,191,36,0.2); color:var(--accent-amber);">第二階段：細節偵探 • 任務 03</span>
+          <h2 class="slide-title">【任務 03】彩虹長尺隊</h2>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="col-card highlight">
+          <div class="card-title" style="color:var(--accent-amber);">📋 支援前線指令清單</div>
+          <ul class="card-list">
+            <li><span class="icon">👉</span><span>數量限定：剛好 <strong>「2 把」</strong> 直尺</span></li>
+            <li><span class="icon">👉</span><span>長度限定：長度必須 <strong>「超過 15 公分」</strong>（如20或30cm）</span></li>
+            <li><span class="icon">👉</span><span>外觀限定：兩把尺的 <strong>「顏色不能一樣」</strong>！</span></li>
+          </ul>
+
+          <div class="timer-panel">
+            <div class="timer-display" id="timer-7">40</div>
+            <div class="timer-btns">
+              <button class="timer-btn btn-start" onclick="startTimer(7, 40)">開始計時</button>
+              <button class="timer-btn btn-reset" onclick="resetTimer(7, 40)">重設</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1; display:flex; flex-direction:column; gap:16px;">
+          <div class="col-card danger">
+            <button class="btn-reveal" onclick="toggleTrap('trap-7')">👁️ 點擊揭曉！聽話雷達陷阱</button>
+            <div class="trap-content" id="trap-7">
+              <ul class="card-list" style="font-size:18px;">
+                <li><span class="icon">❌</span><span>拿了剛好 15 公分的小尺（題目是『超過 15 公分』！）。</span></li>
+                <li><span class="icon">❌</span><span>兩把都是透明的，或兩把都是藍色的。</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-card success">
+            <div class="card-title" style="color:var(--accent-green); font-size:20px;">🤝 10 人合作小錦囊</div>
+            <p style="font-size:18px; line-height:1.5;">
+              排內鎖定 2 位有不同顏色長尺的同學提供即可，其他人不用重複給，避免前鋒混淆。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 8: Mission 4 -->
+    <section class="slide" data-slide="8">
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag" style="background:rgba(251,191,36,0.2); color:var(--accent-amber);">第二階段：細節偵探 • 任務 04</span>
+          <h2 class="slide-title">【任務 04】純白隱形擦</h2>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="col-card highlight">
+          <div class="card-title" style="color:var(--accent-amber);">📋 支援前線指令清單</div>
+          <ul class="card-list">
+            <li><span class="icon">👉</span><span>數量限定：剛好 <strong>「3 塊」</strong> 橡皮擦</span></li>
+            <li><span class="icon">👉</span><span>顏色限定：本體必須是 <strong>「純白色」</strong></span></li>
+            <li><span class="icon">👉</span><span>外觀限定：表面 <strong>「完全沒有任何圖案或印字」</strong></span></li>
+          </ul>
+
+          <div class="timer-panel">
+            <div class="timer-display" id="timer-8">45</div>
+            <div class="timer-btns">
+              <button class="timer-btn btn-start" onclick="startTimer(8, 45)">開始計時</button>
+              <button class="timer-btn btn-reset" onclick="resetTimer(8, 45)">重設</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1; display:flex; flex-direction:column; gap:16px;">
+          <div class="col-card danger">
+            <button class="btn-reveal" onclick="toggleTrap('trap-8')">👁️ 點擊揭曉！聽話雷達陷阱</button>
+            <div class="trap-content" id="trap-8">
+              <ul class="card-list" style="font-size:18px;">
+                <li><span class="icon">❌</span><span>拿了有卡通圖案的造型擦。</span></li>
+                <li><span class="icon">❌</span><span>忘記把印有商標文字的「外層紙套」脫掉！</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-card success">
+            <div class="card-title" style="color:var(--accent-green); font-size:20px;">🤝 10 人合作小錦囊</div>
+            <p style="font-size:18px; line-height:1.5;">
+              機智神隊友：把一般橡皮擦的紙套滑下來，確認白白淨淨無字，立刻過關！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 9: Mission 5 -->
+    <section class="slide" data-slide="9">
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag" style="background:rgba(251,191,36,0.2); color:var(--accent-amber);">第二階段：細節偵探 • 任務 05</span>
+          <h2 class="slide-title">【任務 05】社會小博士</h2>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="col-card highlight">
+          <div class="card-title" style="color:var(--accent-amber);">📋 支援前線指令清單</div>
+          <ul class="card-list">
+            <li><span class="icon">👉</span><span>數量限定：剛好 <strong>「3 本」</strong> 課本</span></li>
+            <li><span class="icon">👉</span><span>科目限定：必須是 <strong>「社會課本」</strong>！</span></li>
+            <li><span class="icon">👉</span><span>指定狀態：每一本都必須 <strong>「翻到第 20 頁」</strong></span></li>
+          </ul>
+
+          <div class="timer-panel">
+            <div class="timer-display" id="timer-9">45</div>
+            <div class="timer-btns">
+              <button class="timer-btn btn-start" onclick="startTimer(9, 45)">開始計時</button>
+              <button class="timer-btn btn-reset" onclick="resetTimer(9, 45)">重設</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1; display:flex; flex-direction:column; gap:16px;">
+          <div class="col-card danger">
+            <button class="btn-reveal" onclick="toggleTrap('trap-9')">👁️ 點擊揭曉！聽話雷達陷阱</button>
+            <div class="trap-content" id="trap-9">
+              <ul class="card-list" style="font-size:18px;">
+                <li><span class="icon">❌</span><span>拿錯科目（拿成國語或數學課本）。</span></li>
+                <li><span class="icon">❌</span><span>翻錯頁碼（翻到第 19 或 22 頁）。</span></li>
+                <li><span class="icon">❌</span><span>往前傳的時候書本合起來了，前鋒沒檢查！</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-card success">
+            <div class="card-title" style="color:var(--accent-green); font-size:20px;">🤝 10 人合作小錦囊</div>
+            <p style="font-size:18px; line-height:1.5;">
+              翻好第 20 頁後，請中繼傳遞員用大拇指壓住書頁往前傳，送到前線依然翻開！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 10: Mission 6 -->
+    <section class="slide" data-slide="10">
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag" style="background:rgba(192,132,252,0.2); color:var(--accent-purple);">第三階段：全排合體 • 任務 06</span>
+          <h2 class="slide-title">【任務 06】銀河文具大橋</h2>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="col-card highlight">
+          <div class="card-title" style="color:var(--accent-amber);">📋 支援前線指令清單</div>
+          <ul class="card-list">
+            <li><span class="icon">👉</span><span><strong>不需要送上講台！</strong> 在各排桌面或走道進行</span></li>
+            <li><span class="icon">👉</span><span>全排 10 人將鉛筆、彩色筆「首尾相接」</span></li>
+            <li><span class="icon">👉</span><span>串聯成一條長度超過 <strong>「2 公尺」</strong> 的連續直線大橋！</span></li>
+          </ul>
+
+          <div class="timer-panel">
+            <div class="timer-display" id="timer-10">60</div>
+            <div class="timer-btns">
+              <button class="timer-btn btn-start" onclick="startTimer(10, 60)">開始計時</button>
+              <button class="timer-btn btn-reset" onclick="resetTimer(10, 60)">重設</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1; display:flex; flex-direction:column; gap:16px;">
+          <div class="col-card danger">
+            <button class="btn-reveal" onclick="toggleTrap('trap-10')">👁️ 點擊揭曉！聽話雷達陷阱</button>
+            <div class="trap-content" id="trap-10">
+              <ul class="card-list" style="font-size:18px;">
+                <li><span class="icon">❌</span><span>中間筆跟筆之間斷開有空隙，不算連續大橋！</span></li>
+                <li><span class="icon">❌</span><span>彎彎曲曲長度不夠 2 公尺。</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-card success">
+            <div class="card-title" style="color:var(--accent-green); font-size:20px;">🤝 10 人合作小錦囊</div>
+            <p style="font-size:18px; line-height:1.5;">
+              全排 10 人每人從鉛筆盒拿 2 支筆，同時往桌面中央擺放對齊，15 秒就能拼完 2 公尺！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 11: Mission 7 -->
+    <section class="slide" data-slide="11">
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag" style="background:rgba(192,132,252,0.2); color:var(--accent-purple);">第三階段：全排合體 • 任務 07</span>
+          <h2 class="slide-title">【任務 07】默契剪刀手</h2>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="col-card highlight">
+          <div class="card-title" style="color:var(--accent-amber);">📋 支援前線指令清單</div>
+          <ul class="card-list">
+            <li><span class="icon">👉</span><span>全排 10 人同時伸出 <strong>「左手」</strong>！</span></li>
+            <li><span class="icon">👉</span><span>手勢限定：比出 <strong>「✌️ 剪刀手」</strong></span></li>
+            <li><span class="icon">👉</span><span>狀態要求：全體定格 5 秒，且 <strong>「完全不能發出聲音」</strong></span></li>
+          </ul>
+
+          <div class="timer-panel">
+            <div class="timer-display" id="timer-11">30</div>
+            <div class="timer-btns">
+              <button class="timer-btn btn-start" onclick="startTimer(11, 30)">開始計時</button>
+              <button class="timer-btn btn-reset" onclick="resetTimer(11, 30)">重設</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1; display:flex; flex-direction:column; gap:16px;">
+          <div class="col-card danger">
+            <button class="btn-reveal" onclick="toggleTrap('trap-11')">👁️ 點擊揭曉！聽話雷達陷阱</button>
+            <div class="trap-content" id="trap-11">
+              <ul class="card-list" style="font-size:18px;">
+                <li><span class="icon">❌</span><span>慣用右手的人一緊張立刻伸出右手！</span></li>
+                <li><span class="icon">❌</span><span>定格時忍不住笑出來或發出聲音，直接失敗！</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-card success">
+            <div class="card-title" style="color:var(--accent-green); font-size:20px;">🤝 10 人合作小錦囊</div>
+            <p style="font-size:18px; line-height:1.5;">
+              相鄰同學在舉起手前互相輕聲提醒「左手、左手」，然後全排一起深呼吸憋氣 5 秒！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 12: Mission 8 -->
+    <section class="slide" data-slide="12">
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag" style="background:rgba(192,132,252,0.2); color:var(--accent-purple);">第三階段：全排合體 • 任務 08</span>
+          <h2 class="slide-title">【任務 08】安靜排排隊</h2>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="col-card highlight">
+          <div class="card-title" style="color:var(--accent-amber);">📋 支援前線指令清單</div>
+          <ul class="card-list">
+            <li><span class="icon">👉</span><span>全排 10 人依 <strong>「國曆生日月份（1~12月）」</strong> 排好</span></li>
+            <li><span class="icon">👉</span><span>排頭代表 1 月，排尾代表 12 月</span></li>
+            <li><span class="icon">👉</span><span>極限限制：<strong>全程不能發出聲音，只能比手勢溝通！</strong></span></li>
+          </ul>
+
+          <div class="timer-panel">
+            <div class="timer-display" id="timer-12">60</div>
+            <div class="timer-btns">
+              <button class="timer-btn btn-start" onclick="startTimer(12, 60)">開始計時</button>
+              <button class="timer-btn btn-reset" onclick="resetTimer(12, 60)">重設</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1; display:flex; flex-direction:column; gap:16px;">
+          <div class="col-card danger">
+            <button class="btn-reveal" onclick="toggleTrap('trap-12')">👁️ 點擊揭曉！聽話雷達陷阱</button>
+            <div class="trap-content" id="trap-12">
+              <ul class="card-list" style="font-size:18px;">
+                <li><span class="icon">❌</span><span>忍不住開口講出月份。</span></li>
+                <li><span class="icon">❌</span><span>月份大小順序站錯（例如 8 月站在 5 月前面）。</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-card success">
+            <div class="card-title" style="color:var(--accent-green); font-size:20px;">🤝 10 人合作小錦囊</div>
+            <p style="font-size:18px; line-height:1.5;">
+              用手指比出月份（如 3 月比 3，11 月比 1 和 1），大家互相禮讓換位，動作輕巧！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 13: Mission 9 -->
+    <section class="slide" data-slide="13">
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag" style="background:rgba(248,113,113,0.2); color:var(--accent-red);">第四階段：終極魔王 • 任務 09</span>
+          <h2 class="slide-title">【任務 09】百寶萬用袋</h2>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="col-card highlight">
+          <div class="card-title" style="color:var(--accent-amber);">📋 支援前線指令清單</div>
+          <ul class="card-list">
+            <li><span class="icon">👉</span><span>數量限定：剛好 <strong>「1 個」</strong> 筆袋</span></li>
+            <li><span class="icon">👉</span><span>內容物限定：裡面裝著 <strong>「剛好 3 件完全不同種類」</strong> 的文具</span></li>
+            <li><span class="icon">👉</span><span>範例：1 鉛筆 + 1 尺 + 1 橡皮擦（多一件少一件都算失敗！）</span></li>
+          </ul>
+
+          <div class="timer-panel">
+            <div class="timer-display" id="timer-13">50</div>
+            <div class="timer-btns">
+              <button class="timer-btn btn-start" onclick="startTimer(13, 50)">開始計時</button>
+              <button class="timer-btn btn-reset" onclick="resetTimer(13, 50)">重設</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1; display:flex; flex-direction:column; gap:16px;">
+          <div class="col-card danger">
+            <button class="btn-reveal" onclick="toggleTrap('trap-13')">👁️ 點擊揭曉！聽話雷達陷阱</button>
+            <div class="trap-content" id="trap-13">
+              <ul class="card-list" style="font-size:18px;">
+                <li><span class="icon">❌</span><span>筆袋底部藏了一支筆芯或小貼紙，變成 4 件！</span></li>
+                <li><span class="icon">❌</span><span>放了 2 支筆（鉛筆+原子筆都算筆類，不算完全不同種類！）。</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-card success">
+            <div class="card-title" style="color:var(--accent-green); font-size:20px;">🤝 10 人合作小錦囊</div>
+            <p style="font-size:18px; line-height:1.5;">
+              把筆袋徹底倒空清乾淨，全組精確挑選「1 筆、1 擦、1 尺」放進去拉上拉鍊送出！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 14: Mission 10 -->
+    <section class="slide" data-slide="14">
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag" style="background:rgba(248,113,113,0.2); color:var(--accent-red);">第四階段：終極魔王 • 任務 10</span>
+          <h2 class="slide-title">【任務 10】特工無聲口號</h2>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="col-card highlight">
+          <div class="card-title" style="color:var(--accent-amber);">📋 支援前線指令清單</div>
+          <ul class="card-list">
+            <li><span class="icon">👉</span><span>全排 10 人迅速起立，雙手緊貼褲縫站直</span></li>
+            <li><span class="icon">👉</span><span>全排一起用 <strong>「超整齊的氣音（不能出聲）」</strong> 說出口號：</span></li>
+            <li><span class="icon">🗣️</span><span><strong>「聽話超人，我們最棒！」</strong></span></li>
+          </ul>
+
+          <div class="timer-panel">
+            <div class="timer-display" id="timer-14">40</div>
+            <div class="timer-btns">
+              <button class="timer-btn btn-start" onclick="startTimer(14, 40)">開始計時</button>
+              <button class="timer-btn btn-reset" onclick="resetTimer(14, 40)">重設</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1; display:flex; flex-direction:column; gap:16px;">
+          <div class="col-card danger">
+            <button class="btn-reveal" onclick="toggleTrap('trap-14')">👁️ 點擊揭曉！聽話雷達陷阱</button>
+            <div class="trap-content" id="trap-14">
+              <ul class="card-list" style="font-size:18px;">
+                <li><span class="icon">❌</span><span>有人太興奮大聲喊出正常聲音，直接破功！</span></li>
+                <li><span class="icon">❌</span><span>動作拖拖拉拉、站立不整齊。</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-card success">
+            <div class="card-title" style="color:var(--accent-green); font-size:20px;">🤝 10 人合作小錦囊</div>
+            <p style="font-size:18px; line-height:1.5;">
+              前鋒比出「噓」的手勢，全排緊盯前鋒的嘴型，用整齊的空氣氣音一口氣念出！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 15: Awards -->
+    <section class="slide" data-slide="15">
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag" style="background:rgba(251,191,36,0.2); color:var(--accent-amber);">榮譽時刻</span>
+          <h2 class="slide-title">戰隊結算與特工頒獎典禮</h2>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="col-card" style="border-top:6px solid var(--accent-amber);">
+          <div class="card-title" style="color:var(--accent-amber);">🏆 神耳特工獎</div>
+          <div style="color:#fff; font-size:18px; margin-bottom:12px;"><strong>頒給：全場「聽得最仔細」的戰隊</strong></div>
+          <ul class="card-list" style="font-size:16px;">
+            <li><span class="icon">👂</span><span>每一題的顏色、數量、限制都聽得一清二楚。</span></li>
+            <li><span class="icon">✨</span><span>從來沒有因為搶快而拿錯物品！</span></li>
+            <li><span class="icon">🎖️</span><span>專注力滿分的聽話大師！</span></li>
+          </ul>
+        </div>
+
+        <div class="col-card" style="border-top:6px solid var(--accent-blue);">
+          <div class="card-title" style="color:var(--accent-blue);">🤝 最佳默契獎</div>
+          <div style="color:#fff; font-size:18px; margin-bottom:12px;"><strong>頒給：全排「輸送帶最順暢」的戰隊</strong></div>
+          <ul class="card-list" style="font-size:16px;">
+            <li><span class="icon">📦</span><span>10 位隊員坐在座位上穩穩傳遞。</span></li>
+            <li><span class="icon">✨</span><span>沒有任何人在走道推擠狂奔！</span></li>
+            <li><span class="icon">🎖️</span><span>互相提醒、彼此鼓勵的最佳典範！</span></li>
+          </ul>
+        </div>
+
+        <div class="col-card" style="border-top:6px solid var(--accent-green);">
+          <div class="card-title" style="color:var(--accent-green);">⚡ 超光速支援獎</div>
+          <div style="color:#fff; font-size:18px; margin-bottom:12px;"><strong>頒給：全場「反應最敏捷」的戰隊</strong></div>
+          <ul class="card-list" style="font-size:16px;">
+            <li><span class="icon">⚡</span><span>聽完指令立刻精準找出物資。</span></li>
+            <li><span class="icon">✨</span><span>傳遞迅速、分工條理分明！</span></li>
+            <li><span class="icon">🎖️</span><span>前鋒果斷自信，支援大成功！</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 16: Reflection -->
+    <section class="slide" data-slide="16">
+      <div class="slide-header">
+        <div>
+          <span class="slide-tag" style="background:rgba(192,132,252,0.2); color:var(--accent-purple);">成長思考</span>
+          <h2 class="slide-title">特工反思：聽話與合作的魔法力量</h2>
+        </div>
+      </div>
+      <div class="slide-body" style="flex-direction:column; gap:16px;">
+        <div class="col-card" style="border-left:8px solid var(--accent-amber); padding:18px 24px;">
+          <div class="card-title" style="color:var(--accent-amber); font-size:22px;">💭 問題一：剛才哪一題我們這排差點拿錯？為什麼？</div>
+          <p style="font-size:18px; color:var(--text-main);">
+            💡 <strong>反思點：</strong>是不是因為只聽到前面兩個字，後面的「限制條件」沒聽完就急著找東西了？
+          </p>
+        </div>
+
+        <div class="col-card" style="border-left:8px solid var(--accent-blue); padding:18px 24px;">
+          <div class="card-title" style="color:var(--accent-blue); font-size:22px;">💭 問題二：如果大家都離開座位往前衝，會發生什麼事？</div>
+          <p style="font-size:18px; color:var(--text-main);">
+            💡 <strong>反思點：</strong>為什麼「大家坐在位置上、由手傳手往前送」反而又快、又穩、又安全？
+          </p>
+        </div>
+
+        <div class="col-card" style="border-left:8px solid var(--accent-green); padding:18px 24px;">
+          <div class="card-title" style="color:var(--accent-green); font-size:22px;">💭 問題三：在 10 個人的排伍中，怎樣做最能幫助隊友？</div>
+          <p style="font-size:18px; color:var(--text-main);">
+            💡 <strong>反思點：</strong>是幫忙檢查條件？傳遞時拿穩？還是隊友拿錯時溫柔提醒他？
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation -->
+  <footer id="bottom-bar">
+    <button class="nav-btn" onclick="prevSlide()">❮ 上一頁</button>
+    <div class="page-indicator">第 <span id="cur-slide">1</span> / <span id="total-slides">16</span> 頁</div>
+    <button class="nav-btn" onclick="nextSlide()">下一頁 ❯</button>
+  </footer>
+
+  <script>
+    let currentSlideIndex = 1;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    document.getElementById('total-slides').innerText = totalSlides;
+
+    function showSlide(idx) {
+      if (idx < 1) idx = 1;
+      if (idx > totalSlides) idx = totalSlides;
+      currentSlideIndex = idx;
+
+      slides.forEach((sl, i) => {
+        sl.classList.toggle('active', (i + 1) === idx);
+      });
+
+      document.getElementById('cur-slide').innerText = idx;
+    }
+
+    function nextSlide() { showSlide(currentSlideIndex + 1); }
+    function prevSlide() { showSlide(currentSlideIndex - 1); }
+
+    // Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        prevSlide();
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullScreen();
+      }
+    });
+
+    // Scoreboard Logic
+    const scores = { 1: 0, 2: 0, 3: 0 };
+    function changeScore(team, delta) {
+      scores[team] = Math.max(0, scores[team] + delta);
+      document.getElementById(`score-t${team}`).innerText = scores[team];
+      if (delta > 0) playAudio('ding');
+    }
+
+    // Timer Logic
+    const timers = {};
+    function startTimer(slideNum, seconds) {
+      const display = document.getElementById(`timer-${slideNum}`);
+      if (!display) return;
+
+      clearInterval(timers[slideNum]);
+      let timeLeft = seconds;
+      display.innerText = timeLeft;
+      display.style.color = 'var(--accent-amber)';
+      playAudio('start');
+
+      timers[slideNum] = setInterval(() => {
+        timeLeft--;
+        display.innerText = timeLeft;
+
+        if (timeLeft <= 5 && timeLeft > 0) {
+          display.style.color = 'var(--accent-red)';
+          playAudio('tick');
+        }
+
+        if (timeLeft <= 0) {
+          clearInterval(timers[slideNum]);
+          display.innerText = '時間到！';
+          playAudio('buzzer');
+        }
+      }, 1000);
+    }
+
+    function resetTimer(slideNum, seconds) {
+      clearInterval(timers[slideNum]);
+      const display = document.getElementById(`timer-${slideNum}`);
+      if (display) {
+        display.innerText = seconds;
+        display.style.color = 'var(--accent-amber)';
+      }
+    }
+
+    function toggleTrap(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.toggle('show');
+        playAudio('ding');
+      }
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    // Web Audio Synthesizer (Zero external dependency sound effects)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playAudio(type) {
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      const now = audioCtx.currentTime;
+
+      if (type === 'tick') {
+        osc.frequency.setValueAtTime(800, now);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+        osc.start(now);
+        osc.stop(now + 0.08);
+      } else if (type === 'ding') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(987.77, now); // B5
+        osc.frequency.setValueAtTime(1318.51, now + 0.1); // E6
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+        osc.start(now);
+        osc.stop(now + 0.5);
+      } else if (type === 'buzzer') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.setValueAtTime(120, now + 0.2);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+        osc.start(now);
+        osc.stop(now + 0.6);
+      } else if (type === 'start') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.setValueAtTime(659.25, now + 0.1);
+        osc.frequency.setValueAtTime(783.99, now + 0.2);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+        osc.start(now);
+        osc.stop(now + 0.4);
+      } else if (type === 'cheer') {
+        // Quick celebratory arpeggio
+        const freqs = [523.25, 659.25, 783.99, 1046.50];
+        freqs.forEach((f, idx) => {
+          const o = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          o.connect(g);
+          g.connect(audioCtx.destination);
+          o.frequency.setValueAtTime(f, now + idx * 0.08);
+          g.gain.setValueAtTime(0.2, now + idx * 0.08);
+          g.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.4);
+          o.start(now + idx * 0.08);
+          o.stop(now + idx * 0.08 + 0.4);
+        });
+      }
+    }
+  </script>
+</body>
+</html>

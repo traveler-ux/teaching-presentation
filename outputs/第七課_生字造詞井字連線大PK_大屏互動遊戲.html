@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>第七課〈最年輕的奶奶〉生字造詞井字連線大PK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;900&family=Fredoka:wght@600;700&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --bg-card: #151c2e;
+      --border-color: rgba(255, 255, 255, 0.15);
+      --ink-title: #ffffff;
+      --ink-body: #e2e8f0;
+      --ink-muted: #94a3b8;
+      
+      --red-team: #ef4444;
+      --red-team-bg: rgba(239, 68, 68, 0.18);
+      --red-team-glow: rgba(239, 68, 68, 0.45);
+      
+      --blue-team: #3b82f6;
+      --blue-team-bg: rgba(59, 130, 246, 0.18);
+      --blue-team-glow: rgba(59, 130, 246, 0.45);
+      
+      --gold: #fbbf24;
+      --green: #10b981;
+      
+      --font-main: 'Noto Sans TC', sans-serif;
+      --font-kai: "DFKai-SB", "BiauKai", "Noto Serif TC", serif;
+      --font-num: 'Fredoka', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; touch-action: manipulation; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink-body);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 14px 24px;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 15%, rgba(239, 68, 68, 0.12) 0%, transparent 35%),
+        radial-gradient(circle at 90% 15%, rgba(59, 130, 246, 0.12) 0%, transparent 35%),
+        radial-gradient(circle at 50% 85%, rgba(251, 191, 36, 0.08) 0%, transparent 40%);
+    }
+
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .title-area h1 {
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 900;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .title-area h1 span {
+      background: linear-gradient(135deg, #f87171, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .title-area p {
+      font-size: 14.5px;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+
+    .top-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-top {
+      background: rgba(21, 28, 46, 0.85);
+      border: 1.5px solid var(--border-color);
+      color: #fff;
+      padding: 7px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-top:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+    .btn-top.active {
+      background: var(--gold);
+      color: #000;
+      border-color: var(--gold);
+    }
+
+    /* Scoreboard & Turn Banner */
+    .battle-bar {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 16px;
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: 18px;
+      padding: 12px 20px;
+      margin-bottom: 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .team-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 16px;
+      border-radius: 14px;
+      transition: all 0.3s;
+    }
+    .team-badge.red {
+      background: var(--red-team-bg);
+      border: 2px solid var(--red-team);
+    }
+    .team-badge.blue {
+      background: var(--blue-team-bg);
+      border: 2px solid var(--blue-team);
+      justify-content: flex-end;
+    }
+    .team-badge.turn-active {
+      box-shadow: 0 0 20px currentColor;
+      transform: scale(1.03);
+    }
+
+    .team-avatar {
+      font-size: 32px;
+      line-height: 1;
+    }
+    .team-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .team-name {
+      font-size: 17px;
+      font-weight: 900;
+    }
+    .red-text { color: var(--red-team); }
+    .blue-text { color: var(--blue-team); }
+    .gold-text { color: var(--gold); }
+
+    .team-score {
+      font-family: var(--font-num);
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .center-status {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .turn-pill {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid var(--border-color);
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+    .timer-pill {
+      font-family: var(--font-num);
+      font-size: 15px;
+      color: var(--gold);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Game Board */
+    .board-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .grid-board {
+      display: grid;
+      gap: 12px;
+      width: 100%;
+      max-width: 660px;
+      aspect-ratio: 1 / 1;
+      margin: 0 auto;
+    }
+    .grid-3x3 {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      max-width: 580px;
+    }
+    .grid-4x4 {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      max-width: 660px;
+    }
+
+    .board-cell {
+      background: linear-gradient(145deg, #111a33, #0f172a);
+      border: 2.5px solid #23335d;
+      border-radius: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+      padding: 6px;
+    }
+    .board-cell:hover:not(.claimed) {
+      border-color: var(--gold);
+      transform: scale(1.04);
+      box-shadow: 0 0 20px rgba(251, 191, 36, 0.35);
+      background: #172445;
+    }
+
+    .cell-char {
+      font-family: var(--font-kai);
+      font-size: clamp(34px, 5.5vw, 54px);
+      font-weight: 900;
+      line-height: 1.1;
+      color: #fff;
+    }
+    .grid-4x4 .cell-char {
+      font-size: clamp(28px, 4.2vw, 44px);
+    }
+
+    .cell-meta {
+      font-size: 12px;
+      color: var(--ink-muted);
+      margin-top: 2px;
+      font-weight: 600;
+    }
+
+    /* Claimed Status */
+    .board-cell.claimed-red {
+      background: linear-gradient(145deg, #7f1d1d, #450a0a);
+      border-color: var(--red-team);
+      box-shadow: inset 0 0 15px rgba(239, 68, 68, 0.4), 0 0 15px rgba(239, 68, 68, 0.3);
+      cursor: default;
+    }
+    .board-cell.claimed-blue {
+      background: linear-gradient(145deg, #1e3a8a, #0f172a);
+      border-color: var(--blue-team);
+      box-shadow: inset 0 0 15px rgba(59, 130, 246, 0.4), 0 0 15px rgba(59, 130, 246, 0.3);
+      cursor: default;
+    }
+
+    .claim-stamp {
+      position: absolute;
+      font-size: clamp(48px, 7vw, 76px);
+      line-height: 1;
+      opacity: 0.88;
+      animation: stampPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .grid-4x4 .claim-stamp {
+      font-size: clamp(38px, 5.5vw, 60px);
+    }
+
+    @keyframes stampPop {
+      0% { transform: scale(2.2); opacity: 0; }
+      100% { transform: scale(1); opacity: 0.88; }
+    }
+
+    /* Winning Line Highlights */
+    .board-cell.win-highlight {
+      border-color: var(--gold) !important;
+      animation: winPulse 1s infinite alternate;
+      z-index: 10;
+    }
+    @keyframes winPulse {
+      0% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.6); transform: scale(1.02); }
+      100% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.95); transform: scale(1.08); }
+    }
+
+    /* Modal / Popups */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(14px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      padding: 16px;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+    .modal-box {
+      background: #151c2e;
+      border: 3px solid var(--gold);
+      border-radius: 26px;
+      padding: 32px 36px;
+      max-width: 620px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.85);
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+    .modal-overlay.active .modal-box { transform: scale(1); }
+
+    .rice-grid-modal {
+      width: 100px;
+      height: 100px;
+      border: 2.5px dashed var(--gold);
+      background: rgba(251, 191, 36, 0.1);
+      color: var(--gold);
+      font-size: 64px;
+      font-family: var(--font-kai);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 16px;
+      position: relative;
+      font-weight: 900;
+      margin: 12px auto;
+      box-shadow: 0 0 25px rgba(251, 191, 36, 0.25);
+    }
+    .rice-grid-modal::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: 
+        linear-gradient(to right, transparent 49%, rgba(251, 191, 36, 0.3) 50%, transparent 51%),
+        linear-gradient(to bottom, transparent 49%, rgba(251, 191, 36, 0.3) 50%, transparent 51%);
+    }
+
+    .modal-char-info {
+      font-size: 18px;
+      font-weight: 700;
+      color: #93c5fd;
+      margin-bottom: 12px;
+    }
+
+    .vocab-hint-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px 16px;
+      text-align: left;
+      margin: 14px 0;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .vocab-hint-card summary {
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--gold);
+      outline: none;
+    }
+
+    .modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .btn-action {
+      padding: 12px 20px;
+      border-radius: 14px;
+      font-size: 17px;
+      font-weight: 900;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-action:hover { transform: scale(1.04); }
+    .btn-success {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+    }
+    .btn-fail {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+    }
+    .btn-fail:hover { background: rgba(255, 255, 255, 0.2); }
+
+    /* Bottom Status Bar */
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-color);
+      border-radius: 16px;
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Header -->
+  <header>
+    <div class="title-area">
+      <h1>第七課〈最年輕的奶奶〉<span>生字造詞井字連線大PK</span></h1>
+      <p>分組搶佔格子 ｜ 正確說出詞語 ｜ 連成一線即刻獲勝！</p>
+    </div>
+    <div class="top-controls">
+      <button class="btn-top active" id="btn-mode-3" onclick="setBoardMode(3)">⚡ 3x3 經典速戰</button>
+      <button class="btn-top" id="btn-mode-4" onclick="setBoardMode(4)">🌟 4x4 全字爭霸</button>
+      <button class="btn-top" onclick="showWordBank()">📖 造詞題庫錦囊</button>
+      <button class="btn-top" onclick="toggleFullscreen()">⛶ 全螢幕</button>
+    </div>
+  </header>
+
+  <!-- Score & Turn Banner -->
+  <div class="battle-bar">
+    <div class="team-badge red" id="badge-red">
+      <div class="team-avatar">🔴</div>
+      <div class="team-info">
+        <div class="team-name red-text">烈火紅隊</div>
+        <div style="font-size: 12px; color: var(--ink-muted);">連勝場數：<span id="score-red" class="team-score">0</span></div>
+      </div>
+    </div>
+
+    <div class="center-status">
+      <div class="turn-pill" id="turn-indicator">現在輪到：<span class="red-text">🔴 烈火紅隊</span> 出擊！</div>
+      <div class="timer-pill" id="timer-display" onclick="toggleTimer()">⏱️ 思考倒數：<span id="timer-sec">20</span> 秒 (點擊開關)</div>
+    </div>
+
+    <div class="team-badge blue" id="badge-blue">
+      <div class="team-info" style="text-align: right;">
+        <div class="team-name blue-text">飛鷹藍隊</div>
+        <div style="font-size: 12px; color: var(--ink-muted);">連勝場數：<span id="score-blue" class="team-score">0</span></div>
+      </div>
+      <div class="team-avatar">🔵</div>
+    </div>
+  </div>
+
+  <!-- Board Container -->
+  <main class="board-container">
+    <div class="grid-board grid-3x3" id="game-board">
+      <!-- Generated by JS -->
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <span id="game-status-text">👉 請目前輪到的隊伍點選棋盤上的任一生字進行造詞挑戰！</span>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button class="btn-top" onclick="resetBoard(true)">🎲 隨機換字重新開局</button>
+      <button class="btn-top" onclick="clearBoardOnly()">🔄 原題重玩</button>
+    </div>
+  </footer>
+
+  <!-- Answer / Question Modal -->
+  <div class="modal-overlay" id="quiz-modal" onclick="closeQuizModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div style="font-size: 16px; font-weight: 700; color: var(--gold);" id="modal-team-title">
+        ⚔️ 隊伍造詞挑戰！
+      </div>
+
+      <div class="rice-grid-modal" id="modal-char">懂</div>
+      
+      <div class="modal-char-info" id="modal-info">
+        注音：ㄉㄨㄥˇ ｜ 部首：心部 ｜ 筆畫：16畫
+      </div>
+
+      <div style="font-size: 18px; font-weight: 800; color: #fff; margin: 10px 0;">
+        🎯 請說出一個含有【<span id="modal-target-char" class="gold-text">懂</span>】的詞語，並造一個句子！
+      </div>
+
+      <details class="vocab-hint-card" id="hint-details">
+        <summary>💡 老師造詞錦囊（點擊展開提示）</summary>
+        <div id="modal-word-hints" style="margin-top: 8px; color: #cbd5e1;">
+          <!-- Loaded dynamically -->
+        </div>
+      </details>
+
+      <div class="modal-actions">
+        <button class="btn-action btn-success" onclick="confirmClaim(true)">
+          ✅ 造詞正確！佔領此格
+        </button>
+        <button class="btn-action btn-fail" onclick="confirmClaim(false)">
+          ❌ 挑戰失敗（換下一隊）
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Victory Modal -->
+  <div class="modal-overlay" id="win-modal" onclick="closeWinModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div style="font-size: 56px; line-height: 1;">🏆</div>
+      <div style="font-size: 28px; font-weight: 900; margin: 12px 0 6px;" id="win-title">
+        🎉 恭喜 【烈火紅隊】 達成連線獲勝！
+      </div>
+      <p style="font-size: 16px; color: var(--ink-muted); margin-bottom: 20px;" id="win-desc">
+        反應敏捷、詞彙量滿滿！為隊伍奪得 1 勝！
+      </p>
+      <div style="display: flex; justify-content: center; gap: 12px;">
+        <button class="btn-action btn-success" style="padding: 12px 30px;" onclick="resetBoard(true); closeWinModal();">
+          🔥 再戰一局（隨機換題）
+        </button>
+        <button class="btn-action btn-fail" onclick="closeWinModal()">關閉查看棋盤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Word Bank Reference Modal -->
+  <div class="modal-overlay" id="bank-modal" onclick="closeWordBank()">
+    <div class="modal-box" style="max-width: 780px; max-height: 85vh; overflow-y: auto;" onclick="event.stopPropagation()">
+      <div style="font-size: 24px; font-weight: 900; color: var(--gold); margin-bottom: 12px;">
+        📖 第七課〈最年輕的奶奶〉全課 15 生字與造詞大全
+      </div>
+      <div id="full-word-bank-list" style="text-align: left; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14.5px;">
+        <!-- Filled by JS -->
+      </div>
+      <button class="btn-top" style="margin: 20px auto 0; font-size: 16px; padding: 8px 24px;" onclick="closeWordBank()">關閉錦囊</button>
+    </div>
+  </div>
+
+  <script>
+    // 第七課 15 個生字完整資料庫
+    const rawLesson7Vocab = [
+      { char: "背", pinyin: "ㄅㄟˋ / ㄅㄟ", radical: "肉", strokes: 9, 
+        words: "背包、後背、背景、背影、背書、背叛", 
+        sentence: "奶奶輕輕拍著我的後背，臉上滿是慈祥的微笑。" },
+      { char: "斑", pinyin: "ㄅㄢ", radical: "文", strokes: 12, 
+        words: "斑紋、斑點、黑斑、斑馬、雀斑、斑駁", 
+        sentence: "奶奶的手背上雖然長了老人斑，但雙手依然非常靈巧。" },
+      { char: "皺", pinyin: "ㄓㄡˋ", radical: "皮", strokes: 15, 
+        words: "皺紋、皺眉、皺起、皺巴巴、起皺", 
+        sentence: "奶奶笑起來的時候，眼角會綻放出一道道溫暖的皺紋。" },
+      { char: "淘", pinyin: "ㄊㄠˊ", radical: "水", strokes: 11, 
+        words: "淘氣、淘金、淘汰、淘米、淘洗", 
+        sentence: "我和淘氣的小狗在客廳裡玩耍，逗得奶奶哈哈大笑。" },
+      { char: "懂", pinyin: "ㄉㄨㄥˇ", radical: "心", strokes: 16, 
+        words: "懂事、懂得、弄懂、聽懂、懂禮貌", 
+        sentence: "大家都誇獎我是個懂事的好孩子，懂得體貼長輩。" },
+      { char: "凡", pinyin: "ㄈㄢˊ", radical: "丶", strokes: 3, 
+        words: "平凡、非凡、凡是、超凡、身手不凡", 
+        sentence: "奶奶雖然看起來很平凡，但在我心中卻有著非凡的魔力。" },
+      { char: "梳", pinyin: "ㄕㄨ", radical: "木", strokes: 10, 
+        words: "梳頭、梳子、梳理、梳洗、梳髮", 
+        sentence: "每天早晨，我喜歡拿著木梳幫奶奶梳理銀白色的頭髮。" },
+      { char: "夾", pinyin: "ㄐㄧㄚˊ", radical: "大", strokes: 7, 
+        words: "皮夾、髮夾、夾子、夾心、夾住", 
+        sentence: "奶奶頭上夾著一個漂亮的粉紅色髮夾，看起來很有精神。" },
+      { char: "藏", pinyin: "ㄘㄤˊ / ㄗㄤˋ", radical: "艸", strokes: 18, 
+        words: "捉迷藏、寶藏、收藏、隱藏、躲藏", 
+        sentence: "假日時，奶奶會陪我們在院子裡一起玩捉迷藏遊戲。" },
+      { char: "捏", pinyin: "ㄋㄧㄝ", radical: "手", strokes: 10, 
+        words: "拿捏、捏土、捏造、捏一把汗、扭扭捏捏", 
+        sentence: "奶奶用靈巧的雙手捏出一隻栩栩如生的彩色小泥人。" },
+      { char: "摺", pinyin: "ㄓㄜˊ", radical: "手", strokes: 14, 
+        words: "摺紙、摺痕、摺疊、摺扇、百摺裙", 
+        sentence: "奶奶是一位摺紙高手，隨手就能摺出漂亮的紙飛機。" },
+      { char: "仔", pinyin: "ㄗˇ", radical: "人", strokes: 5, 
+        words: "仔細、仔密、牛仔、豬仔", 
+        sentence: "做功課時一定要仔細檢查，才不會粗心寫錯字。" },
+      { char: "藝", pinyin: "ㄧˋ", radical: "艸", strokes: 19, 
+        words: "藝術、才藝、手藝、園藝、多才多藝", 
+        sentence: "奶奶多才多藝，不管是插花、下廚還是編織都難不倒她。" },
+      { char: "術", pinyin: "ㄕㄨˋ", radical: "行", strokes: 11, 
+        words: "魔術、手術、技術、美術、法術", 
+        sentence: "奶奶就像魔術師一樣，能把舊布料變成漂亮的布娃娃。" },
+      { char: "創", pinyin: "ㄔㄨㄤˋ / ㄔㄨㄤ", radical: "刀", strokes: 12, 
+        words: "創意、創造、創立、創作、開創、創傷", 
+        sentence: "奶奶總是有滿滿的創意，把生活過得豐富又精彩！" }
+    ];
+
+    // Game State
+    let currentMode = 3; // 3 or 4
+    let boardData = []; // Array of { char, pinyin, radical, strokes, words, sentence, isStar, owner: null | 'red' | 'blue' }
+    let currentTurn = 'red'; // 'red' or 'blue'
+    let scoreRed = 0;
+    let scoreBlue = 0;
+    let selectedCellIndex = null;
+    let timerEnabled = true;
+    let timerSeconds = 20;
+    let timerInterval = null;
+    let isGameOver = false;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initWordBankModal();
+      resetBoard(true);
+    });
+
+    // Initialize Mode
+    function setBoardMode(mode) {
+      if (currentMode === mode) return;
+      currentMode = mode;
+      document.getElementById('btn-mode-3').classList.toggle('active', mode === 3);
+      document.getElementById('btn-mode-4').classList.toggle('active', mode === 4);
+      resetBoard(true);
+    }
+
+    // Reset Board
+    function resetBoard(shuffle = true) {
+      isGameOver = false;
+      selectedCellIndex = null;
+      clearInterval(timerInterval);
+
+      const boardEl = document.getElementById('game-board');
+      boardEl.className = `grid-board grid-${currentMode}x${currentMode}`;
+
+      const totalCells = currentMode * currentMode;
+
+      if (shuffle || boardData.length !== totalCells) {
+        if (currentMode === 3) {
+          // Shuffle 15 chars and take 9
+          const shuffled = [...rawLesson7Vocab].sort(() => 0.5 - Math.random());
+          boardData = shuffled.slice(0, 9).map(v => ({ ...v, isStar: false, owner: null }));
+        } else {
+          // 4x4 Mode: 15 chars + 1 Star cell
+          const shuffled = [...rawLesson7Vocab].sort(() => 0.5 - Math.random());
+          // Insert a Star at index 5 or 10 (center)
+          const starCell = {
+            char: "★",
+            pinyin: "ㄒㄧㄥ",
+            radical: "日",
+            strokes: 9,
+            words: "萬能幸運星！任選本課生字造 2 個詞即可佔領！",
+            sentence: "本課最閃亮的全能幸運星！",
+            isStar: true,
+            owner: null
+          };
+          shuffled.splice(5, 0, starCell);
+          boardData = shuffled.map(v => ({ ...v, owner: null }));
+        }
+      } else {
+        // Just clear owners
+        boardData.forEach(cell => cell.owner = null);
+      }
+
+      currentTurn = 'red';
+      updateTurnUI();
+      renderBoard();
+      startTimer();
+      document.getElementById('game-status-text').textContent = 
+        `👉 請輪到的【${currentTurn === 'red' ? '🔴 烈火紅隊' : '🔵 飛鷹藍隊'}】點選棋盤格子進行造詞！`;
+    }
+
+    function clearBoardOnly() {
+      boardData.forEach(cell => cell.owner = null);
+      isGameOver = false;
+      currentTurn = 'red';
+      updateTurnUI();
+      renderBoard();
+      startTimer();
+      soundEffect('click');
+    }
+
+    // Render Board Grid
+    function renderBoard() {
+      const boardEl = document.getElementById('game-board');
+      boardEl.innerHTML = '';
+
+      boardData.forEach((cell, idx) => {
+        const div = document.createElement('div');
+        div.className = `board-cell ${cell.owner ? 'claimed claimed-' + cell.owner : ''}`;
+        div.onclick = () => onCellClicked(idx);
+
+        if (cell.isStar) {
+          div.innerHTML = `
+            <div class="cell-char gold-text">★</div>
+            <div class="cell-meta gold-text">萬能星</div>
+          `;
+        } else {
+          div.innerHTML = `
+            <div class="cell-char">${cell.char}</div>
+            <div class="cell-meta">${cell.radical}部 ${cell.strokes}畫</div>
+          `;
+        }
+
+        if (cell.owner === 'red') {
+          div.innerHTML += `<div class="claim-stamp">🔴</div>`;
+        } else if (cell.owner === 'blue') {
+          div.innerHTML += `<div class="claim-stamp">🔵</div>`;
+        }
+
+        boardEl.appendChild(div);
+      });
+    }
+
+    // Handle Cell Click
+    function onCellClicked(index) {
+      if (isGameOver) return;
+      const cell = boardData[index];
+      if (cell.owner) {
+        soundEffect('wrong');
+        return; // Already claimed
+      }
+
+      selectedCellIndex = index;
+      soundEffect('click');
+
+      // Populate Modal
+      const modal = document.getElementById('quiz-modal');
+      const teamTitle = document.getElementById('modal-team-title');
+      const charEl = document.getElementById('modal-char');
+      const infoEl = document.getElementById('modal-info');
+      const targetCharEl = document.getElementById('modal-target-char');
+      const hintsEl = document.getElementById('modal-word-hints');
+      const hintDetails = document.getElementById('hint-details');
+      hintDetails.open = false; // Closed by default for teacher reveal
+
+      if (currentTurn === 'red') {
+        teamTitle.innerHTML = `⚔️ 輪到 <span class="red-text">【🔴 烈火紅隊】</span> 出擊造詞！`;
+      } else {
+        teamTitle.innerHTML = `⚔️ 輪到 <span class="blue-text">【🔵 飛鷹藍隊】</span> 出擊造詞！`;
+      }
+
+      if (cell.isStar) {
+        charEl.textContent = "★";
+        charEl.style.color = "var(--gold)";
+        infoEl.textContent = "萬能幸運星 ｜ 任選第一課或第七課生字！";
+        targetCharEl.textContent = "任一生字";
+        hintsEl.innerHTML = `<b>★ 幸運星規則：</b>答題隊伍只要說出本課<b>任意 2 個生字</b>的造詞與例句，就能直接攻佔此格！`;
+      } else {
+        charEl.textContent = cell.char;
+        charEl.style.color = "var(--gold)";
+        infoEl.textContent = `注音：${cell.pinyin} ｜ 部首：${cell.radical}部 ｜ 筆畫：${cell.strokes}畫`;
+        targetCharEl.textContent = cell.char;
+        hintsEl.innerHTML = `
+          <div><b>📚 推薦造詞：</b><span style="color:var(--gold); font-weight:700;">${cell.words}</span></div>
+          <div style="margin-top:4px;"><b>📝 課本/示範例句：</b>${cell.sentence}</div>
+        `;
+      }
+
+      modal.classList.add('active');
+    }
+
+    function closeQuizModal() {
+      document.getElementById('quiz-modal').classList.remove('active');
+      selectedCellIndex = null;
+    }
+
+    // Confirm Claim Result
+    function confirmClaim(isCorrect) {
+      if (selectedCellIndex === null) return;
+      const cell = boardData[selectedCellIndex];
+
+      if (isCorrect) {
+        cell.owner = currentTurn;
+        soundEffect('correct');
+        closeQuizModal();
+        renderBoard();
+
+        // Check Win Condition
+        const winCombo = checkWin(currentTurn);
+        if (winCombo) {
+          handleWin(currentTurn, winCombo);
+          return;
+        }
+
+        // Check Tie
+        const allClaimed = boardData.every(c => c.owner !== null);
+        if (allClaimed) {
+          handleTie();
+          return;
+        }
+
+        // Next Turn
+        switchTurn();
+      } else {
+        soundEffect('wrong');
+        closeQuizModal();
+        // Turn switches without claiming
+        switchTurn();
+      }
+    }
+
+    // Check Win (3-in-a-row or 4-in-a-row)
+    function checkWin(team) {
+      const size = currentMode;
+      const lines = [];
+
+      // Rows
+      for (let r = 0; r < size; r++) {
+        const row = [];
+        for (let c = 0; c < size; c++) row.push(r * size + c);
+        lines.push(row);
+      }
+
+      // Columns
+      for (let c = 0; c < size; c++) {
+        const col = [];
+        for (let r = 0; r < size; r++) col.push(r * size + c);
+        lines.push(col);
+      }
+
+      // Diagonal 1 (\)
+      const d1 = [];
+      for (let i = 0; i < size; i++) d1.push(i * size + i);
+      lines.push(d1);
+
+      // Diagonal 2 (/)
+      const d2 = [];
+      for (let i = 0; i < size; i++) d2.push(i * size + (size - 1 - i));
+      lines.push(d2);
+
+      // Check if any line has all cells owned by team
+      for (const line of lines) {
+        if (line.every(idx => boardData[idx].owner === team)) {
+          return line;
+        }
+      }
+
+      return null;
+    }
+
+    // Handle Win
+    function handleWin(team, winCombo) {
+      isGameOver = true;
+      clearInterval(timerInterval);
+      soundEffect('win');
+      triggerConfetti();
+
+      // Highlight winning cells
+      const boardCells = document.querySelectorAll('.board-cell');
+      winCombo.forEach(idx => {
+        boardCells[idx].classList.add('win-highlight');
+      });
+
+      if (team === 'red') scoreRed++;
+      else scoreBlue++;
+      updateScoreUI();
+
+      const teamName = team === 'red' ? '🔴 烈火紅隊' : '🔵 飛鷹藍隊';
+      document.getElementById('win-title').innerHTML = `🎉 恭喜 <span class="${team === 'red' ? 'red-text' : 'blue-text'}">${teamName}</span> 達成連線獲勝！`;
+      document.getElementById('win-desc').textContent = `成功連成一線，拿下精彩勝利！目前的比數為 紅隊 ${scoreRed} : 藍隊 ${scoreBlue}！`;
+
+      setTimeout(() => {
+        document.getElementById('win-modal').classList.add('active');
+      }, 700);
+    }
+
+    function handleTie() {
+      isGameOver = true;
+      clearInterval(timerInterval);
+      soundEffect('wrong');
+      document.getElementById('win-title').textContent = `🤝 棋逢敵手，平局握手！`;
+      document.getElementById('win-desc').textContent = `所有格子均已佔領，兩隊造詞功力旗鼓相當！`;
+      setTimeout(() => {
+        document.getElementById('win-modal').classList.add('active');
+      }, 700);
+    }
+
+    function closeWinModal() {
+      document.getElementById('win-modal').classList.remove('active');
+    }
+
+    // Switch Turn
+    function switchTurn() {
+      currentTurn = currentTurn === 'red' ? 'blue' : 'red';
+      updateTurnUI();
+      startTimer();
+      document.getElementById('game-status-text').textContent = 
+        `👉 請輪到的【${currentTurn === 'red' ? '🔴 烈火紅隊' : '🔵 飛鷹藍隊'}】點選棋盤格子進行造詞！`;
+    }
+
+    function updateTurnUI() {
+      const badgeRed = document.getElementById('badge-red');
+      const badgeBlue = document.getElementById('badge-blue');
+      const turnIndicator = document.getElementById('turn-indicator');
+
+      if (currentTurn === 'red') {
+        badgeRed.classList.add('turn-active');
+        badgeBlue.classList.remove('turn-active');
+        turnIndicator.innerHTML = `現在輪到：<span class="red-text">🔴 烈火紅隊</span> 出擊！`;
+      } else {
+        badgeBlue.classList.add('turn-active');
+        badgeRed.classList.remove('turn-active');
+        turnIndicator.innerHTML = `現在輪到：<span class="blue-text">🔵 飛鷹藍隊</span> 出擊！`;
+      }
+    }
+
+    function updateScoreUI() {
+      document.getElementById('score-red').textContent = scoreRed;
+      document.getElementById('score-blue').textContent = scoreBlue;
+    }
+
+    // Timer Logic
+    function startTimer() {
+      clearInterval(timerInterval);
+      if (!timerEnabled || isGameOver) return;
+      timerSeconds = 20;
+      document.getElementById('timer-sec').textContent = timerSeconds;
+
+      timerInterval = setInterval(() => {
+        timerSeconds--;
+        document.getElementById('timer-sec').textContent = timerSeconds;
+        if (timerSeconds <= 5 && timerSeconds > 0) {
+          soundEffect('tick');
+        }
+        if (timerSeconds <= 0) {
+          clearInterval(timerInterval);
+          soundEffect('wrong');
+          // Timeout: close quiz modal if open, switch turn
+          if (document.getElementById('quiz-modal').classList.contains('active')) {
+            closeQuizModal();
+          }
+          switchTurn();
+          document.getElementById('game-status-text').textContent = `⏰ 時間到！換隊出擊！`;
+        }
+      }, 1000);
+    }
+
+    function toggleTimer() {
+      timerEnabled = !timerEnabled;
+      const timerDisplay = document.getElementById('timer-display');
+      if (timerEnabled) {
+        timerDisplay.style.opacity = '1';
+        startTimer();
+      } else {
+        clearInterval(timerInterval);
+        timerDisplay.style.opacity = '0.5';
+        document.getElementById('timer-sec').textContent = "--";
+      }
+    }
+
+    // Full Word Bank Modal
+    function initWordBankModal() {
+      const listEl = document.getElementById('full-word-bank-list');
+      listEl.innerHTML = '';
+      rawLesson7Vocab.forEach((v, idx) => {
+        const item = document.createElement('div');
+        item.style.background = 'rgba(255,255,255,0.05)';
+        item.style.padding = '8px 12px';
+        item.style.borderRadius = '10px';
+        item.style.border = '1px solid rgba(255,255,255,0.08)';
+        item.innerHTML = `
+          <div style="font-size:16px; font-weight:800; color:var(--gold);">
+            ${idx+1}. 【${v.char}】 <span style="font-size:13px; color:#93c5fd;">(${v.pinyin} / ${v.radical}部${v.strokes}畫)</span>
+          </div>
+          <div style="font-size:13.5px; color:#fff; margin-top:3px;">
+            <b>詞：</b>${v.words}
+          </div>
+        `;
+        listEl.appendChild(item);
+      });
+    }
+
+    function showWordBank() {
+      soundEffect('click');
+      document.getElementById('bank-modal').classList.add('active');
+    }
+    function closeWordBank() {
+      document.getElementById('bank-modal').classList.remove('active');
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    // Web Audio Sound Generator
+    function soundEffect(type) {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        const now = ctx.currentTime;
+        if (type === 'correct') {
+          // Cheerful Ding-Dong (C5 -> E5 -> G5)
+          osc.frequency.setValueAtTime(523.25, now);
+          osc.frequency.setValueAtTime(659.25, now + 0.1);
+          osc.frequency.setValueAtTime(783.99, now + 0.2);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.45);
+          osc.start(now);
+          osc.stop(now + 0.45);
+        } else if (type === 'wrong') {
+          // Low Buzz
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(150, now);
+          osc.frequency.setValueAtTime(110, now + 0.15);
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+          osc.start(now);
+          osc.stop(now + 0.35);
+        } else if (type === 'click') {
+          osc.frequency.setValueAtTime(440, now);
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === 'tick') {
+          osc.frequency.setValueAtTime(800, now);
+          gain.gain.setValueAtTime(0.05, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.04);
+          osc.start(now);
+          osc.stop(now + 0.04);
+        } else if (type === 'win') {
+          // Fanfare
+          const notes = [523.25, 659.25, 783.99, 1046.5];
+          notes.forEach((freq, i) => {
+            const oscN = ctx.createOscillator();
+            const gainN = ctx.createGain();
+            oscN.connect(gainN);
+            gainN.connect(ctx.destination);
+            oscN.frequency.setValueAtTime(freq, now + i * 0.12);
+            gainN.gain.setValueAtTime(0.2, now + i * 0.12);
+            gainN.gain.exponentialRampToValueAtTime(0.01, now + i * 0.12 + 0.35);
+            oscN.start(now + i * 0.12);
+            oscN.stop(now + i * 0.12 + 0.35);
+          });
+        }
+      } catch (e) {}
+    }
+
+    // Confetti Animation
+    function triggerConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const particles = [];
+      const colors = ['#ef4444', '#3b82f6', '#fbbf24', '#10b981', '#a855f7', '#ec4899'];
+
+      for (let i = 0; i < 90; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          vx: (Math.random() - 0.5) * 18,
+          vy: (Math.random() - 0.7) * 18,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          size: Math.random() * 9 + 5,
+          life: 1
+        });
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let active = false;
+        particles.forEach(p => {
+          if (p.life > 0) {
+            active = true;
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.35;
+            p.life -= 0.018;
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = Math.max(0, p.life);
+            ctx.fillRect(p.x, p.y, p.size, p.size);
+          }
+        });
+        if (active) requestAnimationFrame(render);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      render();
+    }
+  </script>
+</body>
+</html>

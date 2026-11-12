@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>304班 班級大偵探：真的假的？站哪邊！</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;900&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b132b;
+      --bg-card: #1c2541;
+      --text: #f8fafc;
+      --accent-yellow: #f59e0b;
+      --accent-blue: #0284c7;
+      --green: #059669;
+      --red: #dc2626;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans TC', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+    header {
+      background: rgba(15, 23, 42, 0.95);
+      border-bottom: 2px solid rgba(255,255,255,0.1);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand h1 { font-size: 24px; font-weight: 900; color: var(--accent-yellow); }
+    .brand span { background: var(--accent-blue); color: #fff; font-size: 14px; padding: 4px 10px; border-radius: 20px; font-weight: 700; }
+    .controls { display: flex; gap: 10px; align-items: center; }
+    select, button {
+      background: #1e293b;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    button:hover, select:hover { background: var(--accent-blue); }
+    .btn-timer {
+      background: #eab308;
+      color: #000;
+      font-weight: 900;
+      padding: 8px 20px;
+      font-size: 18px;
+      border-radius: 24px;
+      box-shadow: 0 0 15px rgba(234, 179, 8, 0.5);
+    }
+    .btn-timer:hover { background: #facc15; transform: scale(1.05); }
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 40px;
+      max-width: 1350px;
+      width: 100%;
+      margin: 0 auto;
+      justify-content: center;
+    }
+    .meta-bar { display: flex; justify-content: space-between; margin-bottom: 16px; }
+    .badge { font-size: 20px; font-weight: 700; padding: 8px 18px; border-radius: 12px; }
+    .badge-qnum { background: var(--accent-blue); }
+    .badge-student { background: var(--accent-yellow); color: #000; font-size: 22px; }
+    .question-card {
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 24px;
+      padding: 40px 50px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      min-height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 5px solid var(--accent-yellow);
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .question-text { font-size: 38px; font-weight: 900; line-height: 1.45; }
+    .timer-display {
+      position: absolute;
+      top: -30px;
+      background: #ef4444;
+      color: #fff;
+      font-size: 32px;
+      font-weight: 900;
+      font-family: 'Fredoka', sans-serif;
+      padding: 6px 24px;
+      border-radius: 30px;
+      border: 4px solid #fff;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      display: none;
+    }
+    .timer-display.active { display: block; animation: pulse 1s infinite; }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 24px; }
+    .choice-btn {
+      padding: 24px;
+      border-radius: 20px;
+      color: #fff;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .choice-btn.left { background: linear-gradient(135deg, #059669, #10b981); }
+    .choice-btn.right { background: linear-gradient(135deg, #dc2626, #ef4444); }
+    .choice-btn:hover { transform: translateY(-4px); }
+    .choice-sub { font-size: 20px; font-weight: 700; opacity: 0.9; margin-bottom: 6px; }
+    .choice-main { font-size: 38px; font-weight: 900; }
+    .answer-panel {
+      display: none;
+      background: #1e293b;
+      border-radius: 20px;
+      padding: 24px 30px;
+      border: 3px solid #38bdf8;
+      margin-bottom: 20px;
+    }
+    .answer-header { font-size: 32px; font-weight: 900; margin-bottom: 12px; }
+    .answer-header.true { color: #10b981; }
+    .answer-header.false { color: #ef4444; }
+    .answer-exp {
+      font-size: 26px;
+      font-weight: 600;
+      line-height: 1.5;
+      color: #f1f5f9;
+      background: rgba(0,0,0,0.25);
+      padding: 16px 20px;
+      border-radius: 12px;
+      border-left: 6px solid #38bdf8;
+      margin-bottom: 14px;
+    }
+    .answer-callout {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fde047;
+      background: rgba(253, 224, 71, 0.1);
+      padding: 10px 16px;
+      border-radius: 8px;
+    }
+    footer {
+      background: rgba(15, 23, 42, 0.9);
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 16px;
+      color: #94a3b8;
+    }
+    .nav-btns { display: flex; gap: 12px; }
+    .btn-nav { background: #334155; color: #fff; font-size: 18px; padding: 10px 24px; border-radius: 10px; }
+    .btn-reveal { background: #0ea5e9; color: #fff; font-size: 20px; padding: 10px 28px; border-radius: 10px; font-weight: 900; }
+    .btn-reveal:hover { background: #38bdf8; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <h1>🎯 304班 班級大偵探</h1>
+      <span>⭕真的 ❌假的 站哪邊！</span>
+    </div>
+    <div class="controls">
+      <select id="studentSelect"></select>
+      <button onclick="pickRandom()">🎲 隨機抽題</button>
+      <button class="btn-timer" id="timerBtn" onclick="toggleTimer()">⏱️ 開始 10 秒倒數</button>
+    </div>
+  </header>
+  <main>
+    <div class="meta-bar">
+      <div class="badge badge-qnum" id="qNumBadge">第 1 / 54 題</div>
+      <div class="badge badge-student" id="studentBadge">👤 秘密主角：2號 高添程</div>
+    </div>
+    <div class="question-card">
+      <div class="timer-display" id="timerDisplay">10</div>
+      <div class="question-text" id="qText">載入中...</div>
+    </div>
+    <div class="choice-grid">
+      <div class="choice-btn left" onclick="toggleReveal()">
+        <div class="choice-sub">⬅️ 站教室左側走道</div>
+        <div class="choice-main">⭕ 真的 (True)</div>
+      </div>
+      <div class="choice-btn right" onclick="toggleReveal()">
+        <div class="choice-sub">站教室右側走道 ➡️</div>
+        <div class="choice-main">❌ 假的 (False)</div>
+      </div>
+    </div>
+    <div class="answer-panel" id="ansPanel">
+      <div class="answer-header" id="ansHeader">🎉 正解揭曉：【 ⭕ 真的 】</div>
+      <div class="answer-exp" id="ansExp">佐證資料</div>
+      <div class="answer-callout" id="ansCallout">🎤 請起立分享！</div>
+    </div>
+  </main>
+  <footer>
+    <div>快捷鍵：[空白鍵] 倒數/揭曉 ｜ [左右箭頭] 切換題目 ｜ [R] 隨機抽題</div>
+    <div class="nav-btns">
+      <button class="btn-nav" onclick="prevQ()">⬅️ 上一題</button>
+      <button class="btn-reveal" id="revealBtn" onclick="toggleReveal()">🔍 揭曉答案</button>
+      <button class="btn-nav" onclick="nextQ()">下一題 ➡️</button>
+    </div>
+  </footer>
+  <script>
+    const questions = [{"seat": "2號", "name": "高添程", "qtype": "真的", "q": "高添程最想去的地方是「日本」，而且他最喜歡的歌曲是熱門神曲《科目三》。", "ans": "真的", "exp": "高添程在最喜歡的地方填寫了『日本』，最喜歡的歌曲填寫了『科目三』。"}, {"seat": "2號", "name": "高添程", "qtype": "假的", "q": "高添程平日非常注重養生，完全不喜歡吃「薯條」這類油炸食物。", "ans": "假的", "exp": "高添程在學習單上最喜歡的食物畫的就是『薯條』，他非常喜歡吃！"}, {"seat": "3號", "name": "蕭翊展", "qtype": "真的", "q": "蕭翊展最想養的寵物是「狗」，而且他最喜歡的零食是「樂事洋芋片」。", "ans": "真的", "exp": "蕭翊展在自我介紹學習單中的『寵物/喜歡的動物』填寫了『狗』，最愛的零食是『樂事』。"}, {"seat": "3號", "name": "蕭翊展", "qtype": "假的", "q": "蕭翊展最喜歡的科目是「國語」，平日完全不喜歡運動。", "ans": "假的", "exp": "蕭翊展最喜歡的科目其實是『體育』，興趣是打『籃球』。"}, {"seat": "4號", "name": "白崇劭", "qtype": "真的", "q": "白崇劭最喜歡的歌曲是洗腦又溫馨的《祝你生日快樂》歌。", "ans": "真的", "exp": "白崇劭在自我介紹中特別寫下了最愛歌曲是《祝你生日快樂》，非常重視生日！"}, {"seat": "4號", "name": "白崇劭", "qtype": "假的", "q": "白崇劭最想養的寵物是「貓咪」，他最喜歡的地方是「遊樂園」。", "ans": "假的", "exp": "白崇劭最想養的寵物是『狗』，最喜歡的地方是『學校』。"}, {"seat": "5號", "name": "王家尉", "qtype": "真的", "q": "王家尉最喜歡的地方是我們的學校「新埔國小」，最想養的寵物是「金魚」。", "ans": "真的", "exp": "王家尉在最愛地方寫『新埔國小』，想養的寵物寫『金魚』，是個熱愛學校的好孩子。"}, {"seat": "5號", "name": "王家尉", "qtype": "假的", "q": "王家尉最喜歡的食物是綠油油的「高麗菜」，平日最常做的運動是「跑步」。", "ans": "假的", "exp": "王家尉最喜歡的食物其實是甜甜的『熱的巧克力』，興趣是『桌球』。"}, {"seat": "6號", "name": "林靖筌", "qtype": "真的", "q": "6號林靖筌最喜歡的顏色是溫暖明亮的「橘色」，最喜歡的地方是「公園」。", "ans": "真的", "exp": "林靖筌在『最喜歡的顏色』格子中塗滿橘色，最喜歡的地方是『公園』。"}, {"seat": "6號", "name": "林靖筌", "qtype": "假的", "q": "6號林靖筌最想養的寵物是「金魚」，最喜歡吃的食物是「漢堡」。", "ans": "假的", "exp": "林靖筌最想養的寵物是『狗』，最喜歡的食物是『薯條』。"}, {"seat": "7號", "name": "程士愷", "qtype": "真的", "q": "程士愷最想去的地方是台灣著名的「阿里山」，他平時最喜歡的運動是「躲避球」。", "ans": "真的", "exp": "程士愷最想去的地方是『阿里山』，興趣寫的是『躲避球』。"}, {"seat": "7號", "name": "程士愷", "qtype": "假的", "q": "程士愷最喜歡的科目是「國語」，最愛吃的是甜苦的「黑巧克力」。", "ans": "假的", "exp": "程士愷最喜歡的科目其實是『數學』，最愛吃的食物是『薯條』。"}, {"seat": "9號", "name": "姚智允", "qtype": "真的", "q": "姚智允在學習單的自畫像中畫了「我潑水」，且他最喜歡的科目是「藝術(藝文)」。", "ans": "真的", "exp": "姚智允自畫像寫『我潑水』，最喜歡的科目寫『藝文』(畫畫/美術)。"}, {"seat": "9號", "name": "姚智允", "qtype": "假的", "q": "姚智允最想養的寵物是「小白兔」，最喜歡的零食是「洋芋片」。", "ans": "假的", "exp": "姚智允的自我介紹中，最喜歡的零食是『糖果』。"}, {"seat": "10號", "name": "張紘瑀", "qtype": "真的", "q": "張紘瑀最想養的寵物是「狗」，而且他最喜歡的科目是「自然」。", "ans": "真的", "exp": "張紘瑀在學習單上填寫想養『狗』，最愛的科目是『自然』。"}, {"seat": "10號", "name": "張紘瑀", "qtype": "假的", "q": "張紘瑀最喜歡的地方是「動物園」，平日最常打的球是「籃球」。", "ans": "假的", "exp": "張紘瑀最喜歡的地方其實是『外公家』，興趣是打『棒球』。"}, {"seat": "11號", "name": "張徜泱", "qtype": "真的", "q": "11號張徜泱最想養的寵物是威風的「老虎」，最喜歡的歌是熱門動漫《SPY×FAMILY》主題曲。", "ans": "真的", "exp": "張徜泱在寵物欄寫了『老虎』，最愛的歌寫『SPY×FAMILY』（間諜家家酒）。"}, {"seat": "11號", "name": "張徜泱", "qtype": "假的", "q": "11號張徜泱最想去的地方是「日本」，平日最不喜歡吃「冰淇淋」。", "ans": "假的", "exp": "張徜泱最想去的地方其實是『青海』，最喜歡的食物正是『冰淇淋』。"}, {"seat": "12號", "name": "呂宜潤", "qtype": "真的", "q": "呂宜潤最喜歡的歌曲是最近網路上非常流行的洗腦神曲《星期五晚上》（Energy）。", "ans": "真的", "exp": "呂宜潤在自我介紹學習單「最喜歡的歌曲」中親手寫下了《星期五晚上》。"}, {"seat": "12號", "name": "呂宜潤", "qtype": "假的", "q": "呂宜潤最喜歡的科目是「數學」，他的興趣是打「桌球」。", "ans": "假的", "exp": "呂宜潤最喜歡的科目其實是『自然』，他的興趣是『籃球』。"}, {"seat": "13號", "name": "莊博宇", "qtype": "真的", "q": "莊博宇最喜歡的歌曲是經典競速遊戲配樂《跑跑卡丁車》，最愛看的書是《小紅帽》。", "ans": "真的", "exp": "莊博宇在歌單中寫了『跑跑卡丁車』，最喜歡的書寫『小紅帽』，非常有童趣！"}, {"seat": "13號", "name": "莊博宇", "qtype": "假的", "q": "莊博宇最喜歡的地方是「遊樂園」，最喜歡的科目是「國語」。", "ans": "假的", "exp": "莊博宇最喜歡的地方是『學校』，最喜歡的科目是『體育』。"}, {"seat": "14號", "name": "陳軍滔", "qtype": "真的", "q": "14號陳軍滔最喜歡看的電影是《鋼鐵人》，平時在學校最愛玩的設施是「溜滑梯」。", "ans": "真的", "exp": "陳軍滔最喜歡的電影寫『鋼鐵人』，興趣畫了溜滑梯並寫『溜滑梯』。"}, {"seat": "14號", "name": "陳軍滔", "qtype": "假的", "q": "14號陳軍滔最想養的寵物是「小白兔」，最愛上的科目是「數學」。", "ans": "假的", "exp": "陳軍滔想養的寵物填寫『水族』(魚等)，最喜歡的科目則是『體育』。"}, {"seat": "15號", "name": "鄭敦仁", "qtype": "真的", "q": "15號鄭敦仁最想去的地方是充滿剛出爐香味的「麵包店」，最喜歡的顏色是「白色」。", "ans": "真的", "exp": "鄭敦仁最想去的地方寫了『麵包店』，最喜歡的顏色寫『白色』。"}, {"seat": "15號", "name": "鄭敦仁", "qtype": "假的", "q": "15號鄭敦仁最想養的寵物是「小金魚」，平日最喜歡的科目是「體育」。", "ans": "假的", "exp": "鄭敦仁最想養的寵物是『貓』，最喜歡的科目其實是『英文』。"}, {"seat": "16號", "name": "鄭靖騰", "qtype": "真的", "q": "16號鄭靖騰最想養的寵物是「狗」，而且他最喜歡的科目是「自然」。", "ans": "真的", "exp": "鄭靖騰在寵物欄寫『狗』，最愛的科目是『自然』。"}, {"seat": "16號", "name": "鄭靖騰", "qtype": "假的", "q": "16號鄭靖騰最喜歡的假期是「過年」，最喜歡的零食是「糖果」。", "ans": "假的", "exp": "鄭靖騰最喜歡的假期是『暑假』，最喜歡的零食是『巧克力』。"}, {"seat": "17號", "name": "陳薪妤", "qtype": "真的", "q": "陳薪妤最喜歡的假期非常獨特，她填寫的是「星期六」。", "ans": "真的", "exp": "陳薪妤在『最喜歡的假期』一欄非常可愛地填寫了『星期六』！"}, {"seat": "17號", "name": "陳薪妤", "qtype": "假的", "q": "陳薪妤最喜歡的科目是「美勞」，最喜歡的動物是「小綿羊」。", "ans": "假的", "exp": "陳薪妤最喜歡的科目是『美術』，最喜歡的動物其實是威猛的『老虎』！"}, {"seat": "18號", "name": "殷苡庭", "qtype": "真的", "q": "18號殷苡庭最喜歡的歌曲是韋禮安的熱門情歌《如果可以》，最喜歡的食物是「薯條」。", "ans": "真的", "exp": "殷苡庭最愛歌寫了《如果可以》，最喜歡的食物寫了『薯條』。"}, {"seat": "18號", "name": "殷苡庭", "qtype": "假的", "q": "18號殷苡庭最想養的寵物是「小狗」，最想去的地方是「日本」。", "ans": "假的", "exp": "殷苡庭想養的寵物是『兔子』，最想去的地方是南美洲的『巴西』。"}, {"seat": "19號", "name": "楊語涔", "qtype": "真的", "q": "19號楊語涔最喜歡的歌曲是極具魔性、節奏感強烈的網路洗腦神曲《恐龍抗狼》。", "ans": "真的", "exp": "楊語涔在最喜歡的歌曲寫下『恐龍抗狼』，非常跟隨流行！"}, {"seat": "19號", "name": "楊語涔", "qtype": "假的", "q": "19號楊語涔最想去的地方是「美國」，平日最不喜歡吃「冰淇淋」。", "ans": "假的", "exp": "楊語涔最想去的地方是『淡水』，最喜歡的食物正是『冰淇淋』。"}, {"seat": "20號", "name": "陳姵穎", "qtype": "真的", "q": "20號陳姵穎最喜歡的動物是超萌的「小水獺」，她的生日是「10月15日」。", "ans": "真的", "exp": "陳姵穎在喜歡動物寫『小水獺』，生日是十月的『10月15日』。"}, {"seat": "20號", "name": "陳姵穎", "qtype": "假的", "q": "20號陳姵穎最喜歡的假期是「寒假」，最常上的科目是「美勞」。", "ans": "假的", "exp": "陳姵穎最喜歡的假期是『星期日』，最愛科目是『數學』。"}, {"seat": "21號", "name": "陳妍菱", "qtype": "真的", "q": "21號陳妍菱最喜歡的歌曲是經典國風歌曲《半生雪》，最想養的寵物是「兔子」。", "ans": "真的", "exp": "陳妍菱在最愛歌曲填寫《半生雪》，寵物填寫『兔子』。"}, {"seat": "21號", "name": "陳妍菱", "qtype": "假的", "q": "21號陳妍菱最常上的科目是「數學」，平日最常玩的運動是「躲避球」。", "ans": "假的", "exp": "陳妍菱最喜歡的科目是『資訊課』，興趣是『桌球』。"}, {"seat": "22號", "name": "蔡昕妤", "qtype": "真的", "q": "22號蔡昕妤最想去的地方是充滿歡樂的「遊樂區/遊樂園」，最喜歡的顏色是「藍色」。", "ans": "真的", "exp": "蔡昕妤在最愛地方填寫『遊樂區』，最愛顏色塗滿了『藍色』。"}, {"seat": "22號", "name": "蔡昕妤", "qtype": "假的", "q": "22號蔡昕妤最想養的寵物是「小倉鼠」，最想放的假期是「暑假」。", "ans": "假的", "exp": "蔡昕妤最想養的寵物是『貓(溫特)』，最喜歡的假期是超酷的『颱風假』！"}, {"seat": "23號", "name": "陳盈希", "qtype": "真的", "q": "23號陳盈希最喜歡的科目是「國語」，最想去的地方是「公園」。", "ans": "真的", "exp": "陳盈希最喜歡的科目是『國語』，最想去的地方是『公園』。"}, {"seat": "23號", "name": "陳盈希", "qtype": "假的", "q": "23號陳盈希最喜歡的歌曲是《星期五晚上》，最想養的寵物是「小貓」。", "ans": "假的", "exp": "陳盈希在最喜歡的歌曲寫『無』(沒有特別喜愛)，最想養的寵物是『狗』。"}, {"seat": "24號", "name": "劉芷妤", "qtype": "真的", "q": "24號劉芷妤最喜歡的電影/電視是近期超紅的《吉伊卡哇》（Chiikawa），最喜歡的顏色是「粉紅色」。", "ans": "真的", "exp": "劉芷妤在電影電視欄親自寫上『吉伊卡哇』，最愛顏色是『粉紅色』。"}, {"seat": "24號", "name": "劉芷妤", "qtype": "假的", "q": "24號劉芷妤最常去的地方是「百貨公司」，最常上的科目是「自然」。", "ans": "假的", "exp": "劉芷妤最愛去的地方是『操場』，最愛的科目是『英文』。"}, {"seat": "25號", "name": "陳綺蓁", "qtype": "真的", "q": "25號陳綺蓁最喜歡的歌曲是熱門流行歌曲《Golden》，最想去的地方是「日本」。", "ans": "真的", "exp": "陳綺蓁最愛歌寫了《Golden》，最想去的地方是『日本』。"}, {"seat": "25號", "name": "陳綺蓁", "qtype": "假的", "q": "25號陳綺蓁最想養的寵物是「貓咪」，最喜歡的科目是「國語」。", "ans": "假的", "exp": "陳綺蓁想養的寵物是『兔子』，最愛的科目是『數學』。"}, {"seat": "26號", "name": "莊禹星", "qtype": "真的", "q": "26號莊禹星最喜歡的歌曲是非常動感的《Jump》，最想養的寵物是「烏龜」。", "ans": "真的", "exp": "莊禹星最愛的歌曲是『Jump』，最想養的寵物寫了『烏龜』。"}, {"seat": "26號", "name": "莊禹星", "qtype": "假的", "q": "26號莊禹星最喜歡的科目是「數學」，最愛吃的食物是「漢堡」。", "ans": "假的", "exp": "莊禹星最愛的科目是『自然』，最愛食物是『薯條』。"}, {"seat": "27號", "name": "陳千用", "qtype": "真的", "q": "27號陳千用最喜歡的顏色非常繽紛，他填寫的是「彩虹色」，最想養的寵物是「小兔子」。", "ans": "真的", "exp": "陳千用在蠟筆格中塗滿了彩虹條紋並寫上『彩虹色』，想養的寵物是『小兔子』。"}, {"seat": "27號", "name": "陳千用", "qtype": "假的", "q": "27號陳千用最喜歡的地方是「學校」，最喜歡的零食是「洋芋片」。", "ans": "假的", "exp": "陳千用最喜歡的地方是『動物園』，最喜歡的零食則是『軟糖』。"}, {"seat": "28號", "name": "陳宥綺", "qtype": "真的", "q": "28號陳宥綺最想去的地方是舒舒服服的「飯店」，平日最喜歡的興趣是「跳舞」。", "ans": "真的", "exp": "陳宥綺在想去的地方寫了『飯店』，興趣寫了『跳舞』。"}, {"seat": "28號", "name": "陳宥綺", "qtype": "假的", "q": "28號陳宥綺最喜歡的歌曲是《科目三》，最想養的寵物是「小狗」。", "ans": "假的", "exp": "陳宥綺最愛的歌是『Golden』，想養的寵物是『貓咪』。"}, {"seat": "29號", "name": "陳思婍", "qtype": "真的", "q": "29號陳思婍最喜歡的假期是「出國」，而且最喜歡的科目是「美術」。", "ans": "真的", "exp": "陳思婍最愛假期寫了『出國』，最愛的科目是『美術』。"}, {"seat": "29號", "name": "陳思婍", "qtype": "假的", "q": "29號陳思婍最喜歡的食物是「冰淇淋」，最想養的寵物是「小貓」。", "ans": "假的", "exp": "陳思婍最喜歡的食物是『草莓』，最想養的寵物是『兔子』。"}];
+    let currentIndex = 0;
+    let timerInterval = null;
+    let timeLeft = 10;
+    let isRevealed = false;
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBeep(freq, duration) {
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch(e){}
+    }
+
+    function playSuccess() {
+      playBeep(523.25, 0.15);
+      setTimeout(() => playBeep(659.25, 0.15), 150);
+      setTimeout(() => playBeep(783.99, 0.3), 300);
+    }
+
+    function playGong() {
+      playBeep(220, 0.6);
+      setTimeout(() => playBeep(180, 0.8), 200);
+    }
+
+    const selectEl = document.getElementById('studentSelect');
+    questions.forEach((q, idx) => {
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.textContent = (idx + 1) + '. [' + q.seat + ' ' + q.name + '] ' + q.q.substring(0, 16) + '...';
+      selectEl.appendChild(opt);
+    });
+    selectEl.addEventListener('change', (e) => {
+      loadQuestion(parseInt(e.target.value));
+    });
+
+    function loadQuestion(idx) {
+      if (idx < 0) idx = 0;
+      if (idx >= questions.length) idx = questions.length - 1;
+      currentIndex = idx;
+      selectEl.value = idx;
+
+      const q = questions[idx];
+      document.getElementById('qNumBadge').textContent = '第 ' + (idx + 1) + ' / ' + questions.length + ' 題';
+      document.getElementById('studentBadge').textContent = '👤 秘密主角：【 ' + q.seat + ' ' + q.name + ' 】';
+      document.getElementById('qText').textContent = q.q;
+
+      clearInterval(timerInterval);
+      timerInterval = null;
+      document.getElementById('timerBtn').textContent = '⏱️ 開始 10 秒倒數';
+      const tDisp = document.getElementById('timerDisplay');
+      tDisp.classList.remove('active');
+      tDisp.textContent = '10';
+
+      isRevealed = false;
+      document.getElementById('ansPanel').style.display = 'none';
+      document.getElementById('revealBtn').textContent = '🔍 揭曉答案';
+
+      const isTrue = (q.ans === '真的');
+      const headerEl = document.getElementById('ansHeader');
+      headerEl.textContent = isTrue ? '🎉 正解是：【 ⭕ 真的 (True) 】' : '💥 正解是：【 ❌ 假的 (False) 】';
+      headerEl.className = 'answer-header ' + (isTrue ? 'true' : 'false');
+
+      document.getElementById('ansExp').textContent = '📝 學習單佐證：' + q.exp;
+      document.getElementById('ansCallout').textContent = '🎤 現場連線：請【 ' + q.seat + ' ' + q.name + ' 】同學起立！跟大家分享 10 秒鐘的心情～ ✨';
+    }
+
+    function toggleTimer() {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        document.getElementById('timerBtn').textContent = '⏱️ 繼續倒數';
+        document.getElementById('timerDisplay').classList.remove('active');
+        return;
+      }
+      timeLeft = 10;
+      const tDisp = document.getElementById('timerDisplay');
+      tDisp.textContent = timeLeft;
+      tDisp.classList.add('active');
+      document.getElementById('timerBtn').textContent = '⏸️ 暫停計時';
+      playBeep(440, 0.1);
+
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        tDisp.textContent = timeLeft;
+        if (timeLeft > 0) {
+          playBeep(440, 0.1);
+        } else {
+          clearInterval(timerInterval);
+          timerInterval = null;
+          tDisp.textContent = '時間到！';
+          document.getElementById('timerBtn').textContent = '🔔 時間到 (鎖定站位)';
+          playGong();
+        }
+      }, 1000);
+    }
+
+    function toggleReveal() {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      isRevealed = !isRevealed;
+      const panel = document.getElementById('ansPanel');
+      if (isRevealed) {
+        panel.style.display = 'block';
+        document.getElementById('revealBtn').textContent = '🙈 隱藏答案';
+        playSuccess();
+      } else {
+        panel.style.display = 'none';
+        document.getElementById('revealBtn').textContent = '🔍 揭曉答案';
+      }
+    }
+
+    function prevQ() { loadQuestion(currentIndex - 1); }
+    function nextQ() { loadQuestion(currentIndex + 1); }
+    function pickRandom() {
+      const rIdx = Math.floor(Math.random() * questions.length);
+      loadQuestion(rIdx);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        if (!isRevealed && !timerInterval) {
+          toggleTimer();
+        } else if (!isRevealed && timerInterval) {
+          toggleReveal();
+        } else {
+          nextQ();
+        }
+      } else if (e.code === 'ArrowRight') {
+        nextQ();
+      } else if (e.code === 'ArrowLeft') {
+        prevQ();
+      } else if (e.code === 'KeyR') {
+        pickRandom();
+      }
+    });
+
+    loadQuestion(0);
+  </script>
+</body>
+</html>
